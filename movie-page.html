@@ -1,0 +1,3145 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="/css/cinema-styles.css" type="text/css">
+	<link rel="stylesheet" href="/css/icons/style.css" type="text/css">
+
+
+	<link rel="stylesheet" href="/player/player.css" type="text/css">
+	<link rel="stylesheet" href="/css/big_picture.css" type="text/css">
+	<link rel="stylesheet" href="/css/load_animation.css">
+
+	<!--Icons-->
+	<link rel="apple-touch-icon" sizes="57x57" href="/androidIcons/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/androidIcons/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/androidIcons/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/androidIcons/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/androidIcons/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/androidIcons/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/androidIcons/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/androidIcons/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/androidIcons/apple-icon-180x180.png">
+	<link rel="apple-touch-icon" sizes="1024x1024" href="/androidIcons/apple-icon-1024x1024.png">
+	<link rel="apple-touch-icon" sizes="1024x1024" href="/androidIcons/apple-icon-512x512.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/androidIcons/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/androidIcons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/androidIcons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/androidIcons/favicon-16x16.png">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+
+	<!--Manifest-->
+	<link rel="manifest" href="/manifest.json">
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="application-name" content="PWA">
+	<meta name="apple-mobile-web-app-title" content="PWA">
+	<meta name="msapplication-starturl" content="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Синематограф</title>
+
+</head>
+
+<body>
+
+	<!--Service worker-->
+	<script>
+		// Проверка того, что наш браузер поддерживает Service Worker API.
+		if ('serviceWorker' in navigator) {
+			// Весь код регистрации у нас асинхронный.
+			navigator.serviceWorker.register('./sw.js')
+				.then(() => navigator.serviceWorker.ready.then((worker) => {
+					worker.sync.register('syncdata');
+				}))
+				.catch((err) => console.log(err));
+		}
+	</script>
+
+	<!-- header -->
+	<header class="header">
+		<a class="header__logo" href="index.html"><img class="header__logo-img" src="images/logo.png" width="170"
+				height="32" alt="" /></a>
+		<button type="button" class="header__menu-button" data-toggle="offcanvas-menu" title="Toggle menu"></button>
+		<div class="header__search">
+			<div id="search-form">
+				<input class="serach-form__input" type="text" placeholder="Поиск" id="search-bar" autocomplete="off">
+				<button class="serach-form__button"></button>
+			</div>
+			<button type="button" class="header__search-btn-toggle" data-toggle="offcanvas-search"
+				title="Toggle Search"></button>
+		</div>
+	</header>
+	<!-- /header -->
+
+	<div class="cnm-main-menu">
+		<div class="main-menu-container">
+
+			<!-- user authorizated -->
+			<div class="main-menu-user" id="user_authorizated" style="display: none;">
+				<div class="main-menu-user__info">
+					<span class="main-menu-user__user-icon"></span>
+					<span class="main-menu-user__user-name" id='user_name'>UserName</span>
+				</div>
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__settings"><span class="cnm cnm-settings"></span>Настройки</button>
+					<button class="main-menu-user__link" id="close_session"><span
+							class="cnm cnm-close"></span>Выход</button>
+				</div>
+			</div>
+
+			<!-- not authorizated -->
+			<div class="main-menu-user main-menu-user_not_login" id="user_not_authorizated">
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__registration"><span
+							class="cnm cnm-person_add"></span>Зарегистрироваться</button>
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__login"><span class="cnm cnm-vpn_key"></span>Войти</button>
+				</div>
+			</div>
+			<!-- main menu -->
+			<div class="main-menu">
+				<nav class="main-menu__items">
+					<a class="main-menu__item main-menu__item_catalog" href="iptv.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-ondemand_video"></span>
+						</div>
+						IPTV
+					</a>
+					<a class="main-menu__item main-menu__item_catalog" href="index.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-view_module"></span>
+						</div>
+						Каталог фильмов
+					</a>
+					<a class="main-menu__item main-menu__item_categories" href="categories.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-view_list"></span>
+						</div>
+						Жанры
+					</a>
+					<a class="main-menu__item main-menu__item_newest" href="newest.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-movie_creation"></span>
+						</div>
+						Новинки
+					</a>
+					<a class="main-menu__item main-menu__item_top" href="top.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-thumb_up"></span>
+						</div>
+						Топ недели
+					</a>
+					<a class="main-menu__item main-menu__item_fav" href="favorites.html" id="favorites"
+						style="display: none;">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-star"></span>
+						</div>
+						Избранное
+					</a>
+					<a class="main-menu__item main-menu__item_watched" href="watched.html" id="watched"
+						style="display: none;">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-watch_later"></span>
+						</div>
+						Недавно просмотренные
+					</a>
+					<a class="main-menu__item main-menu__item_search" href="search.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-search"></span>
+						</div>
+						Расширенный поиск
+					</a>
+					<a class="main-menu__item main-menu__item_small main-menu__item_stats" href="stats.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-pie_chart"></span>
+						</div>
+						Статистика cinema.ntop.tv
+					</a>
+					<a class="main-menu__item main-menu__item_small main-menu__item_feedback" data-toggle="modal"
+						href="#modal__feedback">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-message"></span>
+						</div>
+						Ваши пожелания
+					</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- CONTENT -->
+	<!-- Анимация загрузки -->
+	<div id="fountainG">
+		<div id="fountainG_1" class="fountainG"></div>
+		<div id="fountainG_2" class="fountainG"></div>
+		<div id="fountainG_3" class="fountainG"></div>
+		<div id="fountainG_4" class="fountainG"></div>
+		<div id="fountainG_5" class="fountainG"></div>
+		<div id="fountainG_6" class="fountainG"></div>
+		<div id="fountainG_7" class="fountainG"></div>
+		<div id="fountainG_8" class="fountainG"></div>
+	</div>
+	<main class="content" style="display: none">
+		<div class="movie-page">
+			<div class="row no-gutters movie-page__header">
+				<div class="col movie-page__mov-poster-wrapper image__wrapper">
+					<div id="place_for_film_poster">
+
+					</div>
+				</div>
+
+				<div class="col movie-page__mov-info">
+					<h1 class="movie-page__mov-title" id="title">Название<span
+							class="movie-page__mov-title_seasons">(Сезон, серия)</span></h1>
+					<div class="movie-page__bookmark" data-toggle="tooltip" data-placement="left"
+						title="Добавить в избранное" id="not_favorites" style="display: none;"></div>
+					<div class="movie-page__bookmark activated" data-toggle="tooltip" data-placement="left"
+						title="Убрать из избранного" id="add_favorites" style="display: none;"></div>
+					<p><span id="year">Год</span>, <span id="countries">Страна</span></p>
+					<p class="mb-3" id="genres">жанр</p>
+
+					<div id="place_for_raiting">
+
+					</div>
+
+					<div id="place_for_button">
+						<!-- <a href="#top"><button class="movie-page__mov-watch-btn"><span
+									class="cnm cnm-play_circle_outline"></span>Смотреть</button></a>
+						<button class="movie-page__mov-watch-btn"
+							onclick="alert('Трейлера нет! Но фильм очень хороший!');">Трейлер</button> -->
+					</div>
+
+
+				</div>
+
+			</div>
+
+
+			<div class="seasons-tabs-wrapper">
+				<a name="top"></a>
+				<div class="nav seasons-tabs" id="SeasonsTabs" role="tablist">
+
+				</div>
+			</div>
+
+			<!-- TABS content -->
+			<div class="tab-content" id="SeasonsTabsContent">
+
+			</div>
+			<!-- /TABS content -->
+			<!-- data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }' -->
+
+			<!-- <div class="container-fluid justify-content-center mt-3"> -->
+
+			<!----------------------------------------------------------------------------->
+			<!-------------------------------VideoJS--------------------------------------->
+			<!----------------------------------------------------------------------------->
+
+			<div class="row">
+				<div class="col"></div>
+				<div class="col-10 col-sm-10 col-md-8 col-lg-8 col-xl-6">
+					<div class="d-flex justify-content-center mt-3 embed-responsive embed-responsive-16by9"
+						id="instructions">
+
+						<video id="my-video" class="video-js vjs-default-skin embed-responsive-item" controls
+							preload="metadata" data-setup='{"playbackRates": [1, 1.5, 2]}'>
+							<source src="/video.mp4" type="video/mp4" />
+							<!-- <source src="MY_VIDEO.webm" type="video/webm" /> --> -->
+						</video>
+					</div>
+				</div>
+				<div class="col"></div>
+			</div>
+
+
+			<!-- </div> -->
+
+
+		</div>
+
+		<div class="mov-page-info">
+			<div class="mov-page-info__tabs-wrapper">
+				<div class="nav mov-page-info__tabs" id="MovPageInfoTabs" role="tablist">
+					<a class="mov-page-info__tab active" id="MovPageInfoDesc-tab" data-toggle="tab"
+						href="#MovPageInfoDesc" role="tab" aria-controls="MovPageInfoDesc" aria-selected="true">
+						<span class="mov-page-info__tab-icon mov-page-info__tab-icon_desc"></span>
+						<span class="mov-page-info__tab-text">Описание</span>
+					</a>
+					<a class="mov-page-info__tab" id="MovPageInfoScreens-tab" data-toggle="tab"
+						href="#MovPageInfoScreens" role="tab" aria-controls="MovPageInfoScreens" aria-selected="false">
+						<span class="mov-page-info__tab-icon mov-page-info__tab-icon_screens"></span>
+						<span class="mov-page-info__tab-text">Скриншоты</span>
+					</a>
+					<a class="mov-page-info__tab" id="MovPageInfoComments-tab" data-toggle="tab"
+						href="#MovPageInfoComments" role="tab" aria-controls="MovPageInfoComments" aria-selected="false"
+						onclick="loadComment()">
+						<span class="mov-page-info__tab-icon mov-page-info__tab-icon_comments"></span>
+						<span class="mov-page-info__tab-text">Отзывы</span>
+					</a>
+					<a class="mov-page-info__tab" id="MovPageInfoActors-tab" data-toggle="tab" href="#MovPageInfoActors"
+						role="tab" aria-controls="MovPageInfoActors" aria-selected="false">
+						<span class="mov-page-info__tab-icon mov-page-info__tab-icon_actors"></span>
+						<span class="mov-page-info__tab-text">Актёры</span>
+					</a>
+				</div>
+			</div>
+
+			<div class="tab-content mov-page-info__tabs-content-wrapper" id="MovPageInfoTabsContent">
+				<!-- TAB description -->
+				<div class="tab-pane fade show active" id="MovPageInfoDesc" role="tabpanel"
+					aria-labelledby="MovPageInfoDesc-tab">
+					<div class="mov-page-info__tab-content mov-page-info__tab-content_description">
+						<p id="description"></p>
+					</div>
+				</div>
+				<!-- /TAB description -->
+				<!-- TAB description -->
+				<div class="tab-pane fade" id="MovPageInfoScreens" role="tabpanel"
+					aria-labelledby="MovPageInfoScreens-tab">
+					<div class="mov-page-info__tab-content mov-page-info__tab-content_screens">
+						<ul class="mov-page-info__screens-list" id="screenshots">
+							<li class="mov-page-info__screens-item">
+
+								<a data-fancybox="gallery" class="mov-page-info__screens-link"
+									href="screens/big/big01.jpg">
+									<img class="mov-page-info__screens-img" src="screens/01.jpg" alt="" />
+								</a>
+							</li>
+							<li class="mov-page-info__screens-item">
+								<a data-fancybox="gallery" class="mov-page-info__screens-link"
+									href="screens/big/big02.jpg">
+									<img class="mov-page-info__screens-img" src="screens/02.jpg" alt="" />
+								</a>
+							</li>
+							<li class="mov-page-info__screens-item">
+								<a data-fancybox="gallery" class="mov-page-info__screens-link"
+									href="screens/big/big03.jpg">
+									<img class="mov-page-info__screens-img" src="screens/03.jpg" alt="" />
+								</a>
+							</li>
+							<li class="mov-page-info__screens-item">
+								<a data-fancybox="gallery" class="mov-page-info__screens-link"
+									href="screens/big/big04.jpg">
+									<img class="mov-page-info__screens-img" src="screens/04.jpg" alt="" />
+								</a>
+							</li>
+							<li class="mov-page-info__screens-item">
+								<a data-fancybox="gallery" class="mov-page-info__screens-link"
+									href="screens/big/big05.jpg">
+									<img class="mov-page-info__screens-img" src="screens/05.jpg" alt="" />
+								</a>
+							</li>
+							<li class="mov-page-info__screens-item">
+								<a data-fancybox="gallery" class="mov-page-info__screens-link"
+									href="screens/big/big06.jpg">
+									<img class="mov-page-info__screens-img" src="screens/06.jpg" alt="" />
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /TAB description -->
+				<!-- TAB description -->
+				<div class="tab-pane fade" id="MovPageInfoComments" role="tabpanel"
+					aria-labelledby="MovPageInfoComments-tab">
+					<div class="mov-page-info__tab-content mov-page-info__tab-content_comments" id="place_for_comments">
+
+						<!-- Анимация загрузки -->
+						<div id="fountainG_actor">
+							<div id="fountainG_actor_1" class="fountainG_actor"></div>
+							<div id="fountainG_actor_2" class="fountainG_actor"></div>
+							<div id="fountainG_actor_3" class="fountainG_actor"></div>
+							<div id="fountainG_actor_4" class="fountainG_actor"></div>
+							<div id="fountainG_actor_5" class="fountainG_actor"></div>
+							<div id="fountainG_actor_6" class="fountainG_actor"></div>
+							<div id="fountainG_actor_7" class="fountainG_actor"></div>
+							<div id="fountainG_actor_8" class="fountainG_actor"></div>
+						</div>
+
+					</div>
+				</div>
+				<!-- /TAB description -->
+				<!-- TAB description -->
+				<div class="tab-pane fade" id="MovPageInfoActors" role="tabpanel"
+					aria-labelledby="MovPageInfoActors-tab">
+					<div class="mov-page-info__tab-content mov-page-info__tab-content_actors">
+						<ul class="mov-page-info__actors-list" id="place_for_persones">
+
+						</ul>
+					</div>
+				</div>
+				<!-- /TAB description -->
+			</div>
+
+		</div>
+
+		<div class="scrollrow-section">
+			<div class="scrollrow-section-header">
+				<h2 class="scrollrow-section-header__text">
+					Смотреть похожие
+				</h2>
+
+			</div>
+
+			<div class="cinema-items_var1 scrollrow-section__items">
+				<div class="row no-gutters scrollrow-section__items-wrapper" id="place_for_other_films">
+
+				</div>
+			</div>
+		</div>
+
+	</main>
+	<!-- /CONTENT -->
+
+	<!-- MODALS -->
+
+	<!-- Modal - ACTOR PAGE -->
+
+	<div class="modal fade" id="modal__actor" tabindex="-1" role="dialog" aria-labelledby="modal__actor"
+		aria-hidden="true">
+		<div class="modal-dialog modal-actor-page modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Имя актера<span>/интернациональное имя
+							актера</span></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="modal-actor__photo-wrapper">
+						<a id="photo_link" href=""><img class="modal-actor__photo" id="place_for_photo_1" src=""
+								alt="" /></a>
+						<!--<img class="modal-actor__photo" id="place_for_photo_2" src="actors/nophoto.png" alt=""/>
+                   <img class="modal-actor__photo" id="place_for_photo_3" src="actors/nophoto.png" alt=""/>-->
+					</div>
+					<div class="modal-actor__info">
+						<p id="place_for_info"></p>
+					</div>
+					<div class="modal-actor__films-wrapper">
+						<h5>Фильмография:</h5>
+						<!-- filmography start -->
+						<div class="container-fluid cinema-content-wrapper cinema-items_var1">
+							<div class="row no-gutters" id="place_for_filmography">
+								<!-- Анимация загрузки -->
+								<div id="fountainG_actor">
+									<div id="fountainG_actor_1" class="fountainG_actor"></div>
+									<div id="fountainG_actor_2" class="fountainG_actor"></div>
+									<div id="fountainG_actor_3" class="fountainG_actor"></div>
+									<div id="fountainG_actor_4" class="fountainG_actor"></div>
+									<div id="fountainG_actor_5" class="fountainG_actor"></div>
+									<div id="fountainG_actor_6" class="fountainG_actor"></div>
+									<div id="fountainG_actor_7" class="fountainG_actor"></div>
+									<div id="fountainG_actor_8" class="fountainG_actor"></div>
+								</div>
+							</div>
+						</div>
+						<!-- filmography end -->
+					</div>
+
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - MOVIE FEEDBACK -->
+	<div class="modal fade" id="modal__addcomment" tabindex="-1" role="dialog" aria-labelledby="modal__addcomment"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Ваш отзыв о фильме</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div>
+						<div class="form-group">
+							<label for="feedback-message">Ваш отзыв:</label>
+							<textarea id="feedback-message" placeholder="Введите отзыв"
+								class="form-control cnm-input"></textarea>
+						</div>
+						<div class="text-center py-2">
+							<button type="submit" class="cnm-modal-btn" id="add_comment">Отправить</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - FEEDBACK -->
+	<div class="modal fade" id="modal__feedback" tabindex="-1" role="dialog" aria-labelledby="modal__feedback"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Ваши пожелания</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="feedback-message">Ваше сообщение</label>
+							<textarea id="feedback-message" placeholder="Введите сообщение"
+								class="form-control cnm-input"></textarea>
+						</div>
+						<div class="text-center py-2">
+							<button type="submit" class="cnm-modal-btn">Отправить</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - SETTINGS -->
+	<div class="modal fade" id="modal__settings" tabindex="-1" role="dialog" aria-labelledby="modal__settings"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Настройки</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - LOGIN -->
+	<div class="modal fade" id="modal__login" tabindex="-1" role="dialog" aria-labelledby="modal__login"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="Login">Вход</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="form_login">
+						<div class="form-group">
+							<label for="login-username">Имя пользователя: <span class="text-danger"
+									id="wrong_login_login" style="display: none;">Вы не ввели логин</span></label>
+							<input type="text" class="form-control cnm-input" id="login-username"
+								placeholder="Введите имя пользователя">
+						</div>
+
+						<div class="form-group">
+							<label for="login-pass">Пароль: <span class="text-danger" id="wrong_login_pass"
+									style="display: none;">Вы не ввели пароль</span></label>
+							<input type="password" class="form-control cnm-input" id="login-pass" placeholder="Пароль">
+						</div>
+
+						<div class="form-group form-check text-center">
+							<input type="checkbox" class="form-check-input" id="login-autologin">
+							<label class="form-check-label" for="login-autologin">Автоматически входить</label>
+						</div>
+
+
+						<div class="text-center py-2">
+							<button id="login_submit" class="cnm-modal-btn">Войти</button>
+						</div>
+					</div>
+
+					<div class="p-4">
+						<a href="#modal__registration" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-person_add"></span> Зарегистрироваться</a>
+						<a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span
+								class="cnm cnm-help_outline"></span> Забыл пароль</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - REGISTRATION -->
+	<div class="modal fade" id="modal__registration" tabindex="-1" role="dialog" aria-labelledby="modal__registration"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Регистрация</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="form_registration">
+						<div class="form-group">
+							<label for="reg-username">Имя пользователя:
+								<span class="text-danger" id="wrong_registration_login" style="display: none;">
+									Вы не ввели имя пользователя
+								</span>
+								<span class="text-danger" id="wrong_registration_login_long" style="display: none;">
+									Логин содержит более 16 символов.
+								</span>
+								<span class="text-danger" id="wrong_registration_login_short" style="display: none;">
+									Логин содержит менее 3 символов.
+								</span>
+							</label>
+							<input type="text" class="form-control cnm-input" id="reg-username"
+								placeholder="Введите имя пользователя">
+						</div>
+						<div class="form-group">
+							<label for="reg-pass">Пароль:
+								<span class="text-danger" id="wrong_registration_password" style="display: none;">
+									Вы не ввели пароль
+								</span>
+								<span class="text-danger" id="wrong_registration_password_long" style="display: none;">
+									Пароль содержит более 16 символов.
+								</span>
+								<span class="text-danger" id="wrong_registration_password_short" style="display: none;">
+									Пароль содержит менее 3 символов.
+								</span>
+							</label>
+							<input type="password" class="form-control cnm-input" id="reg-pass" placeholder="Пароль">
+						</div>
+						<div class="form-group">
+							<label for="reg-repass">Повторите папроль:
+								<span class="text-danger" id="wrong_registration_repassword" style="display: none;">
+									Вы не повторили пароль
+								</span>
+								<span class="text-danger" id="wrong_registration_repassword_wrong"
+									style="display: none;">
+									Пароли не совпадают
+								</span>
+							</label>
+							<input type="password" class="form-control cnm-input" id="reg-repass"
+								placeholder="Повторите пароль">
+						</div>
+						<div class="form-group">
+							<label for="reg-email">E-mail:
+								<span class="text-danger" id="wrong_registration_email" style="display: none;">
+									Вы не указали e-mail
+								</span>
+								<span class="text-danger" id="wrong_registration_email_false" style="display: none;">
+									Проверьте правильность ввода e-mail
+								</span>
+							</label>
+							<input type="text" class="form-control cnm-input" id="reg-email"
+								placeholder="Введите e-mail">
+						</div>
+						<div class="form-group form-check text-center">
+							<input type="checkbox" class="form-check-input" id="reg-autologin">
+							<label class="form-check-label" for="reg-autologin">Автоматически входить</label>
+						</div>
+
+						<div class="text-center py-2">
+							<button type="submit" id="register_submit" class="cnm-modal-btn">Зарегистрироваться</button>
+						</div>
+					</div>
+
+					<div class="p-4">
+						<a href="#modal__login" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-vpn_key"></span> Вход</a>
+						<a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span
+								class="cnm cnm-help_outline"></span> Забыл пароль</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal - FORGOT PASSWORD -->
+	<div class="modal fade" id="modal__forgotpass" tabindex="-1" role="dialog" aria-labelledby="modal__forgotpass"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Восстановление пароля</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="forgot-pass-email">E-mail:</label>
+							<input type="text" class="form-control cnm-input" id="forgot-pass-email"
+								placeholder="Введите e-mail">
+						</div>
+						<div class="text-center py-2">
+							<button type="submit" class="cnm-modal-btn">Восстановить</button>
+						</div>
+					</form>
+
+					<div class="p-4">
+						<a href="#modal__login" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-vpn_key"></span> Вход</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - TRAILER -->
+	<div class="modal fade" id="modal__trailer" tabindex="-1" role="dialog" aria-labelledby="modal__trailer">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="Trailer_Name"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body embed-responsive embed-responsive-16by9">
+					<!----------------------------------------------------------------------------->
+					<!-------------------------------VideoJS--------------------------------------->
+					<!----------------------------------------------------------------------------->
+
+					<video id="video-trailer" class="video-js vjs-default-skin embed-responsive-item" controls
+						preload="none" data-setup='{"playbackRates": [1, 1.5, 2], "autoplay": true}'>
+						<!-- <source src="video_1.mp4" type="video/mp4" /> -->
+					</video>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+		integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+		crossorigin="anonymous"></script>
+
+	<!-- Подключение библиотеки с функциями -->
+	<script src="/js/functions.js"></script>
+
+
+	<script>
+		$(document).ready(function () {
+
+			$('[data-toggle=offcanvas-menu]').click(function () {
+				$('.cnm-main-menu').toggleClass('active');
+				$('.header__menu-button').toggleClass('active');
+			});
+
+			$('[data-toggle=offcanvas-search]').click(function () {
+				$('.header__search').toggleClass('active');
+				$('.header__search-btn-toggle').toggleClass('active');
+			});
+
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+
+
+
+	</script>
+
+	<!-- fancyBox CSS -->
+	<link href="fancybox/jquery.fancybox.min.css" rel="stylesheet">
+
+	<!-- fancyBox JS -->
+	<script src="fancybox/jquery.fancybox.min.js"></script>
+
+	<!-- Video-js.css -->
+	<link href="/player/video-js.css" rel="stylesheet" />
+
+	<!-- Video.js -->
+	<script src="/player/video.js"></script>
+
+	<!-- Video.js flv support -->
+	<script src="/player/flv.js"></script>
+	<script src="/player/videojs-flvjs.js"></script>
+
+	<!-- Video.js playlist -->
+	<script src="/player/videojs-playlist.js"></script>
+	<!-- Video.js plugins-->
+	<script src="/player/videojs.hotkeys.js"></script>
+
+
+
+	<script>
+
+		//----------------------------------------------------------------------------------------------
+		//------------------------------------Персональный рейтинг--------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		function addPersonalRating(ratingPersonalValue, parent) {
+
+			let ratingPersonal = document.createElement('div');
+			ratingPersonal.id = 'personal_raiting';
+
+			parent.append(ratingPersonal);
+
+			let personalRating = document.getElementById('personal_raiting');
+
+			let containerForStars = document.createElement('div');
+
+			let personalRatingTitle = document.createElement('p');
+			personalRatingTitle.id = 'my_rating';
+			personalRatingTitle.classList.add('mov-rank-text');
+			personalRatingTitle.classList.add('mb-1');
+			personalRatingTitle.innerText = `Моя оценка: ${ratingPersonalValue}`;
+
+			personalRating.append(personalRatingTitle);
+
+			for (let i = 0; i < 10; i++) {
+				let star = document.createElement('span');
+				star.classList.add('mov-rank-star');
+				star.setAttribute('data-toggle', 'tooltip');
+				star.setAttribute('data-placement', 'top');
+				star.setAttribute('title', (i + 1));
+				if (i < ratingPersonalValue) {
+					star.classList.add('mov-rank-star_voited');
+				}
+				// star.setAttribute('data-rating', (i + 1));
+				star.addEventListener('mouseover', function (event) {
+					let parent = event.target.parentElement;
+					for (let j = 0; j < 10; j++) {
+						parent.children[j].classList.remove('mov-rank-star_voited');
+					}
+
+					for (let j = 0; j <= i; j++) {
+						parent.children[j].classList.add('mov-rank-star_voited');
+					}
+				});
+
+				star.addEventListener('click', function () {
+					let request = `https://cinema.ntop.tv/api.php?format=ajax&PHPSESSID=${getCookie('PHPSESSID')}&action[0]=Video.setRating&movie_id[0]=${$_GET('id')}&rating[0]=${(i + 1)}&JsHttpRequest=16080186817044-xml`;
+					let xhr = new XMLHttpRequest();
+					xhr.open('POST', request);
+					xhr.responseType = 'json';
+
+					xhr.send();
+
+					xhr.onreadystatechange = function () {
+						if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+							ratingPersonalValue = (i + 1);
+							personalRatingTitle.innerText = `Моя оценка: ${(i + 1)}`;
+							containerForStars.append(addRemoveRatingElement(containerForStars));
+
+							let result = xhr.response;
+
+							let ratingLocal = result['js'][0]['response']['rating_local_value'];
+							let ratingLocalCount = result['js'][0]['response']['rating_local_count'];
+
+							document.getElementById('local_rating').innerText = `Локальный рейтинг: ${ratingLocal}`;
+							document.getElementById('local_rating_width').style.width = `${(ratingLocal * 10)}%`;
+
+							document.getElementById('raiting-local').setAttribute('data-original-title', `Локальный рейтинг: ${ratingLocal} (${ratingLocalCount})`);
+
+						}
+					}
+				});
+
+				containerForStars.append(star);
+			}
+
+			//Сброс личного рейтинга
+			if (ratingPersonalValue > 0) {
+				containerForStars.append(addRemoveRatingElement(containerForStars));
+			}
+
+
+
+			containerForStars.addEventListener('mouseout', function () {
+				for (let i = 0; i < 10; i++) {
+					if (i < ratingPersonalValue) {
+						containerForStars.children[i].classList.add('mov-rank-star_voited');
+					} else {
+						containerForStars.children[i].classList.remove('mov-rank-star_voited');
+					}
+				}
+			});
+
+			personalRating.append(containerForStars);
+
+			//----------------------------------------------------------------------------------------------
+			//-----------------------------Обработчики событий рейтинга-------------------------------------
+			//----------------------------------------------------------------------------------------------
+
+			//Функция для добавления елемента удаления рейтинга
+			function addRemoveRatingElement(parent) {
+
+				let clearPersonalRating = document.createElement('span');
+				clearPersonalRating.classList.add('mov-rank-star-clear');
+				clearPersonalRating.addEventListener('click', function () {
+					let request = `https://cinema.ntop.tv/api.php?format=ajax&PHPSESSID=${getCookie('PHPSESSID')}&action[0]=Video.setRating&movie_id[0]=${$_GET('id')}&rating[0]=0&JsHttpRequest=16080186817044-xml`;
+					let xhr = new XMLHttpRequest();
+					xhr.open('POST', request);
+					xhr.responseType = 'json';
+
+					xhr.send();
+
+					xhr.onreadystatechange = function () {
+						if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+							for (let i = 0; i < 10; i++) {
+								parent.children[i].classList.remove('mov-rank-star_voited');
+							}
+							ratingPersonalValue = 0;
+							personalRatingTitle.innerText = `Моя оценка:`;
+							clearPersonalRating.remove();
+
+							let result = xhr.response;
+							let ratingLocal = result['js'][0]['response']['rating_local_value'];
+							let ratingLocalCount = result['js'][0]['response']['rating_local_count'];
+
+							document.getElementById('local_rating').innerText = `Локальный рейтинг: ${ratingLocal}`;
+							document.getElementById('local_rating_width').style.width = `${(ratingLocal * 10)}%`;
+							document.getElementById('raiting-local').setAttribute('data-original-title', `Локальный рейтинг: ${ratingLocal} (${ratingLocalCount})`);
+						}
+					}
+				});
+
+				if (parent.children.length <= 10) {
+					return clearPersonalRating;
+				} else {
+					return '';
+				}
+			}
+		}
+
+
+		//----------------------------------------------------------------------------------------------
+		//-----------------------------Запрос на информацию о фильме------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		let REQUEST_URL;
+		if (getCookie('PHPSESSID')) {
+			//если пользователь авторизован
+			REQUEST_URL = `https://cinema.ntop.tv/api.php?format=ajax&PHPSESSID=${getCookie('PHPSESSID')}&action[0]=Video.getMovie&movie_id[0]=${$_GET('id')}&action[1]=Video.getBookmarks&JsHttpRequest=16007667792177-xml`;
+		} else {
+			//если пользователь не авторизован
+			REQUEST_URL = 'https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.getMovie&movie_id[0]=' + $_GET('id') + '&JsHttpRequest=16007667792177-xml';
+		}
+
+		let NAME;
+
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', REQUEST_URL);
+		xhr.responseType = 'json';
+
+		xhr.send();
+
+		xhr.onreadystatechange = function () {
+			//Провекрка на статус выполненяи запроса. Если запрос выполнен(xhr.readyState == XMLHttpRequest.DONE) и был возвращен ответ(xhr.status == 200)
+			//идет дальнейшая обработка. В случае сбоя идет обработка ошибки
+			if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+				let result = xhr.response;
+
+				let film = result['js'][0]['response']['movie'];
+
+				//Если пользователь авторизован
+				//Находится ли фильм в избранных
+				if (result['js'].length >= 2) {
+					document.getElementById('add_favorites').setAttribute('data-movie', film['movie_id']);
+					document.getElementById('not_favorites').setAttribute('data-movie', film['movie_id']);
+
+					let favorites = result['js'][1]['response']['movies'];
+					console.log(favorites);
+					let movie_id = film['movie_id'];
+					for (let key in favorites) {
+						if (favorites[key]['movie_id'] == movie_id) {
+							document.getElementById('add_favorites').style.display = 'block';
+							break;
+						}
+						document.getElementById('not_favorites').style.display = 'block';
+					}
+
+				}
+
+
+				//--------------------------Главаня страница и описание-----------------------------------
+
+				let title = film['name'];//--------------------------------------------------------Заголовок
+
+				//-------------------------------Получение названия----------------------------
+				NAME = title;
+				let end = title.indexOf('(');
+				if (end > 0) {
+					NAME = title.slice(0, end);
+				}
+
+
+				// <img class="movie-page__mov-poster-img minimized" id="film_poster" src="" alt="" />place_for_film_poster
+
+				//-----------------------------------Постер------------------------------------
+				let posterImage;
+
+				let covers = film['covers'];
+				console.log(covers);
+				if (covers.length > 1) {
+					let carouselPoster = document.createElement('div');//сама карусель
+					carouselPoster.id = 'carouselPoster';
+					carouselPoster.classList.add('carousel');
+					carouselPoster.classList.add('slide');
+					carouselPoster.setAttribute('data-ride', 'carousel');
+
+					let carouselContent = document.createElement('div');//содержимое карусели
+					carouselContent.classList.add('carousel-inner');
+
+					for (let i = 0; i < covers.length; i++) {
+						if (i <= 0) {
+							carouselContent.innerHTML += `<div class="carousel-item active">
+																<img class="d-block w-100"
+																	src="https://cinema.ntop.tv${covers[i]['original']}"
+																	alt="Слайд ${(i + 1)}"
+																	onclick="bigPoster('https://cinema.ntop.tv${covers[i]['original']}');">
+															</div>`;
+							continue;
+						} else {
+							carouselContent.innerHTML += `<div class="carousel-item">
+																<img class="d-block w-100"
+																	src="https://cinema.ntop.tv${covers[i]['original']}"
+																	alt="Слайд ${(i + 1)}"
+																	onclick="bigPoster('https://cinema.ntop.tv${covers[i]['original']}');">
+															</div>`;
+						}
+					}
+					carouselPoster.append(carouselContent);
+
+					//добавление значков для смены изображений
+					carouselPoster.innerHTML += `<a class="carousel-control-prev" href="#carouselPoster" role="button"
+													data-slide="prev">
+													<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+													<span class="sr-only">Previous</span>
+												</a>
+												<a class="carousel-control-next" href="#carouselPoster" role="button"
+													data-slide="next">
+													<span class="carousel-control-next-icon" aria-hidden="true"></span>
+													<span class="sr-only">Next</span>
+												</a>`;
+					document.getElementById('place_for_film_poster').append(carouselPoster);
+
+				} else {
+					posterImage = 'https://cinema.ntop.tv' + film['covers']['0']['original'];
+					document.getElementById('place_for_film_poster').innerHTML = `<img class="movie-page__mov-poster-img minimized" id="film_poster" src="${posterImage}" alt="" onclick="bigPoster('${posterImage}');"/>`;
+				}
+
+
+				let year = film['year'];//---------------------------------------------------------Год
+				let countries = '';//--------------------------------------------------------------Страны
+				for (let key in film['countries']) {
+					countries += film['countries'][key];
+					countries += ' / ';
+				}
+				countries = countries.substring(0, (countries.length - 2));
+				let genres = '';//-----------------------------------------------------------------Жанр
+				for (let key in film['genres']) {
+					genres += film['genres'][key];
+					genres += ' / ';
+				}
+				genres = genres.substring(0, (genres.length - 2));
+				let description = film['description'];//------------------------------------------Описание
+				let commentQuantity = film['comments_count'];//-----------------------------------Количество комментариев
+
+
+				//----------------------------------Статус серий-----------------------------
+				if (film['StatusSeries'] == 1) {
+					document.getElementById('place_for_film_poster').innerHTML += '<button class="btn btn-primary mt-2" style="width: 100%" disabled>Добавляются серии</button>';
+				} else if (film['StatusSeries'] == 2) {
+					document.getElementById('place_for_film_poster').innerHTML += '<button class="btn btn-success mt-2" style="width: 100%" disabled>Завершен</button>';
+				}
+
+				//------------------------------------Рейтинг--------------------------------
+
+				let ratingIMDb = film['rating_imdb_value'];//-------------------------------------Рейтинг IMDb
+				let ratingIMDbCount = film['rating_imdb_count'];//--------------------------------Рейтинг IMDb количество
+				let ratingKinopoisk = film['rating_kinopoisk_value'];//---------------------------Рейтинг Кинопоиск
+				let ratingKinopoiskCount = film['rating_kinopoisk_count'];//----------------------Рейтинг Кинопоиск количество
+				let ratingLocal = film['rating_local_value'];//-----------------------------------Локальный рейтинг
+				let ratingLocalCount = film['rating_local_count'];//------------------------------Локальный рейтинг количество
+				let ratingPersonalValue = film['rating_personal_value'];//------------------------Личный рейтинг
+
+
+				if (ratingIMDb > 0 && ratingIMDb != undefined) {
+					let ratingIMDbTemplate = '<p class="mov-rank-text">Рейтинг IMDb: ' + ratingIMDb + '</p>' +
+						'<div id="raiting-imdb" style="width: 200px; height: 25px;" data-toggle="tooltip" data-placement="top" title="Рейтинг IMDb: ' + ratingIMDb + ' (' + ratingIMDbCount + ')">' +
+						'<div style="background-color: #eb9c00; position: relative; height: 95%; width: ' + (ratingIMDb * 10) + '%">' +
+						'</div>' +
+						'<img src="./images/raitingw_white.png" alt="" width="100%" style="position: relative; top: -25px" height="100%">' +
+						'</div>';
+					document.getElementById('place_for_raiting').innerHTML += ratingIMDbTemplate;
+				}
+
+				if (ratingKinopoisk > 0 && ratingKinopoisk != undefined) {
+					let ratingKInopoiskTemplate = '<p class="mov-rank-text">Рейтинг KinoPoisk: ' + ratingKinopoisk + '</p>' +
+						'<div id="raiting-kinopoisk" style="width: 200px; height: 25px;" data-toggle="tooltip" data-placement="top" title="Рейтинг KinoPoisk.ru: ' + ratingKinopoisk + ' (' + ratingKinopoiskCount + ')">' +
+						'<div style="background-color: #fefe22; position: relative; height: 95%; width: ' + (ratingKinopoisk * 10) + '%">' +
+						'</div>' +
+						'<img src="/images/raitingw_white.png" alt="" width="100%" style="position: relative; top: -25px" height="100%">' +
+						'</div>';
+					document.getElementById('place_for_raiting').innerHTML += ratingKInopoiskTemplate;
+				}
+
+				if (ratingLocal > 0 && ratingLocal != undefined) {
+					let ratingLocalTemplate = '<p class="mov-rank-text" id="local_rating">Локальный рейтинг: ' + ratingLocal + '</p>' +
+						'<div id="raiting-local" style="width: 200px; height: 25px;" data-toggle="tooltip" data-placement="top" title="Локальный рейтинг: ' + ratingLocal + ' (' + ratingLocalCount + ')">' +
+						'<div id="local_rating_width" style="background-color: #ff2400; position: relative; height: 95%; width: ' + (ratingLocal * 10) + '%">' +
+						'</div>' +
+						'<img src="/images/raitingw_white.png" alt="" width="100%" style="position: relative; top: -25px" height="100%">' +
+						'</div>';
+					document.getElementById('place_for_raiting').innerHTML += ratingLocalTemplate;
+				}
+
+
+				if (getCookie('PHPSESSID')) {
+					addPersonalRating(ratingPersonalValue, document.getElementById('place_for_raiting'));
+				}
+
+				document.getElementById('title').innerText = title;
+				document.getElementById('year').innerText = year;
+				document.getElementById('countries').innerText = countries;
+				document.getElementById('genres').innerText = genres;
+				document.getElementById('description').innerHTML = description;
+				document.getElementById('MovPageInfoComments-tab').getElementsByClassName('mov-page-info__tab-text')[0].innerText = `Отзывы (${commentQuantity})`;
+
+				let files = film['files'];
+
+
+				//--------------------------------------------------------------------------------
+				//----Добавление кнопок (Для просмотра в SD, HD качестве и трейлера(если есть))---
+				//--------------------------------------------------------------------------------
+
+				//---------------------Проверка условия есть ли HD качество-----------------------
+				//--------------------------Если есть HD качество---------------------------------
+
+				if (film['hd'] == 1 && files.length > 1) {
+					//Если есть, добавлятся кнопки для выбора
+					let parent = document.getElementById('place_for_button');//родительский элемент
+
+					let buttonHD = document.createElement('button');//кнопка для HD качества
+					buttonHD.classList.add('movie-page__mov-watch-btn');
+					buttonHD.classList.add('mr-2');
+					buttonHD.classList.add('mt-2');
+					buttonHD.innerHTML = '<span class="cnm cnm-play_circle_outline"></span>Смотреть в HD';
+
+					//обработчик событий для смены ссылок на HD качество для сериала и на перезагрузку плеера для фильма
+					buttonHD.addEventListener('click', function () {
+						//Выделение выбранной кнопки
+						buttonSD.classList.remove('active');
+						buttonHD.classList.add('active');
+
+						//------------------------------------Если сериал--------------------------------------
+
+						if (film['StatusSeries'] >= 1) {
+							//Получение всех элементов с классом "seasons-list__button"
+							let series = document.getElementsByClassName('seasons-list__button');
+							let srcFirstSeries;//ссылка на первую серию в SD качестве
+
+							//Замена ссылок на серию в HD качестве в атрибуте data-name для каждого элемента
+							for (let i = 0; i < series.length; i++) {
+								let attribute = series[i].getAttribute('data-name').replace('cinema.ntop.tv/sd', 'cinema.ntop.tv/hd');
+
+								series[i].classList.remove('active');
+
+								if (i < 1) {
+									srcFirstSeries = attribute;
+									series[i].classList.add('active');
+								}
+
+								series[i].removeAttribute('data-name');
+								series[i].setAttribute('data-name', attribute);
+							}
+
+							//Перезагрузка плеера
+							for (let key in files) {
+								if (files[key]['links']['download'].includes('cinema.ntop.tv/hd')) {
+									let resolutionHDForSerials = files[key]['metainfo']['video']['label'];
+									restartPlayer('my-video', resolutionHDForSerials, srcFirstSeries);
+								}
+							}
+						} else {
+
+							//------------------------------Если фильм-------------------------------------------
+
+							//Получение ссылки на фильм в HD и перезапуск плеера
+							let movieHDsrc = film['files']['0']['links']['download'].replace('http:', 'https:');
+							let resolurionMovieHD = film['files']['0']['metainfo']['video']['label'];
+
+							restartPlayer('my-video', resolurionMovieHD, movieHDsrc);
+
+							//Замена скриншотов на скринштоы в HD качетсве
+							let screenshots = document.getElementById('screenshots');
+							let images = screenshots.getElementsByTagName('img');
+							let links = screenshots.getElementsByTagName('a');
+
+							let screenshotFiles = film['files']['0'];
+
+							for (let i = 0; i < images.length; i++) {
+								images[i].src = 'https://cinema.ntop.tv/' + screenshotFiles['small_frames'][i];
+								links[i].href = 'https://cinema.ntop.tv/' + screenshotFiles['frames'][i];
+							}
+						}
+					});
+
+					//------------------------Добавление кнопки для SD качества---------------------------
+
+					let buttonSD = document.createElement('button');
+					buttonSD.classList.add('movie-page__mov-watch-btn');
+					buttonSD.classList.add('active');
+					buttonSD.classList.add('mr-2');
+					buttonSD.classList.add('mt-2');
+					buttonSD.innerHTML = '<span class="cnm cnm-play_circle_outline"></span>Смотреть в SD';
+
+					//обработчик событий для смены ссылок на HD качество для сериала и на перезагрузку плеера для фильма
+					buttonSD.addEventListener('click', function () {
+						//Выделение выбранной кнопки
+						buttonHD.classList.remove('active');
+						buttonSD.classList.add('active');
+
+
+						//-----------------------------Если сериал-----------------------------------------
+
+						if (film['StatusSeries'] >= 1) {
+							//Получение всех элементов с классом "seasons-list__button"
+							let series = document.getElementsByClassName('seasons-list__button');
+							let srcFirstSeries;//ссылка на первую серию в HD качестве
+
+							//Замена ссылок на серию в HD качестве в атрибуте data-name для каждого элемента
+							for (let i = 0; i < series.length; i++) {
+								let attribute = series[i].getAttribute('data-name').replace('cinema.ntop.tv/hd', 'cinema.ntop.tv/sd');
+
+								series[i].classList.remove('active');
+
+								if (i < 1) {
+									srcFirstSeries = attribute;
+									series[i].classList.add('active');
+								}
+
+								series[i].removeAttribute('data-name');
+								series[i].setAttribute('data-name', attribute);
+							}
+
+							//Перезагрузка плеера
+							for (let key in files) {
+								if (files[key]['links']['download'].includes('cinema.ntop.tv/hd')) {
+									let resolutionHDForSerials = files[key]['metainfo']['video']['label'];
+									restartPlayer('my-video', resolutionHDForSerials, srcFirstSeries);
+								}
+							}
+						} else {
+
+							//----------------------------Если фильм--------------------------------------------
+
+							if (film['files'].length > 2) {
+								//Получение всех элементов с классом "seasons-list__button"
+								let series = document.getElementsByClassName('seasons-list__button');
+								let srcFirstSeries;//ссылка на первую серию в HD качестве
+
+								//Замена ссылок на серию в HD качестве в атрибуте data-name для каждого элемента
+								for (let i = 0; i < series.length; i++) {
+									let attribute = series[i].getAttribute('data-name').replace('cinema.ntop.tv/hd', 'cinema.ntop.tv/sd');
+
+									series[i].classList.remove('active');
+
+									if (i < 1) {
+										srcFirstSeries = attribute;
+										series[i].classList.add('active');
+									}
+
+									series[i].removeAttribute('data-name');
+									series[i].setAttribute('data-name', attribute);
+								}
+
+								//Перезагрузка плеера
+								for (let key in files) {
+									if (files[key]['links']['download'].includes('cinema.ntop.tv/hd')) {
+										let resolutionHDForSerials = files[key]['metainfo']['video']['label'];
+										restartPlayer('my-video', resolutionHDForSerials, srcFirstSeries);
+									}
+								}
+							} else {
+								//Получение ссылки на фильм в SD и перезапуск плеера
+								let movieHDsrc = film['files']['1']['links']['download'].replace('http:', 'https:');
+								let resolurionMovieHD = film['files']['1']['metainfo']['video']['label'];
+
+								restartPlayer('my-video', resolurionMovieHD, movieHDsrc);
+
+								// Замена скриншотов для SD качества
+								let screenshots = document.getElementById('screenshots');
+								let images = screenshots.getElementsByTagName('img');
+								let links = screenshots.getElementsByTagName('a');
+
+								let screenshotFiles = film['files']['1'];
+
+								for (let i = 0; i < images.length; i++) {
+									images[i].src = 'https://cinema.ntop.tv/' + screenshotFiles['small_frames'][i];
+									links[i].href = 'https://cinema.ntop.tv/' + screenshotFiles['frames'][i];
+								}
+
+							}
+
+
+						}
+					});
+
+					parent.append(buttonHD);
+					parent.append(buttonSD);
+				} else {
+
+					//-----------------Если фильм только в SD качестве---------------------------
+
+					let buttonSD = document.createElement('button');
+					buttonSD.classList.add('movie-page__mov-watch-btn');
+					buttonSD.classList.add('active');
+					buttonSD.classList.add('mr-2');
+					buttonSD.classList.add('mt-2');
+					buttonSD.innerHTML = '<span class="cnm cnm-play_circle_outline"></span>Смотреть в SD';
+
+					document.getElementById('place_for_button').append(buttonSD);
+				}
+
+
+				//-----------------------------------------------------------------------------------
+				//---------------------Проверка условия есть ли трейлер------------------------------
+				//-----------------------------------------------------------------------------------
+
+				if (film['trailer'] != undefined) {
+					console.log('Есть трейлер');
+
+					//Настройка плеера
+					let player;
+
+					//Проверка типа видео
+
+					if (film['trailer']['video'].includes('flv')) {
+						let source = document.createElement('source');
+						console.log('Трейлер в формате .flv');
+						source.src = film['trailer']['video'];
+						source.type = 'video/flv';
+						document.getElementById('video-trailer').append(source);
+						try {
+							player = videojs.getPlayer('video-trailer', {
+								techOrder: ['html5', 'flvjs'],
+								flvjs: {
+									mediaDataSource: {
+										isLive: false,
+										cors: true,
+										withCredentials: false,
+									},
+									// config: {},
+								},
+							});
+						} catch (error) {
+							console.error(error);
+							window.location.reload()
+						}
+					} else {
+						try {
+							player = videojs.getPlayer('video-trailer');
+							player.src(film['trailer']['video']);
+						} catch (error) {
+							console.error(error);
+							window.location.reload()
+						}
+
+					}
+
+					//Добавление кнопки трейлера
+					let buttonTrailer = document.createElement('button');
+					buttonTrailer.classList.add('movie-page__mov-watch-btn');
+					buttonTrailer.classList.add('mr-2');
+					buttonTrailer.classList.add('mt-2');
+					buttonTrailer.setAttribute('data-toggle', 'modal');
+					buttonTrailer.setAttribute('data-target', '#modal__trailer');
+					buttonTrailer.innerHTML = '<span class="cnm cnm-play_circle_outline"></span>Смотреть трейлер';
+
+					document.getElementById('Trailer_Name').innerText = NAME;
+
+					document.getElementById('place_for_button').append(buttonTrailer);
+
+					buttonTrailer.addEventListener('click', function () {
+						//Запуск плеера
+						player.load();
+					});
+
+					//Обработка закрытия модального окна с терйлером
+					let trailerModal = document.getElementById('modal__trailer');
+
+					trailerModal.addEventListener('click', function (event) {
+						setTimeout(function () {
+							if (trailerModal.classList.length <= 2) {
+								player.pause();
+							}
+						}, 100);
+					});
+
+				}
+
+
+				//--------------------------------------------------------------------------------
+				//------------------------------------Актеры--------------------------------------
+				//--------------------------------------------------------------------------------
+
+				let personesResult = '';
+
+				for (let key in film['persones']) {
+					let personId = film['persones'][key]['person_id'];
+					let personName = film['persones'][key]['names'][0];
+					let personNameInternational = film['persones'][key]['names'][1];
+					let personPhotoSrc = "https://cinema.ntop.tv" + film['persones'][key]['photo'];
+					if (personPhotoSrc == "https://cinema.ntop.tv") {
+						personPhotoSrc = "actors/nophoto.png";
+					}
+					let personRoles = film['persones'][key]['roles'][0]['role'];
+
+					let personesTemplate = "<li class=\"mov-page-info__actors-item\" onclick=\"loadPersonInfo(" + personId + ")\">" +
+						"<a data-toggle=\"modal\" href=\"#modal__actor\" class=\"mov-page-info__actor-link\">" +
+						"<div style=\"background-image: url(" + personPhotoSrc + ")" +
+						"\" class=\"mov-page-info__actor-photo\"></div>" +
+						"<div class=\"mov-page-info__actor-title\">" +
+						"<p class=\"mov-page-info__actor-name\">" + personName + " / " + personNameInternational + "</p>" +
+						"<p class=\"mov-page-info__actor-role\">" + personRoles + "</p>" +
+						"</div>" +
+						"</a>" +
+						"</li>";
+
+					personesResult += personesTemplate;
+				}
+				document.getElementById('place_for_persones').innerHTML = personesResult;
+
+
+				//--------------------------------------------------------------------------------
+				//-----------------------------Смотреть похожие-----------------------------------
+				//--------------------------------------------------------------------------------
+
+				let otherMoviesResult = '';
+				for (let key in film['other_movies']) {
+
+					let cover = "https://cinema.ntop.tv" + film['other_movies'][key]['cover'];
+					let movieId = film['other_movies'][key]['movie_id'];
+					let name = film['other_movies'][key]['name'];
+					let year = film['other_movies'][key]['year'];
+
+					let otherMoviesTemplate = "<div class=\"col-2\">" +
+						"<div class=\"cinema-item\">" +
+						"<a href=\"movie-page.html?id=" + movieId + "\" class=\"cinema-item__link\">" +
+						"<div class=\"cinema-item__poster-wrap\">" +
+						"<img class=\"cinema-item__poster-img\" src=\"" + cover + "\" alt=\"\"/>" +
+						"</div>" +
+						"<p class=\"cinema-item__title\">" + ((name.indexOf('(') > 0) ? (name.substring(0, name.indexOf('(')) + "<span class=\"cinema-item__title-season\">" + name.substring(name.indexOf('('))) : (name)) + "</span></p>" +
+						"<p class=\"cinema-item__info\">" +
+						"<span class=\"cinema-item__info_country\">" + year + ", Страна не указана</span>" +
+						"<span class=\"cinema-item__info_cats\">Драма / История / Биография / Сериал</span></p>" +
+						"<span class=\"cinema-item__serial-label\">обновляется</span>" +
+						"</a>" +
+						"</div>" +
+						"</div>";
+					otherMoviesResult += otherMoviesTemplate;
+				}
+				document.getElementById('place_for_other_films').innerHTML = otherMoviesResult;
+
+
+				//--------------------------------------------------------------------------------
+				//---------------------------------Скриншоты--------------------------------------
+				//--------------------------------------------------------------------------------
+
+				let screenshots = document.getElementById('screenshots');
+				let images = screenshots.getElementsByTagName('img');
+				let links = screenshots.getElementsByTagName('a');
+
+				let screenshotsFiles = film['files'];
+
+				try {
+					for (let i = 0; i < images.length; i++) {
+						images[i].src = 'https://cinema.ntop.tv/' + screenshotsFiles[(screenshotsFiles.length - 1)]['small_frames'][i];
+						links[i].href = 'https://cinema.ntop.tv/' + screenshotsFiles[(screenshotsFiles.length - 1)]['frames'][i];
+					}
+
+				} catch (error) {
+					console.error(error);
+
+					screenshots.innerHTML = '<h2 class="mt-3 ml-3 text-muted">Скриншотов нет</h2>';
+				}
+
+
+
+
+				//--------------------------------------------------------------------------------
+				//--------------------Загрузка видео и создание навигации-------------------------
+				//--------------------------------------------------------------------------------
+
+				//film['StatusSeries'] имеет 3 значения: 
+				//0 - фильм(может имень SD и HD качество);
+				//1 - сериал, серии выходят;
+				//2 - сериал, серии не выходят
+				if (film['StatusSeries'] >= 1) {
+					//Выполняется если сериал
+					//Подсчитывает количество серий в сезонах и количество сезоном. Результат передает в функцию createNumeration()
+					//Выводит первую серию первого сезона на макет
+
+					// let files = film['files'];
+
+					if (film['hd'] == 1) {
+						//Сериалы с HD качеством
+						console.log('Сериал с HD качеством');
+
+
+						//Проверка. Имеет ли сериал несколько сезонов
+						if (files[0]['name'].includes('season')) {
+							//В сериале несколько сезонов
+							console.log('будут еще сезоны');
+							loadSerial(files);
+
+						} else {
+							//В сериале 1 сезон
+							console.log('сезонов не будет');
+
+							//Делается с расчетом на то, что в сериале только 1 сезон
+							let seasonsTabs = document.getElementById('SeasonsTabs');//div, в который поместятся сезоны
+
+
+
+							//Создание переключателя по сезонам
+							let link = document.createElement('a');//переключатель
+							link.classList.add('seasons-tab-link');
+							link.classList.add('active');
+							link.id = 'Season' + 1 + 'List-tab';
+							link.href = '#Season' + 1 + 'List';
+							link.setAttribute('data-toggle', 'tab');
+							link.setAttribute('role', 'tab');
+							link.setAttribute('aria-controls', 'Season' + 1 + 'List');
+							link.setAttribute('aria-selected', 'false');
+							link.innerText = 'season ' + 1;
+
+							//Добавление переключателя сезона на макет
+							seasonsTabs.append(link);
+
+							//Количество серий в текущем сезоне
+							let parent = document.getElementById('SeasonsTabsContent');//элемент-родитель количества серий по сезонам
+
+							let divTabPane = document.createElement('div');//элемент-родитель количества серий в текущем сезоне
+							divTabPane.classList.add('active');
+
+							divTabPane.id = 'Season' + 1 + 'List';
+							divTabPane.setAttribute('role', 'tabpanel');
+							divTabPane.setAttribute('aria-labelledby', 'Season' + 1 + 'List-tab');
+
+							//Добавление элемента для отображения серий в текущем сезоне
+							parent.append(divTabPane);
+
+							//создание переключателей серий в текущем сезоне
+							let divTabWrapper = document.createElement('div');
+							divTabWrapper.classList.add('seasons-tab-wrapper');
+							divTabPane.append(divTabWrapper);
+
+							let seriesCounter = 1;
+
+							for (let key in files) {
+
+								if (!files[key]['links']['download'].includes('web.cinema.ntop.tv/hd')) {
+
+									let buttonSeries = document.createElement('button');
+									buttonSeries.classList.add('seasons-list__button');
+
+									//Добавление class "active" на первую кнопку и установка первой серии сериала в SD качестве в плеер
+									if (seriesCounter <= 1) {
+										buttonSeries.classList.add('active');
+										let src = files[key]['links']['download'].replace('http:', 'https:');
+										let resolurion = files[key]['metainfo']['video']['label'];
+
+										restartPlayer('my-video', resolurion, src);
+									}
+
+									//добавление атрибута data-name, который содержаит ссылку на фильм
+									// buttonSeries.setAttribute('data-name', files[key]['links']['download'].replace('web', 'online'));
+									buttonSeries.setAttribute('data-name', files[key]['links']['download'].replace('http', 'https'));
+
+									buttonSeries.innerText = 'Серия ' + seriesCounter++;
+
+
+									//Обработчик клика по переключателю с серией
+									//При клике переключатель делается активным и меняется серия на прогигрывателе с помощью restartPlayer
+									buttonSeries.addEventListener('click', function (event) {
+										let buttons = document.getElementsByClassName('seasons-list__button');
+										for (let i = 0; i < buttons.length; i++) {
+											buttons[i].classList.remove('active');
+										}
+										event.target.classList.add('active');
+
+										let resolution = files[key]['metainfo']['video']['label'];
+										restartPlayer('my-video', resolution, event.target.getAttribute('data-name'));
+									});
+									//Добавление переключателя на макет
+									divTabWrapper.append(buttonSeries);
+								}
+							}
+						}
+
+
+						let seriesCounter = 1;
+
+						for (let i in files) {
+							if (files[i]['links']['download'].includes('cinema.ntop.tv/hd')) {
+								if (seriesCounter <= 1) {
+									numerationHDTemplate = `<button class="seasons-list__button active" data-name="">Серия ${seriesCounter++}</button>`;
+								} else {
+									numerationHDTemplate = `<button class="seasons-list__button" data-name="">Серия ${seriesCounter++}</button>`;
+								}
+							}
+						}
+
+
+					} else {
+						//Сериалы в SD качестве
+						console.log('Сериал в SD качестве');
+
+						loadSerial(files);
+					}
+
+					//Функция, которая создает нумерацию сезонов и прогигрываетль для сериалов качестве
+					function loadSerial(files) {
+						//Добавление первой серии в SD качестве первого сезона на макет
+						let resolurionForSerial;
+						for (let key in files) {
+							if (!files[key]['links']['download'].includes('cinema.ntop.tv/hd')) {
+								let resolurionForSerial = files[key]['metainfo']['video']['label'];
+								let src = files[key]['links']['download'].replace('http:', 'https:');
+								restartPlayer('my-video', resolurionForSerial, src);
+								break;
+							}
+						}
+
+						let arrayNumeration = new Array();//для сохранения результата подсчета. передается в функцию createNumeration()
+
+
+						//Сериалы с 'season'
+						if (files[0]['links']['download'].includes('season')) {
+							//Подсчет
+							let season = 'season01';
+							let counterSeasons = 1;
+							let counterSeriesInSeasons = 0;
+							for (let key in files) {
+								if (files[key]['name'].indexOf(season) > 0) {
+									arrayNumeration[counterSeasons] = ++counterSeriesInSeasons;
+								} else if (counterSeasons >= 9) {
+									season = 'season' + ++counterSeasons;
+									counterSeriesInSeasons = 0;
+									arrayNumeration[counterSeasons] = ++counterSeriesInSeasons;
+								} else {
+									season = 'season0' + ++counterSeasons;
+									counterSeriesInSeasons = 0;
+									arrayNumeration[counterSeasons] = ++counterSeriesInSeasons;
+								}
+							}
+
+							//Создание плашек с сериями и сезонами
+							let seasonsTabs = document.getElementById('SeasonsTabs');//div, в который поместятся сезоны
+
+							let totalSeriesCounter = 0;
+
+							//Создание переключателей по сезонам
+							for (let i = 1; i < arrayNumeration.length; i++) {
+								let link = document.createElement('a');//переключатель
+								link.classList.add('seasons-tab-link');
+
+								//Первому элементу присваивается class="active"
+								if (i == 1) {
+									link.classList.add('active');
+								}
+
+								link.id = 'Season' + i + 'List-tab';
+								link.href = '#Season' + i + 'List';
+								link.setAttribute('data-toggle', 'tab');
+								link.setAttribute('role', 'tab');
+								link.setAttribute('aria-controls', 'Season' + i + 'List');
+								link.setAttribute('aria-selected', 'false');
+								link.innerText = 'season ' + i;
+
+								//Добавление переключателя сезона на макет
+								seasonsTabs.append(link);
+
+								//Количество серий в текущем сезоне
+								let parent = document.getElementById('SeasonsTabsContent');//элемент-родитель количества серий по сезонам
+
+								let divTabPane = document.createElement('div');//элемент-родитель количества серий в текущем сезоне
+								divTabPane.classList.add('tab-pane');
+								if (i > 1) {
+									divTabPane.classList.add('fade');
+								} else {
+									divTabPane.classList.add('active');
+									divTabPane.classList.add('show');
+								}
+
+								divTabPane.id = 'Season' + i + 'List';
+								divTabPane.setAttribute('role', 'tabpanel');
+								divTabPane.setAttribute('aria-labelledby', 'Season' + i + 'List-tab');
+
+								//Добавление элемента для отображения серий в текущем сезоне
+								parent.append(divTabPane);
+
+								//создание переключателей серий в текущем сезоне
+								let divTabWrapper = document.createElement('div');
+								divTabWrapper.classList.add('seasons-tab-wrapper');
+								divTabPane.append(divTabWrapper);
+
+								let seriesCounter = 1;
+
+								for (let j = 0; j < arrayNumeration[i]; j++) {
+									if (!files[j]['links']['download'].includes('cinema.ntop.tv/hd')) {
+										let buttonSeries = document.createElement('button');
+										buttonSeries.classList.add('seasons-list__button');
+										buttonSeries.setAttribute('data-series-name', `(Сезон ${i} Серия ${(j + 1)})`);
+										if (i <= 1 && j < 1) {
+											buttonSeries.classList.add('active');
+										}
+
+										//добавление атрибута data-name, который содержаит ссылку на фильм
+										// buttonSeries.setAttribute('data-name', files[totalSeriesCounter++]['links']['download'].replace('web', 'online'));
+										buttonSeries.setAttribute('data-name', files[totalSeriesCounter++]['links']['download'].replace('http:', 'https:'));
+
+										buttonSeries.innerText = 'Серия ' + seriesCounter++;
+
+										//Обработчик клика по переключателю с серией
+										//При клике переключатель делается активным и загружается меняется серия на прогигрывателе с помощью restartPlayer
+										buttonSeries.addEventListener('click', function (event) {
+											let buttons = document.getElementsByClassName('seasons-list__button');
+											for (let k = 0; k < buttons.length; k++) {
+												buttons[k].classList.remove('active');
+											}
+											event.target.classList.add('active');
+											document.getElementById('title-in-video').innerText = `${NAME} (Сезон ${i} Серия ${(j + 1)})`;
+
+
+
+
+											//console.log(videojs('my-video').playlist());
+											//console.log(i+j);
+											let resolution = files[j]['metainfo']['video']['label'];
+											restartPlayer('my-video', resolution, event.target.getAttribute('data-name'));
+										});
+										//Добавление переключателя на макет
+										divTabWrapper.append(buttonSeries);
+									}
+
+								}
+							}
+						} else {
+							//Сериалы без 'season'
+							console.log('Казлы');
+							arrayNumeration[0] = files.length;
+							console.log('files.length=' + files.length);
+
+							//Создание плашек с сериями и сезонами
+							let seasonsTabs = document.getElementById('SeasonsTabs');//div, в который поместятся сезоны
+
+							let link = document.createElement('a');//переключатель
+							link.classList.add('seasons-tab-link');
+							link.classList.add('active');
+
+							link.id = 'Season1List-tab';
+							link.href = '#Season1List';
+							link.setAttribute('data-toggle', 'tab');
+							link.setAttribute('role', 'tab');
+							link.setAttribute('aria-controls', 'Season1List');
+							link.setAttribute('aria-selected', 'false');
+							link.innerText = 'season 1';
+
+							//Добавление переключателя сезона на макет
+							seasonsTabs.append(link);
+							//Количество серий в текущем сезоне
+							let seasonsTabsContent = document.getElementById('SeasonsTabsContent');//элемент-родитель количества серий по сезонам
+
+							let divTabPane = document.createElement('div');//элемент-родитель количества серий в текущем сезоне
+							divTabPane.classList.add('tab-pane');
+							divTabPane.classList.add('active');
+							divTabPane.classList.add('show');
+
+							divTabPane.id = 'Season1List';
+							divTabPane.setAttribute('role', 'tabpanel');
+							divTabPane.setAttribute('aria-labelledby', 'Season1List-tab');
+
+							//создание переключателей серий в текущем сезоне
+							let divTabWrapper = document.createElement('div');
+							divTabWrapper.classList.add('seasons-tab-wrapper');
+							divTabPane.append(divTabWrapper);
+
+							//Добавление элемента для отображения серий в текущем сезоне
+							seasonsTabsContent.append(divTabPane);
+
+							let totalSeriesCounter = 0;
+
+							// let seriesCounter
+
+							for (let i = 0; i < arrayNumeration[0]; i++) {
+								if (!files[i]['links']['download'].includes('cinema.ntop.tv/hd')) {
+									let buttonSeries = document.createElement('button');
+									buttonSeries.classList.add('seasons-list__button');
+									buttonSeries.setAttribute('data-series-name', `(Серия ${(i + 1)})`);
+									if (i < 1) {
+										buttonSeries.classList.add('active');
+									}
+
+									//добавление атрибута data-name, который содержаит ссылку на фильм
+									// buttonSeries.setAttribute('data-name', files[totalSeriesCounter]['links']['download'].replace('web', 'online'));
+									buttonSeries.setAttribute('data-name', files[totalSeriesCounter]['links']['download'].replace('http:', 'https:'));
+
+									buttonSeries.innerText = 'Серия ' + ++totalSeriesCounter;
+
+									//Обработчик клика по переключателю с серией
+									//При клике переключатель делается активным и загружается меняется серия на прогигрывателе с помощью restartPlayer
+									buttonSeries.addEventListener('click', function (event) {
+										let buttons = document.getElementsByClassName('seasons-list__button');
+										for (let j = 0; j < buttons.length; j++) {
+											buttons[j].classList.remove('active');
+										}
+										event.target.classList.add('active');
+										document.getElementById('title-in-video').innerText = `${NAME} (Серия ${(i + 1)})`;
+
+
+										let resolution = files[i]['metainfo']['video']['label'];
+										restartPlayer('my-video', resolution, event.target.getAttribute('data-name'));
+									});
+									//Добавление переключателя на макет
+									divTabWrapper.append(buttonSeries);
+								}
+							}
+						}
+
+					}
+				} else if (film['StatusSeries'] < 1) {
+					//Выполняется если фильм
+					if (film['files'].length == 2) {
+						//Выполняется если у фильма есть HD качество
+
+						//Добавление фильма с SD качеством на макет
+						let resolurion = film['files']['1']['metainfo']['video']['label'];
+						let src = film['files']['1']['links']['download'].replace('http:', 'https:');
+						restartPlayer('my-video', resolurion, src);
+					} else if (film['files'].length < 2) {
+						//Выполняется если у фильма только SD качество
+
+						//Добавление фильма с SD качеством на макет
+						let resolurionMovieHD = film['files']['0']['metainfo']['video']['label'];
+						let src = film['files']['0']['links']['download'].replace('http:', 'https:');
+						restartPlayer('my-video', resolurionMovieHD, src);
+					} else if (film['files'].length > 2) {
+						//Выполняется если это все же сериал
+
+						//Выполняется если сериал
+						//Подсчитывает количество серий в сезонах и количество сезоном. Результат передает в функцию createNumeration()
+						//Выводит первую серию первого сезона на макет
+
+						// let files = film['files'];
+
+						if (film['hd'] == 1) {
+							//Сериалы с HD качеством
+							console.log('Сериал с HD качеством');
+
+
+							//Проверка. Имеет ли сериал несколько сезонов
+							if (files[0]['name'].includes('season')) {
+								//В сериале несколько сезонов
+								console.log('будут еще сезоны');
+								loadSerial(files);
+
+							} else {
+								//В сериале 1 сезон
+								console.log('сезонов не будет');
+
+								//Делается с расчетом на то, что в сериале только 1 сезон
+								let seasonsTabs = document.getElementById('SeasonsTabs');//div, в который поместятся сезоны
+
+
+
+								//Создание переключателя по сезонам
+								let link = document.createElement('a');//переключатель
+								link.classList.add('seasons-tab-link');
+								link.classList.add('active');
+								link.id = 'Season' + 1 + 'List-tab';
+								link.href = '#Season' + 1 + 'List';
+								link.setAttribute('data-toggle', 'tab');
+								link.setAttribute('role', 'tab');
+								link.setAttribute('aria-controls', 'Season' + 1 + 'List');
+								link.setAttribute('aria-selected', 'false');
+								link.innerText = 'season ' + 1;
+
+								//Добавление переключателя сезона на макет
+								seasonsTabs.append(link);
+
+								//Количество серий в текущем сезоне
+								let parent = document.getElementById('SeasonsTabsContent');//элемент-родитель количества серий по сезонам
+
+								let divTabPane = document.createElement('div');//элемент-родитель количества серий в текущем сезоне
+								divTabPane.classList.add('active');
+
+								divTabPane.id = 'Season' + 1 + 'List';
+								divTabPane.setAttribute('role', 'tabpanel');
+								divTabPane.setAttribute('aria-labelledby', 'Season' + 1 + 'List-tab');
+
+								//Добавление элемента для отображения серий в текущем сезоне
+								parent.append(divTabPane);
+
+								//создание переключателей серий в текущем сезоне
+								let divTabWrapper = document.createElement('div');
+								divTabWrapper.classList.add('seasons-tab-wrapper');
+								divTabPane.append(divTabWrapper);
+
+								let seriesCounter = 1;
+
+								for (let key in files) {
+
+									if (!files[key]['links']['download'].includes('web.cinema.ntop.tv/hd')) {
+
+										let buttonSeries = document.createElement('button');
+										buttonSeries.classList.add('seasons-list__button');
+
+										//Добавление class "active" на первую кнопку и установка первой серии сериала в SD качестве в плеер
+										if (seriesCounter <= 1) {
+											buttonSeries.classList.add('active');
+											let src = files[key]['links']['download'].replace('http:', 'https:');
+											let resolurion = files[key]['metainfo']['video']['label'];
+
+											restartPlayer('my-video', resolurion, src);
+										}
+
+										//добавление атрибута data-name, который содержаит ссылку на фильм
+										// buttonSeries.setAttribute('data-name', files[key]['links']['download'].replace('web', 'online'));
+										buttonSeries.setAttribute('data-name', files[key]['links']['download'].replace('http:', 'https:'));
+
+										buttonSeries.innerText = 'Серия ' + seriesCounter++;
+
+
+										//Обработчик клика по переключателю с серией
+										//При клике переключатель делается активным и меняется серия на прогигрывателе с помощью restartPlayer
+										buttonSeries.addEventListener('click', function (event) {
+											let buttons = document.getElementsByClassName('seasons-list__button');
+											for (let i = 0; i < buttons.length; i++) {
+												buttons[i].classList.remove('active');
+											}
+											event.target.classList.add('active');
+
+											let resolution = files[key]['metainfo']['video']['label'];
+											restartPlayer('my-video', resolution, event.target.getAttribute('data-name'));
+										});
+										//Добавление переключателя на макет
+										divTabWrapper.append(buttonSeries);
+									}
+								}
+							}
+
+
+							let seriesCounter = 1;
+
+							for (let i in files) {
+								if (files[i]['links']['download'].includes('cinema.ntop.tv/hd')) {
+									if (seriesCounter <= 1) {
+										numerationHDTemplate = `<button class="seasons-list__button active" data-name="">Серия ${seriesCounter++}</button>`;
+									} else {
+										numerationHDTemplate = `<button class="seasons-list__button" data-name="">Серия ${seriesCounter++}</button>`;
+									}
+								}
+							}
+
+
+						} else {
+							//Сериалы в SD качестве
+							console.log('Сериал в SD качестве');
+
+							loadSerial(files);
+						}
+
+						//Функция, которая создает нумерацию сезонов и прогигрываетль для сериалов качестве
+						function loadSerial(files) {
+							//Добавление первой серии в SD качестве первого сезона на макет
+							let resolurionForSerial;
+							for (let key in files) {
+								if (!files[key]['links']['download'].includes('cinema.ntop.tv/hd')) {
+									let resolurionForSerial = files[key]['metainfo']['video']['label'];
+									let src = files[key]['links']['download'].replace('http:', 'https:');
+									restartPlayer('my-video', resolurionForSerial, src);
+									break;
+								}
+							}
+
+							let arrayNumeration = new Array();//для сохранения результата подсчета. передается в функцию createNumeration()
+
+
+							//Сериалы с 'season'
+							if (files[0]['links']['download'].includes('season')) {
+								//Подсчет
+								let season = 'season01';
+								let counterSeasons = 1;
+								let counterSeriesInSeasons = 0;
+								for (let key in files) {
+									if (files[key]['name'].indexOf(season) > 0) {
+										arrayNumeration[counterSeasons] = ++counterSeriesInSeasons;
+									} else if (counterSeasons >= 9) {
+										season = 'season' + ++counterSeasons;
+										counterSeriesInSeasons = 0;
+										arrayNumeration[counterSeasons] = ++counterSeriesInSeasons;
+									} else {
+										season = 'season0' + ++counterSeasons;
+										counterSeriesInSeasons = 0;
+										arrayNumeration[counterSeasons] = ++counterSeriesInSeasons;
+									}
+								}
+
+								//Создание плашек с сериями и сезонами
+								let seasonsTabs = document.getElementById('SeasonsTabs');//div, в который поместятся сезоны
+
+								let totalSeriesCounter = 0;
+
+								//Создание переключателей по сезонам
+								for (let i = 1; i < arrayNumeration.length; i++) {
+									let link = document.createElement('a');//переключатель
+									link.classList.add('seasons-tab-link');
+
+									//Первому элементу присваивается class="active"
+									if (i == 1) {
+										link.classList.add('active');
+									}
+
+									link.id = 'Season' + i + 'List-tab';
+									link.href = '#Season' + i + 'List';
+									link.setAttribute('data-toggle', 'tab');
+									link.setAttribute('role', 'tab');
+									link.setAttribute('aria-controls', 'Season' + i + 'List');
+									link.setAttribute('aria-selected', 'false');
+									link.innerText = 'season ' + i;
+
+									//Добавление переключателя сезона на макет
+									seasonsTabs.append(link);
+
+									//Количество серий в текущем сезоне
+									let parent = document.getElementById('SeasonsTabsContent');//элемент-родитель количества серий по сезонам
+
+									let divTabPane = document.createElement('div');//элемент-родитель количества серий в текущем сезоне
+									divTabPane.classList.add('tab-pane');
+									if (i > 1) {
+										divTabPane.classList.add('fade');
+									} else {
+										divTabPane.classList.add('active');
+										divTabPane.classList.add('show');
+									}
+
+									divTabPane.id = 'Season' + i + 'List';
+									divTabPane.setAttribute('role', 'tabpanel');
+									divTabPane.setAttribute('aria-labelledby', 'Season' + i + 'List-tab');
+
+									//Добавление элемента для отображения серий в текущем сезоне
+									parent.append(divTabPane);
+
+									//создание переключателей серий в текущем сезоне
+									let divTabWrapper = document.createElement('div');
+									divTabWrapper.classList.add('seasons-tab-wrapper');
+									divTabPane.append(divTabWrapper);
+
+									let seriesCounter = 1;
+
+									for (let j = 0; j < arrayNumeration[i]; j++) {
+										if (!files[j]['links']['download'].includes('cinema.ntop.tv/hd')) {
+											let buttonSeries = document.createElement('button');
+											buttonSeries.classList.add('seasons-list__button');
+											buttonSeries.setAttribute('data-series-name', `(Сезон ${i} Серия ${(j + 1)})`);
+											if (i <= 1 && j < 1) {
+												buttonSeries.classList.add('active');
+											}
+
+											//добавление атрибута data-name, который содержаит ссылку на фильм
+											// buttonSeries.setAttribute('data-name', files[totalSeriesCounter++]['links']['download'].replace('web', 'online'));
+											buttonSeries.setAttribute('data-name', files[totalSeriesCounter++]['links']['download'].replace('http:', 'https:'));
+
+											buttonSeries.innerText = 'Серия ' + seriesCounter++;
+
+											//Обработчик клика по переключателю с серией
+											//При клике переключатель делается активным и загружается меняется серия на прогигрывателе с помощью restartPlayer
+											buttonSeries.addEventListener('click', function (event) {
+												let buttons = document.getElementsByClassName('seasons-list__button');
+												for (let k = 0; k < buttons.length; k++) {
+													buttons[k].classList.remove('active');
+												}
+												event.target.classList.add('active');
+												document.getElementById('title-in-video').innerText = `${NAME} (Сезон ${i} Серия ${(j + 1)})`;
+
+
+
+
+												//console.log(videojs('my-video').playlist());
+												//console.log(i+j);
+												let resolution = files[j]['metainfo']['video']['label'];
+												restartPlayer('my-video', resolution, event.target.getAttribute('data-name'));
+											});
+											//Добавление переключателя на макет
+											divTabWrapper.append(buttonSeries);
+										}
+
+									}
+								}
+							} else {
+								//Сериалы без 'season'
+								console.log('Казлы');
+								arrayNumeration[0] = files.length;
+								console.log('files.length=' + files.length);
+
+								//Создание плашек с сериями и сезонами
+								let seasonsTabs = document.getElementById('SeasonsTabs');//div, в который поместятся сезоны
+
+								let link = document.createElement('a');//переключатель
+								link.classList.add('seasons-tab-link');
+								link.classList.add('active');
+
+								link.id = 'Season1List-tab';
+								link.href = '#Season1List';
+								link.setAttribute('data-toggle', 'tab');
+								link.setAttribute('role', 'tab');
+								link.setAttribute('aria-controls', 'Season1List');
+								link.setAttribute('aria-selected', 'false');
+								link.innerText = 'season 1';
+
+								//Добавление переключателя сезона на макет
+								seasonsTabs.append(link);
+								//Количество серий в текущем сезоне
+								let seasonsTabsContent = document.getElementById('SeasonsTabsContent');//элемент-родитель количества серий по сезонам
+
+								let divTabPane = document.createElement('div');//элемент-родитель количества серий в текущем сезоне
+								divTabPane.classList.add('tab-pane');
+								divTabPane.classList.add('active');
+								divTabPane.classList.add('show');
+
+								divTabPane.id = 'Season1List';
+								divTabPane.setAttribute('role', 'tabpanel');
+								divTabPane.setAttribute('aria-labelledby', 'Season1List-tab');
+
+								//создание переключателей серий в текущем сезоне
+								let divTabWrapper = document.createElement('div');
+								divTabWrapper.classList.add('seasons-tab-wrapper');
+								divTabPane.append(divTabWrapper);
+
+								//Добавление элемента для отображения серий в текущем сезоне
+								seasonsTabsContent.append(divTabPane);
+
+								let totalSeriesCounter = 0;
+
+								// let seriesCounter
+
+								for (let i = 0; i < arrayNumeration[0]; i++) {
+									if (!files[i]['links']['download'].includes('cinema.ntop.tv/hd')) {
+										let buttonSeries = document.createElement('button');
+										buttonSeries.classList.add('seasons-list__button');
+										buttonSeries.setAttribute('data-series-name', `(Серия ${(i + 1)})`);
+										if (i < 1) {
+											buttonSeries.classList.add('active');
+										}
+
+										//добавление атрибута data-name, который содержаит ссылку на фильм
+										// buttonSeries.setAttribute('data-name', files[totalSeriesCounter]['links']['download'].replace('web', 'online'));
+										buttonSeries.setAttribute('data-name', files[totalSeriesCounter]['links']['download'].replace('http:', 'https:'));
+
+										buttonSeries.innerText = 'Серия ' + ++totalSeriesCounter;
+
+										//Обработчик клика по переключателю с серией
+										//При клике переключатель делается активным и загружается меняется серия на прогигрывателе с помощью restartPlayer
+										buttonSeries.addEventListener('click', function (event) {
+											let buttons = document.getElementsByClassName('seasons-list__button');
+											for (let j = 0; j < buttons.length; j++) {
+												buttons[j].classList.remove('active');
+											}
+											event.target.classList.add('active');
+											document.getElementById('title-in-video').innerText = `${NAME} (Серия ${(i + 1)})`;
+
+
+											let resolution = files[i]['metainfo']['video']['label'];
+											restartPlayer('my-video', resolution, event.target.getAttribute('data-name'));
+										});
+										//Добавление переключателя на макет
+										divTabWrapper.append(buttonSeries);
+									}
+								}
+							}
+
+						}
+
+					}
+				}
+
+
+
+				function show() {
+					//---------------------------------------------------------------------------
+					//--------------------------------VideoJS------------------------------------
+					//---------------------------------------------------------------------------
+
+					//-----------------------------------Плеер----------------------------------
+					let player;
+					try {
+						player = videojs.getPlayer('my-video');
+					} catch (error) {
+						console.error(error);
+						window.location.reload()
+					}
+					player.poster('/images/default_poster.png');
+
+
+					//----------------------Добавление заголовка на плеер------------------------
+
+					let videoPlayer = document.getElementById('my-video');//плеер
+					let titleDiv = document.createElement('div');//заголовок
+					titleDiv.classList.add('vjs-title');
+					videoPlayer.append(titleDiv);
+					let title = document.createElement('p');
+					title.id = 'title-in-video';
+					titleDiv.append(title);
+					title.innerText = NAME;
+
+					//-------------------------Подключение плагинов------------------------------
+
+					player.ready(function () {
+
+						//--------------Добавление плагина горячих 'hotkeys'---------------------
+						this.hotkeys({
+							volumeStep: 0.1,
+							seekStep: 30,
+							enableModifiersForNumbers: false
+						});
+
+						//-------------------Добавление плагина 'playlist'-----------------------				
+
+						//Родительский элемент, в котором отображаются кнопки с сериями сериала
+						let containerForSeries = document.getElementById('SeasonsTabsContent').getElementsByTagName('button');
+
+						//плейлист
+						let playlist = [];
+
+						if (containerForSeries.length > 0) {
+							//заполнение плейлиста
+							for (let i = 0; i < containerForSeries.length; i++) {
+								playlist.push({
+									sources: [{
+										src: containerForSeries[i].getAttribute('data-name'),
+										type: 'video/mp4'
+									}]
+								});
+							}
+						}
+
+						this.playlist(playlist);//установка плейлиста
+						this.playlist.autoadvance(2);//задержка 2 секунды между сменой серий
+
+						//Выбирается активная серия на панели навигации
+						this.on('playlistitem', function () {
+
+							console.log(this.playlist.currentItem());
+
+							for (let i = 0; i < containerForSeries.length; i++) {
+
+								if (containerForSeries[i].getAttribute('data-name').includes(this.src())) {
+									//выбор активной серии
+									containerForSeries[i].classList.add('active');
+
+									//установка названия в заголовок
+									title.innerText = `${NAME} ${containerForSeries[i].getAttribute('data-series-name')}`;
+
+									//выбор активного сезона
+									let seasonListId = containerForSeries[i].parentElement.parentElement.id;//id елемента, в котором находятся серии
+									let containerForSeasons = document.getElementById('SeasonsTabs');//элемент, в котором находятся ссылки по сезонам
+
+									let currentSeason = 1;
+
+									//Установка активного сезона
+									for (let j = 0; j < containerForSeasons.children.length; j++) {
+										if (containerForSeasons.children[j].getAttribute('aria-controls').includes(seasonListId)) {
+											// containerForSeasons.children[j].classList.add('active');											
+											containerForSeasons.children[j].click();
+											console.log('сезон ' + (j + 1));
+											currentSeason = (j + 1);
+										}
+									}
+
+								} else {
+									//удаление class active со всех серий кроме активной
+									containerForSeries[i].classList.remove('active');
+								}
+							}
+						});
+
+					});
+
+					//------------------------------------------------------------------------------
+					//------------------Включение отображения содержимого---------------------------
+					//------------------------------------------------------------------------------
+					document.getElementById('fountainG').remove();//удаление анимации загрузки
+					document.getElementsByTagName('main')[0].style.display = 'block';//отображение содержимого страницы
+				}
+
+				//---------------------------------------------------------------------------
+				//-------------Добавление фильма в недавно просмотренные---------------------
+				//---------------------------------------------------------------------------
+
+				let locStorLast = new Object();
+
+				if (localStorage.getItem('last') != null) {
+					locStorLast = JSON.parse(localStorage.getItem('last'));
+				}
+
+				let unique = true;
+
+				for (let key in locStorLast) {
+					if (locStorLast[key]['movie_id'] == film['movie_id']) {
+						unique = false;
+					}
+				}
+
+				if (unique) {
+					console.log('Такого еще не было');
+					let last = new Object();
+					last['movie_id'] = film['movie_id'];
+					last['title'] = film['name'];
+					last['poster_image'] = film['covers'][0]['thumbnail'];
+					last['popular'] = film['popular'];
+					last['hd'] = film['hd'];
+					last['statusSeries'] = film['StatusSeries'];
+					last['year'] = film['year'];
+					last['countries'] = film['countries'];
+					last['genres'] = film['genres'];
+
+					if (Object.keys(locStorLast).length <= 0) {
+						locStorLast[0] = last;
+					} else {
+						locStorLast[(Object.keys(locStorLast).length)] = last;
+					}
+
+					localStorage.setItem('last', JSON.stringify(locStorLast));
+				}
+				//---------------------------------------------------------------------------
+
+				setTimeout(show, 2000);
+
+			} else if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 404) {
+				document.write('Ошибка получения данных');
+			}
+
+		}//конец xhr.onreadystatechange
+
+
+		//--------------------------------------------------------------------------------
+		//--------------Информация о конкретном актере в модальном окне-------------------
+		//--------------------------------------------------------------------------------
+
+		function loadPersonInfo(id) {
+			//Запрос на информацию об актере по id 
+			REQUEST_URL = 'https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.getPerson&person_id[0]=' + id + '&JsHttpRequest=16007667792177-xml';
+			xhr = new XMLHttpRequest();
+			xhr.open('POST', REQUEST_URL);
+			xhr.responseType = 'json';
+
+			xhr.send();
+
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+					let person = xhr.response;
+					let name = person['js']['0']['response']['person']['name'];
+					if (name == null || name == undefined || name == '') {
+						name = "Нет имени";
+					}
+					let international_name = person['js']['0']['response']['person']['international_name'];
+					if (international_name == null || international_name == undefined || international_name == '') {
+						international_name = "No international name";
+					}
+					document.getElementById("exampleModalCenterTitle").innerHTML = name + "<span> / " + international_name + "</span>";
+
+					try {
+						photos = "https://cinema.ntop.tv" + person['js']['0']['response']['person']['photos'][0]['original'];
+					} catch (error) {
+						console.log(error);
+						photos = "actors/nophoto.png";
+					}
+					document.getElementById("place_for_photo_1").src = photos;
+
+					let info = person['js']['0']['response']['person']['info'];
+					document.getElementById("place_for_info").innerHTML = info;
+
+					//Ссылка на страницу с актером
+					document.getElementById('photo_link').href = '/person-page.html?id=' + id;
+
+					//Заполнение фильмографии
+					filmographyResult = '';
+					REQUEST_URL = 'https://cinema.ntop.tv/api.php?format=ajax';
+					i = 0;
+
+					for (let filmographyKey in person['js']['0']['response']['person']['movies']) {
+						REQUEST_URL += '&action[' + i + ']=Video.getMovie&movie_id[' + i + ']=' + person['js']['0']['response']['person']['movies'][filmographyKey]['movie_id'];
+						i++;
+					}
+					REQUEST_URL += '&JsHttpRequest=16007667792177-xml';
+					xhrFilms = new XMLHttpRequest();
+					xhrFilms.open('POST', REQUEST_URL);
+					xhrFilms.responseType = 'json';
+					xhrFilms.send();
+
+					xhrFilms.onreadystatechange = function () {
+						if (xhrFilms.readyState == XMLHttpRequest.DONE && xhrFilms.status == 200) {
+							let filmography = xhrFilms.response;
+							for (let filmographyKey in filmography['js']) {
+								movieInFilmography = filmography['js'][filmographyKey]['response']['movie'];
+								let movieId = movieInFilmography['movie_id'];
+								cover = 'https://cinema.ntop.tv' + movieInFilmography['covers']['0']['thumbnail'];
+								name = movieInFilmography['name'];
+								year = movieInFilmography['year'];
+								countries = '';
+								for (let key in movieInFilmography['countries']) {
+									countries += movieInFilmography['countries'][key];
+									countries += ' / ';
+								}
+								countries = countries.substring(0, (countries.length - 2));
+								genres = '';
+								for (let key in movieInFilmography['genres']) {
+									genres += movieInFilmography['genres'][key];
+									genres += ' / ';
+								}
+								genres = genres.substring(0, (genres.length - 2));
+
+								let filmographyTemplate = "<div class=\"col-6 col-sm-4 col-md-3 col-lg-2\">" +
+									"<div class=\"cinema-item\">" +
+									"<a href=\"movie-page.html?id=" + movieId + "\" class=\"cinema-item__link\">" +
+									"<div class=\"cinema-item__poster-wrap\">" +
+									"<img class=\"cinema-item__poster-img\" src=\"" + cover + "\" alt=\"\"/>" +
+									"</div>" +
+									"<p class=\"cinema-item__title\">" + ((name.indexOf('(') > 0) ? (name.substring(0, name.indexOf('(')) + "<span class=\"cinema-item__title-season\">" + name.substring(name.indexOf('('))) : (name)) + "</span></p>" +
+									"<p class=\"cinema-item__info\"><span class=\"cinema-item__info_country\">" + year + ", " + countries + "</span>" +
+									"" + genres + "</p>" +
+									"<span class=\"cinema-item__serial-label\">обновляется</span>" +
+									"</a>" +
+									"</div>" +
+									"</div>";
+								filmographyResult += filmographyTemplate;
+							}
+							document.getElementById('place_for_filmography').innerHTML = filmographyResult;
+						}
+
+					}
+				}
+
+			}
+		}
+
+
+		//--------------------------------------------------------------------------------
+		//------------------------------------Отзывы--------------------------------------
+		//--------------------------------------------------------------------------------
+
+		function loadComment() {
+			REQUEST_URL = 'https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.getComments&movie_id[0]=' + $_GET('id') + '&JsHttpRequest=16007667792177-xml';
+
+			let xhr = new XMLHttpRequest();
+			xhr.open('POST', REQUEST_URL);
+			xhr.responseType = 'json';
+
+			xhr.send();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+					let comment = xhr.response;
+					let commentResult = '';
+					console.log('comment.length=' + comment.length);
+
+					let currentComment = comment['js'][0]['response']['comments'];
+					for (let key in currentComment) {
+						let userName = currentComment[key]['user_name'];
+						let createDate = currentComment[key]['created_at'];
+						let text = currentComment[key]['text'];
+
+						let commentTemplate = "<div class=\"mov-page-info__comment-item\">" +
+							"<div class=\"mov-page-info__comment-title\">" +
+							"<span class=\"mov-page-info__comment-user\">" + userName + "</span>" +
+							"<span class=\"mov-page-info__comment-date\">" + createDate + "</span>" +
+							"<br class=\"crearfix\">" +
+							"</div>" +
+							"<div class=\"mov-page-info__comment-text\">" +
+							"<p>" + text + "</p>" +
+							"</div>" +
+							"</div>";
+						commentResult += commentTemplate;
+					}
+					if (commentResult == '') {
+						document.getElementById('place_for_comments').innerHTML = "<div class=\"d-flex justify-content-center\"><h2 class=\"mt-3 ml-3 text-muted\">Отзывов нет</h2></div>" + "<button class=\"movie-page__mov-watch-btn\" type=\"button\" data-toggle=\"modal\" data-target=\"#modal__addcomment\"><span class=\"cnm  cnm-question_answer\"></span>Оставить отзыв</button>";
+					} else {
+						document.getElementById('place_for_comments').innerHTML = commentResult + "<button class=\"movie-page__mov-watch-btn\" type=\"button\" data-toggle=\"modal\" data-target=\"#modal__addcomment\"><span class=\"cnm  cnm-question_answer\"></span>Оставить отзыв</button>";
+					}
+				}
+			}
+		}
+
+
+		//-----------------------------------------------------------------------------------
+		//----------------------------Создание увеличенного постера--------------------------
+		//-----------------------------------------------------------------------------------
+
+		function bigPoster(src) {
+
+			let divOverlay = document.createElement('div');
+			divOverlay.id = 'overlay';
+
+			let divMagnify = document.createElement('div');
+			divMagnify.id = 'magnify';
+
+			let image = document.createElement('img');
+			image.src = src;
+
+			//Задается максимальный размер увеличенного изображения: высота изображения равняется 2/3 высоты внутренней высоты окна
+			let imageMaxHeight = window.innerHeight * 2 / 3;
+			image.style.maxHeight = `${imageMaxHeight}px`;
+
+			//установка отступа в соответствии с размером изображения
+			if (imageMaxHeight < image.height) {
+				divMagnify.style.top = (window.innerHeight / 2) - (imageMaxHeight / 2) + 'px';
+				divMagnify.style.left = (window.innerWidth / 2) - ((imageMaxHeight / (image.height / image.width)) / 2) + 'px';
+			} else {
+				divMagnify.style.top = (window.innerHeight / 2) - (image.height / 2) + 'px';
+				divMagnify.style.left = (window.innerWidth / 2) - (image.width / 2) + 'px';
+			}
+
+			//Кнопка для закрытия
+			let divClosePopup = document.createElement('div');
+			divClosePopup.id = 'close-popup';
+
+			divMagnify.append(image);
+			divMagnify.append(divClosePopup);
+
+			document.body.append(divOverlay);
+			document.body.append(divMagnify);
+
+			divClosePopup.addEventListener('click', function () {
+				close();
+			});
+
+			divOverlay.addEventListener('click', function () {
+				close();
+			});
+
+			function close() {
+				divClosePopup.remove();
+				divMagnify.remove();
+				divOverlay.remove();
+			}
+		}
+
+		//Постер остается посередине при изменении ширины экрана
+		document.addEventListener("DOMContentLoaded", function (event) {
+			window.onresize = function () {
+				if (document.getElementById('magnify')) {
+					document.getElementById('magnify').style.top = (screen.height / 2) - (document.getElementById('magnify').children[0].height / 2) + 'px';
+					document.getElementById('magnify').style.left = (document.body.clientWidth / 2) - (document.getElementById('magnify').children[0].width / 2) + 'px';
+				}
+			}
+		});
+
+
+		//Обработчик события при закрытии модального окна
+		document.getElementById('modal__actor').addEventListener('click', function () {
+			setTimeout((function () {
+				if (document.getElementById('modal__actor').classList.length <= 2) {
+					document.getElementById('place_for_filmography').innerHTML = '';
+					document.getElementById('place_for_filmography').innerHTML = `
+					<!-- Анимация загрузки -->
+					<div id="fountainG_actor">
+						<div id="fountainG_actor_1" class="fountainG_actor"></div>
+						<div id="fountainG_actor_2" class="fountainG_actor"></div>
+						<div id="fountainG_actor_3" class="fountainG_actor"></div>
+						<div id="fountainG_actor_4" class="fountainG_actor"></div>
+						<div id="fountainG_actor_5" class="fountainG_actor"></div>
+						<div id="fountainG_actor_6" class="fountainG_actor"></div>
+						<div id="fountainG_actor_7" class="fountainG_actor"></div>
+						<div id="fountainG_actor_8" class="fountainG_actor"></div>
+					</div>`;
+				}
+			}), 100);
+		});
+
+
+		//-----------------------------------------------------------------------------------
+		//---------------------Обработка добавления фильма в избранное-----------------------
+		//-----------------------------------------------------------------------------------
+
+		document.getElementById('not_favorites').addEventListener('click', function () {
+			let xhr = new XMLHttpRequest();
+			let request = `https://cinema.ntop.tv/api.php?format=ajax&PHPSESSID=${getCookie('PHPSESSID')}&action[0]=Video.addBookmark&movie_id[0]=${this.getAttribute('data-movie')}&JsHttpRequest=16071005642901-xml`;
+
+			xhr.open('POST', request);
+			xhr.send();
+
+			this.style.display = 'none';
+			document.getElementById('add_favorites').style.display = 'block';
+		});
+
+
+		//-----------------------------------------------------------------------------------
+		//---------------------Обработка удаления фильма из избранных------------------------
+		//-----------------------------------------------------------------------------------
+
+		document.getElementById('add_favorites').addEventListener('click', function () {
+			let xhr = new XMLHttpRequest();
+			let request = `https://cinema.ntop.tv/api.php?format=ajax&PHPSESSID=${getCookie('PHPSESSID')}&action[0]=Video.deleteBookmark&movie_id[0]=${this.getAttribute('data-movie')}&JsHttpRequest=16071005642901-xml`;
+			xhr.open('POST', request);
+			xhr.send();
+
+			this.style.display = 'none';
+			document.getElementById('not_favorites').style.display = 'block';
+		});
+
+
+		//----------------------------------------------------------------------------------------------
+		//-----------------------------------------Авторизация------------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		function authorization() {
+			let login = document.getElementById('login-username');
+			let password = document.getElementById('login-pass');
+			let remember = (document.getElementById('login-autologin').checked) ? 1 : 0;
+
+			if (login.value.length <= 0 || password.value.length <= 0) {
+				if (login.value.length <= 0) {
+					document.getElementById('wrong_login_login').style.display = 'inline-block';
+					login.style.borderColor = 'red';
+				}
+				if (password.value.length <= 0) {
+					document.getElementById('wrong_login_pass').style.display = 'inline-block';
+					password.style.borderColor = 'red';
+				}
+
+			} else {
+				document.getElementById('wrong_login_login').style.display = 'none';
+				document.getElementById('wrong_login_pass').style.display = 'none';
+				password.style.borderColor = '#c1c1c1';
+				login.style.borderColor = '#c1c1c1';
+
+				let xhr = new XMLHttpRequest();
+				let request = `https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.login&login[0]=${login.value}&pass[0]=${password.value}&remember[0]=${remember}&JsHttpRequest=16063651671721-xml`;
+
+				xhr.open('POST', request);
+				xhr.responseType = 'json';
+
+				xhr.send();
+
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+						let result = xhr.response;
+						result = result['js'][0];
+						if (result['status'] == 200) {
+							setCookie('PHPSESSID', result['response']['PHPSESSID']);
+
+							document.getElementById('user_authorizated').style.display = 'block';
+							document.getElementById('user_not_authorizated').style.display = 'none';
+							document.getElementById('modal__login').getElementsByTagName('button')[0].click();
+
+							document.getElementsByTagName('header')[0].getElementsByTagName('button')[0].click();
+
+							document.getElementById('favorites').style.display = 'block';
+
+							setCookie('login', login.value);
+							document.getElementById('user_name').innerText = login.value;
+
+							let request = `https://cinema.ntop.tv/api.php?format=ajax&PHPSESSID=${getCookie('PHPSESSID')}&action[0]=Video.getMovie&movie_id[0]=${$_GET('id')}&action[1]=Video.getBookmarks&JsHttpRequest=16007667792177-xml`;
+							let xhrMovie = new XMLHttpRequest();
+							xhrMovie.open('POST', request);
+							xhrMovie.responseType = 'json';
+
+							xhrMovie.send();
+
+							xhrMovie.onreadystatechange = function () {
+								if (xhrMovie.readyState == XMLHttpRequest.DONE && xhrMovie.status == 200) {
+									let result = xhrMovie.response;
+
+									let film = result['js'][0]['response']['movie']
+
+									let ratingPersonalValue = film['rating_personal_value'];
+
+									addPersonalRating(ratingPersonalValue, document.getElementById('place_for_raiting'));
+
+									//Если пользователь авторизован
+									//Находится ли фильм в избранных
+									if (result['js'].length >= 2) {
+										document.getElementById('add_favorites').setAttribute('data-movie', film['movie_id']);
+										document.getElementById('not_favorites').setAttribute('data-movie', film['movie_id']);
+
+										let favorites = result['js'][1]['response']['movies'];
+										let movie_id = film['movie_id'];
+										for (let key in favorites) {
+											if (favorites[key]['movie_id'] == movie_id) {
+												document.getElementById('add_favorites').style.display = 'block';
+												break;
+											}
+											document.getElementById('not_favorites').style.display = 'block';
+										}
+
+									}
+								}
+							}
+
+
+
+						} else if (result['status'] == 300) {
+
+							let warning = document.createElement('p');
+							warning.classList.add('text-danger');
+							warning.classList.add('text-danger');
+							warning.classList.add('text-center');
+							warning.innerText = result['response'];
+							document.getElementById('form_login').prepend(warning);
+
+							login.style.borderColor = 'red';
+							login.value = '';
+
+							password.style.borderColor = 'red';
+							password.value = '';
+
+						}
+
+					}
+				}
+
+
+			}
+		}
+
+		document.getElementById('login_submit').addEventListener('click', function () {
+			authorization();
+		});
+
+		document.getElementById('modal__login').addEventListener('keypress', function (event) {
+			let enterCode = 13;
+			if (event.keyCode == enterCode) {
+				authorization();
+			}
+		});
+
+
+		//Обработчик на закрытие формы авторизации
+		document.getElementById('modal__login').addEventListener('click', function () {
+			let elem = this;
+			setTimeout(function () {
+				if (elem.classList.length <= 2) {
+					let login = document.getElementById('login-username');
+					login.style.borderColor = '#c1c1c1';
+					login.value = '';
+
+					let password = document.getElementById('login-pass');
+					password.style.borderColor = '#c1c1c1';
+					password.value = '';
+
+					document.getElementById('login-autologin').checked = false;
+
+					document.getElementById('wrong_login_login').style.display = 'none';
+					document.getElementById('wrong_login_pass').style.display = 'none';
+
+					if (document.getElementById('form_login').children[0].tagName == 'P') {
+						document.getElementById('form_login').children[0].remove();
+					}
+				}
+			}, 100);
+		});
+
+
+		//----------------------------------------------------------------------------------------------
+		//-----------------------------------------Регистрация------------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		document.getElementById('register_submit').addEventListener('click', function () {
+			let formRegistration = document.getElementById('modal__registration');
+
+			let login = document.getElementById('reg-username');
+			let password = document.getElementById('reg-pass');
+			let repassword = document.getElementById('reg-repass');
+			let email = document.getElementById('reg-email');
+			let remember = (document.getElementById('reg-autologin').checked) ? 1 : 0;
+
+			if ((login.value.length <= 0) || (password.value.length <= 0) || (repassword.value.length <= 0) || (email.value.length <= 0)) {
+				if (login.value.length <= 0) {
+					document.getElementById('wrong_registration_login').style.display = 'inline-block';
+					login.style.borderColor = 'red';
+				}
+				if (password.value.length <= 0) {
+					document.getElementById('wrong_registration_password').style.display = 'inline-block';
+					password.style.borderColor = 'red';
+				}
+				if (repassword.value.length <= 0) {
+					document.getElementById('wrong_registration_repassword').style.display = 'inline-block';
+					repassword.style.borderColor = 'red';
+				}
+				if (email.value.length <= 0) {
+					document.getElementById('wrong_registration_email').style.display = 'inline-block';
+					email.style.borderColor = 'red';
+				}
+			} else {
+				let xhr = new XMLHttpRequest();
+				let request = `https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.register&login[0]=${login.value}&pass[0]=${password.value}&pass2[0]=${repassword.value}&email[0]=${email.value}&remember[0]=${remember}&JsHttpRequest=16063651671721-xml`;
+
+				xhr.open('POST', request, true);
+				xhr.responseType = 'json';
+
+				xhr.send();
+
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+						let result = xhr.response;
+						result = result['js'][0];
+
+						if (result['status'] == 300) {
+							login.style.borderColor = '#c1c1c1';
+							password.style.borderColor = '#c1c1c1';
+							repassword.style.borderColor = '#c1c1c1';
+							email.style.borderColor = '#c1c1c1';
+
+							document.getElementById('wrong_registration_login').style.display = 'none';
+							document.getElementById('wrong_registration_login_short').style.display = 'none';
+							document.getElementById('wrong_registration_login_long').style.display = 'none';
+
+							document.getElementById('wrong_registration_password').style.display = 'none';
+							document.getElementById('wrong_registration_password_short').style.display = 'none';
+							document.getElementById('wrong_registration_password_long').style.display = 'none';
+
+							document.getElementById('wrong_registration_repassword').style.display = 'none';
+							document.getElementById('wrong_registration_repassword_wrong').style.display = 'none';
+
+							document.getElementById('wrong_registration_email').style.display = 'none';
+							document.getElementById('wrong_registration_email_false').style.display = 'none';
+
+							if (document.getElementById('form_registration').children[0].tagName == 'P') {
+								document.getElementById('form_registration').children[0].remove();
+							}
+
+							switch (result['response']) {
+								case 'Ошибка. Логин содержит более 16 символов':
+									document.getElementById('wrong_registration_login').style.display = 'none';
+									document.getElementById('wrong_registration_login_short').style.display = 'none';
+									document.getElementById('wrong_registration_login_long').style.display = 'inline-block';
+									login.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Логин содержит менее 3 символов':
+									document.getElementById('wrong_registration_login').style.display = 'none';
+									document.getElementById('wrong_registration_login_short').style.display = 'inline-block';
+									document.getElementById('wrong_registration_login_long').style.display = 'none';
+									login.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Пароль содержит более 16 символов':
+									document.getElementById('wrong_registration_password').style.display = 'none';
+									document.getElementById('wrong_registration_password_short').style.display = 'none';
+									document.getElementById('wrong_registration_password_long').style.display = 'inline-block';
+									password.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Пароль содержит менее 3 символов':
+									document.getElementById('wrong_registration_password').style.display = 'none';
+									document.getElementById('wrong_registration_password_short').style.display = 'inline-block';
+									document.getElementById('wrong_registration_password_long').style.display = 'none';
+									password.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Пароли не совпадают':
+									document.getElementById('wrong_registration_repassword').style.display = 'none';
+									document.getElementById('wrong_registration_repassword_wrong').style.display = 'inline-block';
+									repassword.style.borderColor = 'red';
+									break;
+								case 'Проверьте правильность ввода email':
+									document.getElementById('wrong_registration_email').style.display = 'none';
+									document.getElementById('wrong_registration_email_false').style.display = 'inline-block';
+									email.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Выбранный Вами логин уже занят':
+									let warning = document.createElement('p');
+									warning.classList.add('text-danger');
+									warning.classList.add('text-danger');
+									warning.classList.add('text-center');
+									warning.innerText = result['response'];
+									document.getElementById('form_registration').prepend(warning);
+									break;
+							}
+						} else if (result['status'] == 200) {
+							setCookie('PHPSESSID', result['response']['PHPSESSID']);
+							setCookie('login', login.value);
+							document.getElementById('user_name').innerText = login.value;
+
+
+							document.getElementById('user_authorizated').style.display = 'block';
+							document.getElementById('user_not_authorizated').style.display = 'none';
+							document.getElementById('modal__login').getElementsByTagName('button')[0].click();
+
+							document.getElementsByTagName('header')[0].getElementsByTagName('button')[0].click();
+
+							document.getElementById('favorites').style.display = 'block';
+
+						}
+					}
+				}
+			}
+		});
+
+		//Обработчик на закрытие формы регистрации
+		document.getElementById('modal__registration').addEventListener('click', function () {
+			let elem = this;
+			setTimeout(function () {
+				if (elem.classList.length <= 2) {
+					let login = document.getElementById('reg-username');
+					login.style.borderColor = '#c1c1c1';
+					login.value = '';
+
+					let password = document.getElementById('reg-pass');
+					password.style.borderColor = '#c1c1c1';
+					password.value = '';
+
+					let repassword = document.getElementById('reg-repass');
+					repassword.style.borderColor = '#c1c1c1';
+					repassword.value = '';
+
+					let email = document.getElementById('reg-email');
+					email.style.borderColor = '#c1c1c1';
+					email.value = '';
+
+					document.getElementById('reg-autologin').checked = false;
+
+					document.getElementById('wrong_registration_login').style.display = 'none';
+					document.getElementById('wrong_registration_login_long').style.display = 'none';
+					document.getElementById('wrong_registration_login_short').style.display = 'none';
+
+					document.getElementById('wrong_registration_password').style.display = 'none';
+					document.getElementById('wrong_registration_password_long').style.display = 'none';
+					document.getElementById('wrong_registration_password_short').style.display = 'none';
+
+					document.getElementById('wrong_registration_repassword').style.display = 'none';
+					document.getElementById('wrong_registration_repassword_wrong').style.display = 'none';
+
+					document.getElementById('wrong_registration_email').style.display = 'none';
+
+
+					if (document.getElementById('form_registration').children[0].tagName == 'P') {
+						document.getElementById('form_registration').children[0].remove();
+					}
+				}
+			}, 100);
+		});
+
+
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------------------Выход--------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		document.getElementById('close_session').addEventListener('click', function () {
+			let xhr = new XMLHttpRequest();
+			let request = `https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.logout&JsHttpRequest=16063651671721-xml`;
+
+
+			xhr.open('POST', request);
+			xhr.responseType = 'json';
+
+			xhr.send();
+
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+					document.getElementById('user_authorizated').style.display = 'none';
+					document.getElementById('user_not_authorizated').style.display = 'block';
+
+					document.getElementsByTagName('header')[0].getElementsByTagName('button')[0].click();
+
+					document.getElementById('favorites').style.display = 'none';
+
+					document.getElementById('add_favorites').style.display = 'none';
+					document.getElementById('not_favorites').style.display = 'none';
+					document.getElementById('personal_raiting').remove();
+
+					deleteCookie('PHPSESSID');
+					deleteCookie('login');
+				}
+			}
+		});
+
+
+		//----------------------------------------------------------------------------------------------
+		//-------------------------------Добавление отзыва-----------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		document.getElementById('add_comment').addEventListener('click', function () {
+			if (getCookie('PHPSESSID')) {
+				let query = document.getElementById('feedback-message').value;
+
+				if (query.length <= 0) {
+					document.getElementById('feedback-message').style.borderColor = 'red';
+					document.getElementById('feedback-message').addEventListener('keypress', function () {
+						this.style.borderColor = '#ced4da';
+					});
+				} else {
+					let query16 = '';
+
+					for (let i = 0; i < query.length; i++) {
+						query16 += '%u' + query.charCodeAt(i).toString(16);
+					}
+
+					let request = `https://cinema.ntop.tv/api.php?format=ajax&PHPSESSID=${getCookie('PHPSESSID')}&action[0]=Video.postComment&movie_id[0]=${$_GET('id')}&text[0]=${query16}&JsHttpRequest=16079130225676-xml`;
+
+					let xhr = new XMLHttpRequest();
+					console.log(request);
+
+					xhr.open('POST', request);
+					xhr.responseType = 'json';
+					xhr.send();
+					xhr.onreadystatechange = function () {
+						if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+							document.getElementById('modal__addcomment').getElementsByTagName('button')[0].click();
+							let commentQuantity = document.getElementById('place_for_comments').children.length;
+							document.getElementById('place_for_comments').innerHTML = `
+								<!-- Анимация загрузки -->
+								<div id="fountainG_actor">
+									<div id="fountainG_actor_1" class="fountainG_actor"></div>
+									<div id="fountainG_actor_2" class="fountainG_actor"></div>
+									<div id="fountainG_actor_3" class="fountainG_actor"></div>
+									<div id="fountainG_actor_4" class="fountainG_actor"></div>
+									<div id="fountainG_actor_5" class="fountainG_actor"></div>
+									<div id="fountainG_actor_6" class="fountainG_actor"></div>
+									<div id="fountainG_actor_7" class="fountainG_actor"></div>
+									<div id="fountainG_actor_8" class="fountainG_actor"></div>
+								</div>`;
+
+
+							console.log(commentQuantity);
+							document.getElementById('MovPageInfoComments-tab').innerHTML = `
+								<span class="mov-page-info__tab-icon mov-page-info__tab-icon_comments"></span>
+								<span class="mov-page-info__tab-text">Отзывы (${commentQuantity})</span>`;
+							loadComment();
+						}
+					}
+				}
+
+			} else {
+				alert('Сперва авторизуйся');
+			}
+
+		});
+
+
+		window.onload = function () {
+			//----------------------------------------------------------------------------------------------
+			//--------------------Отображение авторизованного пользователя----------------------------------
+			//----------------------------------------------------------------------------------------------
+
+			if (getCookie('PHPSESSID')) {
+				document.getElementById('user_authorizated').style.display = 'block';
+				document.getElementById('user_not_authorizated').style.display = 'none';
+				document.getElementById('favorites').style.display = 'block';
+				document.getElementById('user_name').innerText = getCookie('login');
+			}
+
+			//----------------------------------------------------------------------------------------------
+			//------------------------Отображение 'Недавно просмотренные'-----------------------------------
+			//----------------------------------------------------------------------------------------------
+			if (localStorage.getItem('last')) {
+				document.getElementById('watched').style.display = 'block';
+			}
+
+
+			//----------------------------------------------------------------------------------------------
+			//---------------------------------------Работа поиска------------------------------------------
+			//----------------------------------------------------------------------------------------------
+
+			let searchForm = document.getElementById('search-form');//элемен поиска
+			let searchFormButton = searchForm.getElementsByTagName('button')[0];//кнопка поиска
+			console.log(searchForm.offsetWidth);
+
+			//Начало поиска при клике на 'Enter'
+			searchForm.addEventListener("keypress", function (event) {
+				let keyEnter = 13;//13 - код клавиши 'ENTER'. по нажатию этой клавиши будет выполняться поиск
+				let searchBar = document.getElementById('search-bar');//поле ввода поискового запроса
+				if (event.keyCode == keyEnter) {
+					let query = '';//запрос
+
+					//перевод символов из поискового запроса в 16-ричную систему
+					for (let i = 0; i < searchBar.value.length; i++) {
+						query += '%u' + searchBar.value.charCodeAt(i).toString(16);
+					}
+					sessionStorage.setItem('query', searchBar.value);
+
+					//переход на страницу с результатами поиска. поисковой запрос передается GET-методом с идентификатором 'query'
+					document.location.href = "/search_result.html?query=" + query;
+				}
+
+				//Запуск мгновенного поиска
+				if (searchBar.value != '') {
+					if (document.getElementById('field-search-result') != undefined) {
+						document.getElementById('field-search-result').remove();
+					}
+					search(searchBar.value, searchForm);
+				}
+
+			});
+
+			//Отправка поискового запроса при повторном фокусе поля поиска
+			document.getElementById('search-bar').addEventListener('focus', function () {
+				let searchBar = document.getElementById('search-bar');//поле ввода поискового запроса
+				var query = '';//запрос
+
+				//перевод символов из поискового запроса в 16-ричную систему
+				for (let i = 0; i < this.value.length; i++) {
+					query += '%u' + this.value.charCodeAt(i).toString(16);
+				}
+				sessionStorage.setItem('query', searchBar.value);
+
+				//Запуск мгновенного поиска
+				if (this.value != '') {
+					if (document.getElementById('field-search-result') != undefined) {
+						document.getElementById('field-search-result').remove();
+					}
+					search(this.value, searchForm);
+				}
+			});
+
+			//Начало поиска при клике на кнопку поиска
+			searchFormButton.addEventListener('click', function () {
+				let searchBar = document.getElementById('search-bar');//поле ввода поискового запроса
+				var query = '';//запрос
+
+				//перевод символов из поискового запроса в 16-ричную систему
+				for (let i = 0; i < searchBar.value.length; i++) {
+					query += '%u' + searchBar.value.charCodeAt(i).toString(16);
+				}
+				sessionStorage.setItem('query', searchBar.value);
+
+				//переход на страницу с результатами поиска. поисковой запрос передается GET-методом с идентификатором 'query'
+				document.location.href = "/search_result.html?query=" + query;
+				//search();
+			});
+
+			//Удаление мгновенного поиска при потере фокуса поля ввода
+			searchForm.addEventListener('focusout', function () {
+				if (document.getElementById('field-search-result') != undefined) {
+					function removeFieldResult() {
+						document.getElementById('field-search-result').remove();
+					}
+					setTimeout(removeFieldResult, 250);
+				}
+			});
+		}//window.onload
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,914 @@
+
+<!doctype html>
+<html lang="ru">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="./css/cinema-styles.css" type="text/css">
+
+	<link rel="stylesheet" href="./css/icons/style.css" type="text/css">
+	<link rel="stylesheet" href="./css/load_animation.css">
+
+	<!-- Video JS Style-->
+
+	<link href="https://vjs.zencdn.net/7.2.3/video-js.css" rel="stylesheet">
+
+	<!-- Video JS -->
+	<script src="./player/video.js"></script>
+	<script src="./player/videojs-contrib-hls.js"></script>
+
+	<!--Icons-->
+	<link rel="apple-touch-icon" sizes="57x57" href="/androidIcons/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/androidIcons/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/androidIcons/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/androidIcons/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/androidIcons/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/androidIcons/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/androidIcons/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/androidIcons/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/androidIcons/apple-icon-180x180.png">
+	<link rel="apple-touch-icon" sizes="1024x1024" href="/androidIcons/apple-icon-1024x1024.png">
+	<link rel="apple-touch-icon" sizes="1024x1024" href="/androidIcons/apple-icon-512x512.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/androidIcons/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/androidIcons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/androidIcons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/androidIcons/favicon-16x16.png">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+
+	<!--Manifest-->
+	<link rel="manifest" href="/manifest.json">
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="application-name" content="PWA">
+	<meta name="apple-mobile-web-app-title" content="PWA">
+	<meta name="msapplication-starturl" content="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Синематограф</title>
+</head>
+
+<body>
+
+	<!--Service worker-->
+	<script>
+		// Проверка того, что наш браузер поддерживает Service Worker API.
+		if ('serviceWorker' in navigator) {
+			// Весь код регистрации у нас асинхронный.
+			navigator.serviceWorker.register('./sw.js')
+				.then(() => navigator.serviceWorker.ready.then((worker) => {
+					worker.sync.register('syncdata');
+				}))
+				.catch((err) => console.log(err));
+		}
+	</script>
+
+	<!-- header -->
+	<header class="header">
+		<a class="header__logo" href="#"><img class="header__logo-img" src="images/logo.png" width="170" height="32"
+				alt="" /></a>
+		<button type="button" class="header__menu-button" data-toggle="offcanvas-menu" title="Toggle menu"></button>
+		<div class="header__search">
+			<div id="search-form">
+				<input class="serach-form__input" type="text" placeholder="Поиск" id="search-bar" autocomplete="off">
+				<button type="button" class="serach-form__button close" data-dismiss="modal" aria-label="Close"
+					id="close">
+					<span>&times;</span>
+				</button>
+			</div>
+			<button type="button" class="header__search-btn-toggle" data-toggle="offcanvas-search"
+				title="Toggle Search"></button>
+		</div>
+	</header>
+	<!-- /header -->
+
+	<div class="cnm-main-menu">
+		<div class="main-menu-container">
+
+			<!-- user authorizated -->
+			<div class="main-menu-user" id="user_authorizated" style="display: none;">
+				<div class="main-menu-user__info">
+					<span class="main-menu-user__user-icon"></span>
+					<span class="main-menu-user__user-name" id='user_name'>UserName</span>
+				</div>
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__settings"><span class="cnm cnm-settings"></span>Настройки</button>
+					<button class="main-menu-user__link" id="close_session"><span
+							class="cnm cnm-close"></span>Выход</button>
+				</div>
+			</div>
+
+			<!-- not authorizated -->
+			<div class="main-menu-user main-menu-user_not_login" id="user_not_authorizated">
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__registration"><span
+							class="cnm cnm-person_add"></span>Зарегистрироваться</button>
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__login"><span class="cnm cnm-vpn_key"></span>Войти</button>
+				</div>
+			</div>
+			<!-- main menu -->
+			<div class="main-menu">
+				<nav class="main-menu__items">
+					<a class="main-menu__item main-menu__item_catalog active" href="iptv.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-ondemand_video"></span>
+						</div>
+						IPTV
+					</a>
+					<a class="main-menu__item main-menu__item_catalog" href="index.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-view_module"></span>
+						</div>
+						Каталог фильмов
+					</a>
+					<a class="main-menu__item main-menu__item_categories" href="categories.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-view_list"></span>
+						</div>
+						Жанры
+					</a>
+					<a class="main-menu__item main-menu__item_newest" href="newest.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-movie_creation"></span>
+						</div>
+						Новинки
+					</a>
+					<a class="main-menu__item main-menu__item_top" href="top.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-thumb_up"></span>
+						</div>
+						Топ недели
+					</a>
+					<a class="main-menu__item main-menu__item_fav" href="favorites.html" id="favorites"
+						style="display: none;">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-star"></span>
+						</div>
+						Избранное
+					</a>
+					<a class="main-menu__item main-menu__item_watched" href="watched.html" id="watched"
+						style="display: none;">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-watch_later"></span>
+						</div>
+						Недавно просмотренные
+					</a>
+					<a class="main-menu__item main-menu__item_search" href="search.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-search"></span>
+						</div>
+						Расширенный поиск
+					</a>
+					<a class="main-menu__item main-menu__item_small main-menu__item_stats" href="stats.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-pie_chart"></span>
+						</div>
+						Статистика cinema.ntop.tv
+					</a>
+					<a class="main-menu__item main-menu__item_small main-menu__item_feedback" data-toggle="modal"
+						href="#modal__feedback">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-message"></span>
+						</div>
+						Ваши пожелания
+					</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- CONTENT -->
+	<main class="content">
+		<div class="top-bar">
+			<h1 class="top-bar__title"><span class="cnm cnm-ondemand_video"></span> IPTV</h1>
+
+			<div class="top-bar__sort-wrapper">
+
+				<div class="top-bar__item top-bar__sort-list-wrapper">
+					<div class="dropdown top-bar__sort-list-dropdown top-bar__sort-list-dropdown_iptv">
+						<button class="top-bar__sort-list-button dropdown-toggle" type="button" id="sort-list"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Все каналы
+						</button>
+						<div class="dropdown-menu top-bar__sort-list-menu" aria-labelledby="sort-list"
+							id="dropdown-menu-values">
+
+						</div>
+					</div>
+				</div>
+
+				<div class="top-bar__item top-bar__serials-switch-wrapper mb-2w">
+					<div class="serials-switch top-bar__serials-switch">
+						<input type="checkbox" class="serials-switch__input" id="show-channels-in-HD">
+						<label class="serials-switch__label" for="show-channels-in-HD" id="showHD">
+							<span class="serials-switch__label-text">Только<br>
+								HD качество</span></span>
+						</label>
+					</div>
+				</div>
+
+
+				<div class="top-bar__item top-bar__list-type-wrapper">
+					<div class="list-type top-bar__list-type">
+						<button class="list-type__button list-type__button_thumbs active" id="button_badges"><span
+								class="cnm cnm-view_comfy"></span></button>
+						<button class="list-type__button list-type__button_list" id="button_list"><span
+								class="cnm cnm-view_list"></span></button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!-- iptv-channels_type-thumbs -->
+
+		<!-- Анимация загрузки -->
+		<div id="fountainG">
+			<div id="fountainG_1" class="fountainG"></div>
+			<div id="fountainG_2" class="fountainG"></div>
+			<div id="fountainG_3" class="fountainG"></div>
+			<div id="fountainG_4" class="fountainG"></div>
+			<div id="fountainG_5" class="fountainG"></div>
+			<div id="fountainG_6" class="fountainG"></div>
+			<div id="fountainG_7" class="fountainG"></div>
+			<div id="fountainG_8" class="fountainG"></div>
+		</div>
+
+		<div class="container-fluid" id="place_for_channels" style="display: none;">
+
+
+
+		</div>
+
+		<div class="clearfix"></div>
+		</div>
+
+	</main>
+	<!-- /CONTENT -->
+
+	<!-- MODALS -->
+
+	<!-- Modal - FEEDBACK -->
+	<div class="modal fade" id="modal__feedback" tabindex="-1" role="dialog" aria-labelledby="modal__feedback"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Ваши пожелания</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="feedback-message">Ваше сообщение</label>
+							<textarea id="feedback-message" placeholder="Введите сообщение"
+								class="form-control cnm-input"></textarea>
+						</div>
+						<div class="text-center py-2">
+							<button type="submit" class="cnm-modal-btn">Отправить</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - SETTINGS -->
+	<div class="modal fade" id="modal__settings" tabindex="-1" role="dialog" aria-labelledby="modal__settings"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Настройки</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - LOGIN -->
+	<div class="modal fade" id="modal__login" tabindex="-1" role="dialog" aria-labelledby="modal__login"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="Login">Вход</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="form_login">
+						<div class="form-group">
+							<label for="login-username">Имя пользователя: <span class="text-danger"
+									id="wrong_login_login" style="display: none;">Вы не ввели логин</span></label>
+							<input type="text" class="form-control cnm-input" id="login-username"
+								placeholder="Введите имя пользователя">
+						</div>
+
+						<div class="form-group">
+							<label for="login-pass">Пароль: <span class="text-danger" id="wrong_login_pass"
+									style="display: none;">Вы не ввели пароль</span></label>
+							<input type="password" class="form-control cnm-input" id="login-pass" placeholder="Пароль">
+						</div>
+
+						<div class="form-group form-check text-center">
+							<input type="checkbox" class="form-check-input" id="login-autologin">
+							<label class="form-check-label" for="login-autologin">Автоматически входить</label>
+						</div>
+
+
+						<div class="text-center py-2">
+							<button id="login_submit" class="cnm-modal-btn">Войти</button>
+						</div>
+					</div>
+
+					<div class="p-4">
+						<a href="#modal__registration" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-person_add"></span> Зарегистрироваться</a>
+						<a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span
+								class="cnm cnm-help_outline"></span> Забыл пароль</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - REGISTRATION -->
+	<div class="modal fade" id="modal__registration" tabindex="-1" role="dialog" aria-labelledby="modal__registration"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Регистрация</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="form_registration">
+						<div class="form-group">
+							<label for="reg-username">Имя пользователя:
+								<span class="text-danger" id="wrong_registration_login" style="display: none;">
+									Вы не ввели имя пользователя
+								</span>
+								<span class="text-danger" id="wrong_registration_login_long" style="display: none;">
+									Логин содержит более 16 символов.
+								</span>
+								<span class="text-danger" id="wrong_registration_login_short" style="display: none;">
+									Логин содержит менее 3 символов.
+								</span>
+							</label>
+							<input type="text" class="form-control cnm-input" id="reg-username"
+								placeholder="Введите имя пользователя">
+						</div>
+						<div class="form-group">
+							<label for="reg-pass">Пароль:
+								<span class="text-danger" id="wrong_registration_password" style="display: none;">
+									Вы не ввели пароль
+								</span>
+								<span class="text-danger" id="wrong_registration_password_long" style="display: none;">
+									Пароль содержит более 16 символов.
+								</span>
+								<span class="text-danger" id="wrong_registration_password_short" style="display: none;">
+									Пароль содержит менее 3 символов.
+								</span>
+							</label>
+							<input type="password" class="form-control cnm-input" id="reg-pass" placeholder="Пароль">
+						</div>
+						<div class="form-group">
+							<label for="reg-repass">Повторите папроль:
+								<span class="text-danger" id="wrong_registration_repassword" style="display: none;">
+									Вы не повторили пароль
+								</span>
+								<span class="text-danger" id="wrong_registration_repassword_wrong"
+									style="display: none;">
+									Пароли не совпадают
+								</span>
+							</label>
+							<input type="password" class="form-control cnm-input" id="reg-repass"
+								placeholder="Повторите пароль">
+						</div>
+						<div class="form-group">
+							<label for="reg-email">E-mail:
+								<span class="text-danger" id="wrong_registration_email" style="display: none;">
+									Вы не указали e-mail
+								</span>
+								<span class="text-danger" id="wrong_registration_email_false" style="display: none;">
+									Проверьте правильность ввода e-mail
+								</span>
+							</label>
+							<input type="text" class="form-control cnm-input" id="reg-email"
+								placeholder="Введите e-mail">
+						</div>
+						<div class="form-group form-check text-center">
+							<input type="checkbox" class="form-check-input" id="reg-autologin">
+							<label class="form-check-label" for="reg-autologin">Автоматически входить</label>
+						</div>
+
+						<div class="text-center py-2">
+							<button type="submit" id="register_submit" class="cnm-modal-btn">Зарегистрироваться</button>
+						</div>
+					</div>
+
+					<div class="p-4">
+						<a href="#modal__login" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-vpn_key"></span> Вход</a>
+						<a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span
+								class="cnm cnm-help_outline"></span> Забыл пароль</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal - FORGOT PASSWORD -->
+	<div class="modal fade" id="modal__forgotpass" tabindex="-1" role="dialog" aria-labelledby="modal__forgotpass"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Восстановление пароля</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="forgot-pass-email">E-mail:</label>
+							<input type="text" class="form-control cnm-input" id="forgot-pass-email"
+								placeholder="Введите e-mail">
+						</div>
+						<div class="text-center py-2">
+							<button type="submit" class="cnm-modal-btn">Восстановить</button>
+						</div>
+					</form>
+
+					<div class="p-4">
+						<a href="#modal__login" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-vpn_key"></span> Вход</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- <button class="movie-page__mov-watch-btn mr-2 mt-2" data-toggle="modal" data-target="#modal__trailer"><span class="cnm cnm-play_circle_outline"></span>Смотреть трейлер</button> -->
+
+
+
+	<!-- Modal - TRAILER -->
+	<div class="modal fade" id="modal__channel" tabindex="-1" role="dialog" aria-labelledby="modal__channel">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="channel_name">Название канала</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div id='place_for_player'
+					class="modal-body row justify-content-center m-0 embed-responsive embed-responsive-16by9">
+					<!----------------------------------------------------------------------------->
+					<!-------------------------------VideoJS--------------------------------------->
+					<!----------------------------------------------------------------------------->
+
+					<!-- <video id='hls-example' class="video-js vjs-default-skin" width="400" height="300" controls preload="none">
+						<source id='hls-example_source' type="application/x-mpegURL">
+						
+					</video> -->
+					<script>
+
+					</script>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Плеер-->
+
+
+
+	<div>
+		<!-- <video id='hls-example' class="video-js vjs-default-skin" width="400" height="300" controls>
+			<source type="application/x-mpegURL" src="http://st09.dvbip.tv:1499/index.m3u8">
+		</video> -->
+
+
+
+
+
+	</div>
+
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+		integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+		crossorigin="anonymous"></script>
+
+	<script src="/js/functions.js"></script>
+
+
+
+
+
+
+	<script>
+		$(document).ready(function () {
+
+			$('[data-toggle=offcanvas-menu]').click(function () {
+				$('.cnm-main-menu').toggleClass('active');
+				$('.header__menu-button').toggleClass('active');
+			});
+
+			$('[data-toggle=offcanvas-search]').click(function () {
+				$('.header__search').toggleClass('active');
+				$('.header__search-btn-toggle').toggleClass('active');
+			});
+
+		});
+
+	</script>
+
+	<script>
+		const REQUEST_URL = 'https://iptvproxy.lds.net.ua/channels';//&JsHttpRequest=16007667792177-xml';
+		const sortButton = document.getElementById('sort-list');//кнопка, открывающая отбор каналов
+		const sortDropdownMenu = document.getElementById('dropdown-menu-values');//div, в который помещаются названия типов канала (Детские, Информационные, ...)
+		const placeForChannels = document.getElementById('place_for_channels');//div, в который помещается список фильмов
+
+		const buttonBadges = document.getElementById('button_badges');//отображение каналов значками
+		const buttonList = document.getElementById('button_list');//отображение каналов списком
+
+		let CHANNEL_NAMES = new Array();//массив с названиями каналов
+
+		let xhr = new XMLHttpRequest();
+		xhr.open('GET', REQUEST_URL, true);
+		xhr.responseType = 'json';
+		xhr.send();
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+				channels = xhr.response;//получает результат запроса
+
+				for (let i = 0; i < channels.length; i++) {
+					CHANNEL_NAMES[i] = channels[i]['name'];//сохраняет названия каналов в массив CHANNEL_NAMES
+
+					//создает div-элемент, в котором будет находится каналы с заголовком
+					let divChannelGroup = document.createElement('div');
+					divChannelGroup.id = 'channels_group_' + i;
+
+					//создает div-элемент, в который поместится список каналов
+					let divForMovies = document.createElement('div');
+					divForMovies.classList.add('iptv-channels_type-thumbs');
+					divForMovies.style.float = 'none';
+					divForMovies.id = "channels_group_" + i + "_place_for_channels";
+
+					//создает div-элемент, в который поместится заголовок
+					let divHeader = document.createElement('div');
+					divHeader.classList.add('channels-category-name');
+					divHeader.classList.add('mt-2');
+					divHeader.classList.add('mb-2');
+
+					//заголовок
+					let h1 = document.createElement('h1');
+					h1.innerText = CHANNEL_NAMES[i];
+
+					//создание дочерних элементов в группе с каналами
+					divHeader.append(h1);
+					divChannelGroup.append(divHeader);
+					divChannelGroup.append(divForMovies);
+
+					//добавление группы в div-элемент для отображения списка каналов 
+					placeForChannels.append(divChannelGroup);
+
+					//clearfix для 'уборки последствий' float
+					clearfix = document.createElement('div');
+					clearfix.classList.add('clearfix');
+					divChannelGroup.append(clearfix);
+					//placeForChannels.append(clearfix);
+
+				}
+				//заполнение каналов
+				displayСhannels(channels);
+
+				//добавление значений CHANNEL_NAMES в sortDropdownMenu
+				for (let i = 0; i < CHANNEL_NAMES.length; i++) {
+					let dropdownItem = document.createElement("a");
+					dropdownItem.classList.add('dropdown-item');
+					dropdownItem.innerText = CHANNEL_NAMES[i];
+
+					sortDropdownMenu.appendChild(dropdownItem);
+				}
+
+				//Установка надписи "Все каналы" в sortDropdownMenu
+				let dropdownItem = document.createElement("a");
+				dropdownItem.classList.add('dropdown-item');
+				dropdownItem.classList.add('active');
+				dropdownItem.innerText = "Все каналы";
+				sortDropdownMenu.insertBefore(dropdownItem, sortDropdownMenu.firstChild);
+			} else if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 404) {
+				document.write('Ошибка получения данных');
+			}
+
+		}//xhr.onreadystatechange
+
+
+		//----------------------------------------------------------------------------------------------
+		//-------------------------------------Обработка выбора-----------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		sortDropdownMenu.addEventListener('click', function (event) {
+			let parent = event.target.parentElement;
+			let target = event.target;
+
+			//убирает class="active" со списка
+			for (let i = 0; i < parent.children.length; i++) {
+				parent.children[i].classList.remove('active');
+			}
+
+			target.classList.add('active');//добавляет class="active" в выбранный элемент
+
+			sortButton.innerText = target.innerText;//присваивание значения выбранного варианте кнопке
+
+			//обработка отображения
+			if (target.innerText == 'Все каналы') {
+				//возвращение видимости группам
+				for (let i = 0; i < CHANNEL_NAMES.length; i++) {
+					document.getElementById('channels_group_' + i).style.display = 'inherit';
+				}
+			} else {
+				//сравнение выбранного текстового значения в выпадающем списке с заголовками групп
+				for (let i = 0; i < CHANNEL_NAMES.length; i++) {
+					if ((document.getElementById('channels_group_' + i).children[0].children[0].innerText).toLowerCase() == target.innerText.toLowerCase()) {
+						//если значения совпадают, то присваивается display = 'inherit'
+						document.getElementById('channels_group_' + i).style.display = 'inherit';
+					} else {
+						//если значения не совпадают, то присваивается display = 'none'
+						document.getElementById('channels_group_' + i).style.display = 'none';
+					}
+				}
+			}
+		});//sortDropdownMenu.addEventListener
+
+
+		//-----------------------------------------------------------------------------------------------------------
+		//функция displayСhannels(channelName) используется для подгрузки списка каналов
+		//channels - тело ответа из json
+		//channelName - название типа канала, который необходимо подгрузить. Если нужны все каналы - передается false
+		//-----------------------------------------------------------------------------------------------------------
+
+		function displayСhannels(channels, channelName) {
+			for (let key in channels) {
+				let result = '';
+				channel = channels[key]['channels'];
+
+				for (let i = 0; i < channel.length; i++) {
+
+					// data-toggle="modal" data-target="#modal__trailer"
+
+					let name = channel[i]['name'];
+					// console.log(typeof name);
+					let hd = (name.toLowerCase().includes('hd')) ? '<div class="iptv_channel_icons"><span class="cinema-item__poster-icon cinema-item__poster-icon_hd" data-toggle="tooltip" data-placement="top" title="HD качество"></span></div>' : '';
+					let logo = channel[i]['logo']//.replace('http', 'https');
+					let url = channel[i]['url'];//.replace('http', 'https');
+					let template = `<div class="iptv-channels__item" data-toggle="modal" data-target="#modal__channel" onclick="setChannel('${name}', '${url}');" style="position: relative">` +
+						'<a class="iptv-channels__link">' +
+						'<div class="iptv-channels__logo-wrapper">' +
+						hd + 
+						'<img class="iptv-channels__logo-pic" src="' + logo + '" alt=""/>' +
+						'</div>' +
+						'<p class="iptv-channels__title">' + name + '</p>' +
+						'<p class="iptv-channels__desc">Описание канала</p>' +
+						'</a>' +
+						'</div>';
+					result += template;
+				}
+				document.getElementById('channels_group_' + key + "_place_for_channels").innerHTML = result;
+
+			}
+		}//function displayСhannels
+
+
+		//--------------------------------------------------------------------------------------------------------------
+		//функция setChannel(channelName) используется для загрузки информации о воспроизводимом канале в модальное окно
+		//name - название канала
+		//url - url канала
+		//--------------------------------------------------------------------------------------------------------------
+
+		function setChannel(name, url) {
+			document.getElementById('channel_name').innerText = name;
+			console.log(`url=${url}`);
+			let placeForPlayer = document.getElementById('place_for_player');
+
+			// let source = document.createElement('source');
+			// source.type = 'application/x-mpegURL';
+			// source.src = url;
+			// document.getElementById('hls-example').append(source);
+			console.log('placeForPlayer.width=' + placeForPlayer.style.width);
+			let video = document.createElement('video');
+			video.id = 'hls-example';
+			video.classList.add('video-js');
+			video.classList.add('vjs-default-skin');
+			video.classList.add('embed-responsive-item');
+			// video.width = '400';
+			// video.style.maxHeight = window.innerHeight * 0.45;
+			video.controls = true;
+			video.preload = true;
+			video.autoplay = true;
+
+
+
+
+			placeForPlayer.append(video);
+
+			video.innerHTML = `<source src="${url}"  type="application/x-mpegURL"/>`;
+
+			// console.log(document.getElementById('hls-example_source'));
+
+			let player = videojs('hls-example');
+			player.play();
+
+			//Обработка закрытия модального окна
+			let modalChannel = document.getElementById('modal__channel');//модальное окно
+
+			modalChannel.addEventListener('click', function () {
+				setTimeout(function () {
+					if (modalChannel.classList.length <= 2) {
+						player.dispose();
+					}
+				}, 100);
+			});
+		}//function setChannel
+
+
+		//----------------------------------------------------------------------------------------------
+		//-------------------------------------Отображение каналов--------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		buttonBadges.addEventListener('click', function () {
+			this.classList.add('active');
+			buttonList.classList.remove('active');
+			for (let i = 0; i < CHANNEL_NAMES.length; i++) {
+				document.getElementById('channels_group_' + i + '_place_for_channels').classList.remove('iptv-channels_type-list');
+				document.getElementById('channels_group_' + i + '_place_for_channels').classList.add('iptv-channels_type-thumbs');
+				document.getElementsByClassName('clearfix')[i].style.display = 'block';
+			}
+		});
+
+		buttonList.addEventListener('click', function () {
+			this.classList.add('active');
+			buttonBadges.classList.remove('active');
+			for (let i = 0; i < CHANNEL_NAMES.length; i++) {
+				document.getElementById('channels_group_' + i + '_place_for_channels').classList.remove('iptv-channels_type-thumbs');
+				document.getElementById('channels_group_' + i + '_place_for_channels').classList.add('iptv-channels_type-list');
+			}
+		});//buttonBadges.addEventListener
+
+
+		//----------------------------------------------------------------------------------------------
+		//-----------------------------Отображение каналов в HD качестве--------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		document.getElementById('showHD').addEventListener('click', function () {
+			let showChannels = document.getElementById('show-channels-in-HD');
+
+			if (showChannels.checked == false) {
+				for (let i = 0; i < document.getElementById('place_for_channels').children.length; i++) {
+					let channelGroup = document.getElementById('channels_group_' + i + '_place_for_channels'); //группа с каналами
+
+					for (let j = 0; j < channelGroup.children.length; j++) {
+						let channel = channelGroup.children[j];//канал
+						let channelName = channel.getElementsByTagName('p')[0];//название канала
+
+						if (!channelName.innerText.toUpperCase().includes('HD')) {
+							channel.style.display = 'none';
+						} else {
+							channel.style.display = 'block';
+						}
+					}
+				}
+			} else {
+				for (let i = 0; i < document.getElementById('place_for_channels').children.length; i++) {
+					let channelGroup = document.getElementById('channels_group_' + i + '_place_for_channels'); //группа с каналами
+
+					for (let j = 0; j < channelGroup.children.length; j++) {
+						channelGroup.children[j].style.display = 'block';
+					}
+				}
+			}
+		});//document.getElementById('showHD').addEventListener
+
+
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------Работа поиска по каналам--------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		let searchForm = document.getElementById('search-bar');
+		searchForm.addEventListener('keypress', function (event) {
+			console.log('click');
+			//Получение введенной строки
+			let enterString = '';
+			if (searchForm.value.length > 0) {
+				enterString += (searchForm.value + event.key);
+			} else {
+				enterString += event.key;
+			}
+			enterString = enterString.toLowerCase();
+
+			for (let i = 0; i < document.getElementById('place_for_channels').children.length; i++) {
+				let channelGroup = document.getElementById('channels_group_' + i + '_place_for_channels'); //группа с каналами
+
+				for (let j = 0; j < channelGroup.children.length; j++) {
+					let channel = channelGroup.children[j];//канал
+					let channelName = channel.getElementsByTagName('p')[0];//название канала
+					if (!channelName.innerText.toLowerCase().includes(enterString)) {
+						channel.style.display = 'none';
+					} else {
+						channel.style.display = 'block';
+					}
+				}
+			}
+		});//searchForm.addEventListener('keypress'
+
+
+		//--------------------------------------------------------------------------------------------------
+		//Очистка содержимого поисковой строки и отображение каналов при клике на крестик в поисковой строке
+		//--------------------------------------------------------------------------------------------------
+
+		document.getElementById('close').addEventListener('click', function () {
+			for (let i = 0; i < document.getElementById('place_for_channels').children.length; i++) {
+				let channelGroup = document.getElementById('channels_group_' + i + '_place_for_channels'); //группа с каналами
+
+				for (let j = 0; j < channelGroup.children.length; j++) {
+					channelGroup.children[j].style.display = 'block';
+				}
+			}
+			searchForm.value = '';
+		});
+
+		window.onload = function () {
+			//----------------------------------------------------------------------------------------------
+			//--------------------Отображение авторизованного пользователя----------------------------------
+			//----------------------------------------------------------------------------------------------
+
+			if (getCookie('PHPSESSID')) {
+				document.getElementById('user_authorizated').style.display = 'block';
+				document.getElementById('user_not_authorizated').style.display = 'none';
+				// w('куки есть')
+			}
+
+			//------------------------------------------------------------------------------
+			//------------------Включение отображения содержимого---------------------------
+			//------------------------------------------------------------------------------
+			setTimeout(function () {
+				document.getElementById('fountainG').remove();//удаление анимации загрузки
+				document.getElementById('place_for_channels').style.display = 'block';//отображение содержимого страницы
+			}, 2000);
+
+
+
+
+
+		}//window.onload
+	</script>
+</body>
+
+</html>

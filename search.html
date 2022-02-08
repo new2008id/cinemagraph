@@ -1,0 +1,620 @@
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/cinema-styles.css" type="text/css">
+    
+    <link rel="stylesheet" href="/css/icons/style.css" type="text/css">
+
+    <title>Синематограф</title>
+  </head>
+<body>
+      
+    <!-- header -->
+    <header class="header">
+        <a class="header__logo" href="#"><img class="header__logo-img" src="images/logo.png" width="170" height="32" alt=""/></a>
+        <button type="button" class="header__menu-button" data-toggle="offcanvas-menu" title="Toggle menu"></button>
+        <div class="header__search">
+            <form class="search-form">
+                <input class="serach-form__input" type="text" placeholder="Поиск">
+                <button class="serach-form__button"></button>
+            </form>
+            <button type="button" class="header__search-btn-toggle" data-toggle="offcanvas-search" title="Toggle Search"></button>
+        </div>
+    </header>
+    <!-- /header -->
+    
+    <div class="cnm-main-menu">
+        <div class="main-menu-container">
+           
+          <!-- user authorizated -->
+			<div class="main-menu-user" id="user_authorizated" style="display: none;">
+				<div class="main-menu-user__info">
+					<span class="main-menu-user__user-icon"></span>
+					<span class="main-menu-user__user-name" id='user_name'>UserName</span>
+				</div>
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__settings"><span class="cnm cnm-settings"></span>Настройки</button>
+					<button class="main-menu-user__link" id="close_session"><span
+							class="cnm cnm-close"></span>Выход</button>
+				</div>
+			</div>
+
+			<!-- not authorizated -->
+			<div class="main-menu-user main-menu-user_not_login" id="user_not_authorizated">
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__registration"><span
+							class="cnm cnm-person_add"></span>Зарегистрироваться</button>
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__login"><span class="cnm cnm-vpn_key"></span>Войти</button>
+				</div>
+			</div>
+            <!-- main menu -->
+            <div class="main-menu">
+                <nav class="main-menu__items">
+                    <a class="main-menu__item main-menu__item_catalog" href="index.html">
+                        <div class="main-menu__item-icon">
+                            <span class="cnm cnm-view_module"></span>
+                        </div>
+                        Каталог
+                    </a>
+                    <a class="main-menu__item main-menu__item_categories" href="categories.html">
+                        <div class="main-menu__item-icon">
+                            <span class="cnm cnm-view_list"></span>
+                        </div>
+                        Жанры
+                    </a>
+                    <a class="main-menu__item main-menu__item_newest" href="newest.html">
+                        <div class="main-menu__item-icon">
+                            <span class="cnm cnm-movie_creation"></span>
+                        </div>
+                        Новинки
+                    </a>
+                    <a class="main-menu__item main-menu__item_top" href="top.html">
+                        <div class="main-menu__item-icon">
+                            <span class="cnm cnm-thumb_up"></span>
+                        </div>
+                        Топ недели
+                    </a>
+                    <a class="main-menu__item main-menu__item_fav" href="favorites.html">
+                        <div class="main-menu__item-icon">
+                            <span class="cnm cnm-star"></span>
+                        </div>
+                        Избранное
+                    </a>
+                    <a class="main-menu__item main-menu__item_watched" href="watched.html">
+                        <div class="main-menu__item-icon">
+                            <span class="cnm cnm-watch_later"></span>
+                        </div>
+                        Недавно просмотренные
+                    </a>
+                    <a class="main-menu__item main-menu__item_search active" href="search.html">
+                        <div class="main-menu__item-icon">
+                            <span class="cnm cnm-search"></span>
+                        </div>
+                        Расширенный поиск
+                    </a>
+                    <a class="main-menu__item main-menu__item_small main-menu__item_stats" href="stats.html">
+                        <div class="main-menu__item-icon">
+                            <span class="cnm cnm-pie_chart"></span>
+                        </div>
+                        Статистика cinema.ntop.tv
+                    </a>
+                    <a class="main-menu__item main-menu__item_small main-menu__item_feedback" data-toggle="modal" href="#modal__feedback">
+                        <div class="main-menu__item-icon">
+                            <span class="cnm cnm-message"></span>
+                        </div>
+                        Ваши пожелания
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+    
+      
+    <!-- CONTENT -->
+    <main class="content">
+        <div class="top-bar">
+            <h1 class="top-bar__title"><span class="cnm cnm-search"></span> Расширенный поиск</h1>
+            
+                <button type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                   Фильтр
+                </button>
+            
+        </div>
+        
+        
+        <div class="container-fluid collapse" id="collapseExample">
+           <div class="search-filters-wrapper">
+            <div class="row no-gutters">
+                <div class="col-12 col-md-4 search-filters__part">
+                   <div class="search-filters__part-bg">
+                    <h5 class="search-filters__part-title">Жанр</h5>
+                    <div class="form-group">
+                        <label class="label-1" for="select-genre">Выбрать жанр:</label>
+                        <select class="form-control" id="select-genre">
+                          <option>1</option>
+                          <option>2</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-1" for="unselect-genre">Исключить жанр:</label>
+                        <select class="form-control" id="unselect-genre">
+                          <option>1</option>
+                          <option>2</option>
+                        </select>
+                    </div>
+                   </div>
+                </div>
+                <div class="col-12 col-md-4 search-filters__part">
+                   <div class="search-filters__part-bg">
+                    <h5 class="search-filters__part-title">Страна</h5>
+                    <div class="form-group">
+                        <label class="label-1" for="select-country">Выбрать страну:</label>
+                        <select class="form-control" id="select-country">
+                          <option>1</option>
+                          <option>2</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-1" for="unselect-country">Исключить страну:</label>
+                        <select class="form-control" id="unselect-country">
+                          <option>1</option>
+                          <option>2</option>
+                        </select>
+                    </div>
+                   </div>
+                </div>
+                <div class="col-12 col-md-4 search-filters__part">
+                   <div class="search-filters__part-bg">
+                    <h5 class="search-filters__part-title">Год выпуска</h5>
+                    <div class="form-group">
+                        <label class="label-1" for="select-country">Выбрать год:</label>
+                        <select class="form-control" id="select-country">
+                          <option>1</option>
+                          <option>2</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-1" for="unselect-country">или промежуток:</label>
+                        <select class="form-control" id="unselect-country">
+                          <option>1</option>
+                          <option>2</option>
+                        </select>
+                    </div>
+                   </div>
+                </div>
+            </div>
+           </div> 
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        <div class="container-fluid cinema-content-wrapper cinema-items_var1">
+            <div class="row no-gutters">
+				
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            <img class="cinema-item__poster-img" src="posters/b01.jpg" alt=""/>
+                        </div>
+                        <p class="cinema-item__title">Гений <span class="cinema-item__title-season">(сезон 2, серия 8)</span></p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2018, США</span>
+                        Драма / История / Биография / Сериал</p>
+                        <span class="cinema-item__serial-label">обновляется</span>
+                        </a>
+                    </div>
+				</div>
+				
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                           
+                            <img class="cinema-item__poster-img" src="posters/b02.png" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Очень английский скандал</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2018, Великобритания</span>
+                        Криминал / Драма / Биография / Сериал</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            <img class="cinema-item__poster-img" src="posters/b03.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Меган Ливи</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2017, США</span>
+                        Драма / Война / Биография</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b04.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Красавица для чудовища</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2018, Великобритания / США / Люксембург</span>
+                        Драма / Мелодрама / Биография</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b05.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Винчестер. Дом, который построили призраки</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2018, США / Австралия</span>
+                        Триллер / Ужасы / Фэнтези / Биография / Детектив</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b06.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Нераскрытое дело <span class="cinema-item__title-season">(серия 10)</span></p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2018, США</span>
+                        Биография / Сериал</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b07.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Дарреллы <span class="cinema-item__title-season">(сезон 3, серия 2)</span></p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2016, Великобритания</span>
+                        Драма / Биография / Сериал</p>
+                        <span class="cinema-item__serial-label">обновляется</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b08.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Секретное досье</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2018, Великобритания / США</span>
+                        Драма / Триллер / История / Биография</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b09.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Величайший шоумен</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2017, США</span>
+                        Драма / Биография / Мюзикл</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b10.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Профессор Марстон и Чудо-женщины</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2018, США</span>
+                        Драма / Биография</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b11.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Все деньги мира</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2017, США</span>
+                        Криминал / Драма / Триллер / Биография / Детектив</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b12.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Большая игра</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2017, США / Китай / Канада</span>
+                        Криминал / Драма / Биография</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b13.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Американская история преступлений  <span class="cinema-item__title-season">(сезон 2, серия 9)</span></p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2016, США</span>
+                        Криминал / Драма / Биография / Сериал</p>
+                        <span class="cinema-item__serial-label">обновляется</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                    <div class="cinema-item">
+                        <a href="#" class="cinema-item__link">
+                        <div class="cinema-item__poster-wrap">
+                            
+                            <img class="cinema-item__poster-img" src="posters/b14.jpg" alt=""/>
+                            
+                        </div>
+                        <p class="cinema-item__title">Темные времена</p>
+                        <p class="cinema-item__info"><span class="cinema-item__info_country">2017, Великобритания / США</span>
+                        Драма / Война / История / Биография</p>
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </main>
+    <!-- /CONTENT -->
+      
+      
+    <!-- BOTTOM-BAR -->
+    <div class="bottom-bar">
+        <span class="bottom-bar__items-coount">1-12 из 16889</span>
+        <button class="bottom-bar__nav-button bottom-bar__nav-button_prev"></button>
+        <button class="bottom-bar__nav-button bottom-bar__nav-button_next"></button>
+    </div>
+    <!-- /BOTTOM-BAR -->
+      
+<!-- MODALS -->      
+     
+<!-- Modal - FEEDBACK -->
+<div class="modal fade" id="modal__feedback" tabindex="-1" role="dialog" aria-labelledby="modal__feedback" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Ваши пожелания</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="feedback-message">Ваше сообщение</label>
+            <textarea id="feedback-message" placeholder="Введите сообщение"  class="form-control cnm-input"></textarea>
+          </div>
+          <div class="text-center py-2">
+              <button type="submit" class="cnm-modal-btn">Отправить</button>
+              </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div> 
+    
+         
+<!-- Modal - SETTINGS -->
+<div class="modal fade" id="modal__settings" tabindex="-1" role="dialog" aria-labelledby="modal__settings" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Настройки</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+<!-- Modal - LOGIN -->
+<div class="modal fade" id="modal__login" tabindex="-1" role="dialog" aria-labelledby="modal__login" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Login">Вход</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+           <form>
+              <div class="form-group">
+                <label for="login-username">Имя пользователя:</label>
+                <input type="text" class="form-control cnm-input" id="login-username" placeholder="Введите имя пользователя">
+              </div>
+              <div class="form-group">
+                <label for="login-pass">Пароль:</label>
+                <input type="password" class="form-control cnm-input" id="login-pass" placeholder="Пароль">
+              </div>
+              <div class="form-group form-check text-center">
+                <input type="checkbox" class="form-check-input" id="login-autologin">
+                <label class="form-check-label" for="login-autologin">Автоматически входить</label>
+              </div>
+              
+              <div class="text-center py-2">
+              <button type="submit" class="cnm-modal-btn">Войти</button>
+              </div>
+            </form>
+            
+            <div class="p-4">
+               <a href="#modal__registration" data-toggle="modal" class="float-left"><span class="cnm cnm-person_add"></span> Зарегистрироваться</a>
+               <a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span class="cnm cnm-help_outline"></span> Забыл пароль</a>
+               <span class="clearfix"></span>
+                
+            </div>
+      </div>
+    </div>
+  </div>
+</div>         
+
+       
+<!-- Modal - REGISTRATION -->
+<div class="modal fade" id="modal__registration" tabindex="-1" role="dialog" aria-labelledby="modal__registration" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Регистрация</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+           <form>
+              <div class="form-group">
+                <label for="reg-username">Имя пользователя:</label>
+                <input type="text" class="form-control cnm-input" id="reg-username" placeholder="Введите имя пользователя">
+              </div>
+              <div class="form-group">
+                <label for="reg-pass">Пароль:</label>
+                <input type="password" class="form-control cnm-input" id="reg-pass" placeholder="Пароль">
+              </div>
+              <div class="form-group">
+                <label for="reg-repass">Повторите папроль:</label>
+                <input type="password" class="form-control cnm-input" id="reg-repass" placeholder="Повторите пароль">
+              </div>
+              <div class="form-group">
+                <label for="reg-email">E-mail:</label>
+                <input type="text" class="form-control cnm-input" id="reg-email" placeholder="Введите e-mail">
+              </div>
+              <div class="form-group form-check text-center">
+                <input type="checkbox" class="form-check-input" id="reg-autologin">
+                <label class="form-check-label" for="reg-autologin">Автоматически входить</label>
+              </div>
+              
+              <div class="text-center py-2">
+              <button type="submit" class="cnm-modal-btn">Зарегистрироваться</button>
+              </div>
+            </form>
+            
+            <div class="p-4">
+               <a href="#modal__login" data-toggle="modal" class="float-left"><span class="cnm cnm-vpn_key"></span> Вход</a>
+               <a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span class="cnm cnm-help_outline"></span> Забыл пароль</a>
+               <span class="clearfix"></span>
+                
+            </div>
+      </div>
+    </div>
+  </div>
+</div> 
+
+    
+<!-- Modal - FORGOT PASSWORD -->
+<div class="modal fade" id="modal__forgotpass" tabindex="-1" role="dialog" aria-labelledby="modal__forgotpass" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Восстановление пароля</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+           <form>
+              <div class="form-group">
+                <label for="forgot-pass-email">E-mail:</label>
+                <input type="text" class="form-control cnm-input" id="forgot-pass-email" placeholder="Введите e-mail">
+              </div>
+              <div class="text-center py-2">
+              <button type="submit" class="cnm-modal-btn">Восстановить</button>
+              </div>
+            </form>
+            
+            <div class="p-4">
+               <a href="#modal__login" data-toggle="modal" class="float-left"><span class="cnm cnm-vpn_key"></span> Вход</a>
+               <span class="clearfix"></span>
+                
+            </div>
+      </div>
+    </div>
+  </div>
+</div>     
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    
+    
+<script>
+$(document).ready(function() {
+    
+  $('[data-toggle=offcanvas-menu]').click(function() {
+    $('.cnm-main-menu').toggleClass('active');
+    $('.header__menu-button').toggleClass('active'); 
+  });
+    
+  $('[data-toggle=offcanvas-search]').click(function() {
+    $('.header__search').toggleClass('active');
+    $('.header__search-btn-toggle').toggleClass('active'); 
+  });
+  
+});
+
+</script>
+</body>
+</html>

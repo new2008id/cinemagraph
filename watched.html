@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="css/cinema-styles.css" type="text/css">
+
+	<link rel="stylesheet" href="/css/icons/style.css" type="text/css">
+
+	<!--Icons-->
+	<link rel="apple-touch-icon" sizes="57x57" href="/androidIcons/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/androidIcons/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/androidIcons/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/androidIcons/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/androidIcons/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/androidIcons/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/androidIcons/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/androidIcons/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/androidIcons/apple-icon-180x180.png">
+	<link rel="apple-touch-icon" sizes="1024x1024" href="/androidIcons/apple-icon-1024x1024.png">
+	<link rel="apple-touch-icon" sizes="1024x1024" href="/androidIcons/apple-icon-512x512.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/androidIcons/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/androidIcons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/androidIcons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/androidIcons/favicon-16x16.png">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+
+	<!--Manifest-->
+	<link rel="manifest" href="/manifest.json">
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="application-name" content="PWA">
+	<meta name="apple-mobile-web-app-title" content="PWA">
+	<meta name="msapplication-starturl" content="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Синематограф</title>
+</head>
+
+<body>
+
+	<!--Service worker-->
+	<script>
+		// Проверка того, что наш браузер поддерживает Service Worker API.
+		if ('serviceWorker' in navigator) {
+			// Весь код регистрации у нас асинхронный.
+			navigator.serviceWorker.register('./sw.js')
+				.then(() => navigator.serviceWorker.ready.then((worker) => {
+					worker.sync.register('syncdata');
+				}))
+				.catch((err) => console.log(err));
+		}
+	</script>
+
+	<!-- header -->
+	<header class="header">
+		<a class="header__logo" href="#"><img class="header__logo-img" src="images/logo.png" width="170" height="32"
+				alt="" /></a>
+		<button type="button" class="header__menu-button" data-toggle="offcanvas-menu" title="Toggle menu"></button>
+		<div class="header__search">
+			<div id="search-form">
+				<input class="serach-form__input" type="text" placeholder="Поиск" id="search-bar" autocomplete="off">
+				<button class="serach-form__button"></button>
+			</div>
+			<button type="button" class="header__search-btn-toggle" data-toggle="offcanvas-search"
+				title="Toggle Search"></button>
+		</div>
+	</header>
+	<!-- /header -->
+
+	<div class="cnm-main-menu">
+		<div class="main-menu-container">
+
+			<!-- user authorizated -->
+			<div class="main-menu-user" id="user_authorizated" style="display: none;">
+				<div class="main-menu-user__info">
+					<span class="main-menu-user__user-icon"></span>
+					<span class="main-menu-user__user-name" id='user_name'>UserName</span>
+				</div>
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__settings"><span class="cnm cnm-settings"></span>Настройки</button>
+					<button class="main-menu-user__link" id="close_session"><span
+							class="cnm cnm-close"></span>Выход</button>
+				</div>
+			</div>
+
+			<!-- not authorizated -->
+			<div class="main-menu-user main-menu-user_not_login" id="user_not_authorizated">
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__registration"><span
+							class="cnm cnm-person_add"></span>Зарегистрироваться</button>
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__login"><span class="cnm cnm-vpn_key"></span>Войти</button>
+				</div>
+			</div>
+			<!-- main menu -->
+			<div class="main-menu">
+				<nav class="main-menu__items">
+					<a class="main-menu__item main-menu__item_catalog" href="iptv.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-ondemand_video"></span>
+						</div>
+						IPTV
+					</a>
+					<a class="main-menu__item main-menu__item_catalog" href="index.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-view_module"></span>
+						</div>
+						Каталог фильмов
+					</a>
+					<a class="main-menu__item main-menu__item_categories" href="categories.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-view_list"></span>
+						</div>
+						Жанры
+					</a>
+					<a class="main-menu__item main-menu__item_newest" href="newest.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-movie_creation"></span>
+						</div>
+						Новинки
+					</a>
+					<a class="main-menu__item main-menu__item_top" href="top.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-thumb_up"></span>
+						</div>
+						Топ недели
+					</a>
+					<a class="main-menu__item main-menu__item_fav" href="favorites.html" id="favorites"
+						style="display: none;">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-star"></span>
+						</div>
+						Избранное
+					</a>
+					<a class="main-menu__item main-menu__item_watched active" href="watched.html" id="watched">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-watch_later"></span>
+						</div>
+						Недавно просмотренные
+					</a>
+					<a class="main-menu__item main-menu__item_search" href="search.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-search"></span>
+						</div>
+						Расширенный поиск
+					</a>
+					<a class="main-menu__item main-menu__item_small main-menu__item_stats" href="stats.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-pie_chart"></span>
+						</div>
+						Статистика cinema.ntop.tv
+					</a>
+					<a class="main-menu__item main-menu__item_small main-menu__item_feedback" data-toggle="modal"
+						href="#modal__feedback">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-message"></span>
+						</div>
+						Ваши пожелания
+					</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- CONTENT -->
+	<main class="content">
+		<div class="top-bar">
+			<h1 class="top-bar__title"><span class="cnm cnm-watch_later"></span> Недавно просмотренные</h1>
+
+		</div>
+
+		<div class="container-fluid cinema-content-wrapper cinema-items_var1">
+			<div class="row no-gutters" id="place_for_films">
+
+			</div>
+		</div>
+
+	</main>
+	<!-- /CONTENT -->
+
+
+	<!-- BOTTOM-BAR -->
+	<!-- <div class="bottom-bar">
+		<span class="bottom-bar__items-coount">1-12 из 16889</span>
+		<button class="bottom-bar__nav-button bottom-bar__nav-button_prev"></button>
+		<button class="bottom-bar__nav-button bottom-bar__nav-button_next"></button>
+	</div> -->
+	<!-- /BOTTOM-BAR -->
+
+	<!-- MODALS -->
+
+	<!-- Modal - FEEDBACK -->
+	<div class="modal fade" id="modal__feedback" tabindex="-1" role="dialog" aria-labelledby="modal__feedback"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Ваши пожелания</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="feedback-message">Ваше сообщение</label>
+							<textarea id="feedback-message" placeholder="Введите сообщение"
+								class="form-control cnm-input"></textarea>
+						</div>
+						<div class="text-center py-2">
+							<button type="submit" class="cnm-modal-btn">Отправить</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - SETTINGS -->
+	<div class="modal fade" id="modal__settings" tabindex="-1" role="dialog" aria-labelledby="modal__settings"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Настройки</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - LOGIN -->
+	<div class="modal fade" id="modal__login" tabindex="-1" role="dialog" aria-labelledby="modal__login"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="Login">Вход</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="form_login">
+						<div class="form-group">
+							<label for="login-username">Имя пользователя: <span class="text-danger"
+									id="wrong_login_login" style="display: none;">Вы не ввели логин</span></label>
+							<input type="text" class="form-control cnm-input" id="login-username"
+								placeholder="Введите имя пользователя">
+						</div>
+
+						<div class="form-group">
+							<label for="login-pass">Пароль: <span class="text-danger" id="wrong_login_pass"
+									style="display: none;">Вы не ввели пароль</span></label>
+							<input type="password" class="form-control cnm-input" id="login-pass" placeholder="Пароль">
+						</div>
+
+						<div class="form-group form-check text-center">
+							<input type="checkbox" class="form-check-input" id="login-autologin">
+							<label class="form-check-label" for="login-autologin">Автоматически входить</label>
+						</div>
+
+
+						<div class="text-center py-2">
+							<button id="login_submit" class="cnm-modal-btn">Войти</button>
+						</div>
+					</div>
+
+					<div class="p-4">
+						<a href="#modal__registration" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-person_add"></span> Зарегистрироваться</a>
+						<a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span
+								class="cnm cnm-help_outline"></span> Забыл пароль</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - REGISTRATION -->
+	<div class="modal fade" id="modal__registration" tabindex="-1" role="dialog" aria-labelledby="modal__registration"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Регистрация</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="form_registration">
+						<div class="form-group">
+							<label for="reg-username">Имя пользователя:
+								<span class="text-danger" id="wrong_registration_login" style="display: none;">
+									Вы не ввели имя пользователя
+								</span>
+								<span class="text-danger" id="wrong_registration_login_long" style="display: none;">
+									Логин содержит более 16 символов.
+								</span>
+								<span class="text-danger" id="wrong_registration_login_short" style="display: none;">
+									Логин содержит менее 3 символов.
+								</span>
+							</label>
+							<input type="text" class="form-control cnm-input" id="reg-username"
+								placeholder="Введите имя пользователя">
+						</div>
+						<div class="form-group">
+							<label for="reg-pass">Пароль:
+								<span class="text-danger" id="wrong_registration_password" style="display: none;">
+									Вы не ввели пароль
+								</span>
+								<span class="text-danger" id="wrong_registration_password_long" style="display: none;">
+									Пароль содержит более 16 символов.
+								</span>
+								<span class="text-danger" id="wrong_registration_password_short" style="display: none;">
+									Пароль содержит менее 3 символов.
+								</span>
+							</label>
+							<input type="password" class="form-control cnm-input" id="reg-pass" placeholder="Пароль">
+						</div>
+						<div class="form-group">
+							<label for="reg-repass">Повторите папроль:
+								<span class="text-danger" id="wrong_registration_repassword" style="display: none;">
+									Вы не повторили пароль
+								</span>
+								<span class="text-danger" id="wrong_registration_repassword_wrong"
+									style="display: none;">
+									Пароли не совпадают
+								</span>
+							</label>
+							<input type="password" class="form-control cnm-input" id="reg-repass"
+								placeholder="Повторите пароль">
+						</div>
+						<div class="form-group">
+							<label for="reg-email">E-mail:
+								<span class="text-danger" id="wrong_registration_email" style="display: none;">
+									Вы не указали e-mail
+								</span>
+								<span class="text-danger" id="wrong_registration_email_false" style="display: none;">
+									Проверьте правильность ввода e-mail
+								</span>
+							</label>
+							<input type="text" class="form-control cnm-input" id="reg-email"
+								placeholder="Введите e-mail">
+						</div>
+						<div class="form-group form-check text-center">
+							<input type="checkbox" class="form-check-input" id="reg-autologin">
+							<label class="form-check-label" for="reg-autologin">Автоматически входить</label>
+						</div>
+
+						<div class="text-center py-2">
+							<button type="submit" id="register_submit" class="cnm-modal-btn">Зарегистрироваться</button>
+						</div>
+					</div>
+
+					<div class="p-4">
+						<a href="#modal__login" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-vpn_key"></span> Вход</a>
+						<a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span
+								class="cnm cnm-help_outline"></span> Забыл пароль</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal - FORGOT PASSWORD -->
+	<div class="modal fade" id="modal__forgotpass" tabindex="-1" role="dialog" aria-labelledby="modal__forgotpass"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Восстановление пароля</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="forgot-pass-email">E-mail:</label>
+							<input type="text" class="form-control cnm-input" id="forgot-pass-email"
+								placeholder="Введите e-mail">
+						</div>
+						<div class="text-center py-2">
+							<button type="submit" class="cnm-modal-btn">Восстановить</button>
+						</div>
+					</form>
+
+					<div class="p-4">
+						<a href="#modal__login" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-vpn_key"></span> Вход</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+		integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+		crossorigin="anonymous"></script>
+
+	<script src="/js/functions.js"></script>
+
+
+	<script>
+		$(document).ready(function () {
+
+			$('[data-toggle=offcanvas-menu]').click(function () {
+				$('.cnm-main-menu').toggleClass('active');
+				$('.header__menu-button').toggleClass('active');
+			});
+
+			$('[data-toggle=offcanvas-search]').click(function () {
+				$('.header__search').toggleClass('active');
+				$('.header__search-btn-toggle').toggleClass('active');
+			});
+
+		});
+	</script>
+	<script>
+
+
+
+		if (getCookie('PHPSESSID')) {
+			let request = `https://cinema.ntop.tv/api.php?format=ajax&PHPSESSID=${getCookie('PHPSESSID')}&action[0]=Video.getBookmarks&JsHttpRequest=16069273371350-xml`;
+			let xhr = new XMLHttpRequest();
+			xhr.responseType = 'json';
+			xhr.open('POST', request);
+
+			xhr.send();
+
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+					let result = xhr.response;
+					let movies = result['js'][0]['response']['movies'];
+
+					let bookmarks = [];
+
+					for (let key in movies) {
+						bookmarks.push(movies[key]['movie_id']);
+					}
+
+					let last = JSON.parse(localStorage.getItem('last'));
+					let resultTemplate = '';
+					for (let i = 0; i < Object.keys(last).length; i++) {
+						let film = last[i];
+						let href = 'movie-page.html?id=' + film['movie_id'];//добавление id фильма к ссылке
+						let title = film['title'];
+						let posterImage = 'https://cinema.ntop.tv' + film['poster_image'];
+
+						let popular = (film['popular'] == 1) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_top" data-toggle="tooltip" data-placement="top" title="Хит!"></span>' : '';
+						let hd = (film['hd'] == 1) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_hd" data-toggle="tooltip" data-placement="top" title="HD качество"></span>' : '';
+						let seriesStatus = (film['StatusSeries'] == 1) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_series_add" data-toggle="tooltip" data-placement="top" title="Серии добаляются"></span>' : ((film['StatusSeries'] == 2) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_series_end" data-toggle="tooltip" data-placement="top" title="Сериал завершен"></span>' : '');
+
+						let favorite = '';
+						//получение favorites_id (массива id фильмов), которые пользователь добавил в избранные
+
+						if (bookmarks.includes(film['movie_id'])) {
+							favorite = '<span class="cinema-item__poster-icon cinema-item__poster-icon_series_favorite" data-toggle="tooltip" data-placement="top" title="В избранном"></span>';
+						}
+
+						let year = film['year'];
+						var countries = '';
+						for (let countryKey in film['countries']) {
+							countries += film['countries'][countryKey] + ' / ';
+						}
+						countries = countries.substring(0, (countries.length - 2));
+						var genres = '';
+						for (let genreKey in film['genres']) {
+							genres += film['genres'][genreKey] + ' / ';
+						}
+						genres = genres.substring(0, (genres.length - 2));
+
+						let template = "<div class=\"col-6 col-sm-4 col-md-3 col-lg-2\">" +
+							"<div class=\"cinema-item\">" +
+							"<a href=\"" + href + "\" class=\"cinema-item__link\">" +
+							"<div class=\"cinema-item__poster-wrap\">" +
+							"<div class=\"cinema-item__poster-icons\">" +
+							popular + hd + seriesStatus + favorite +
+							"</div>" +
+							"<img class=\"cinema-item__poster-img\" src=\"" + posterImage + "\" alt=\"\"/>" +
+							"</div>" +
+							//Заголовок сериала имеет вид: "Название_сериала(сезон/серия)"
+							//эта строка смотрит на наличие '(' в названии. Если она присутствует, то название сериала выводится в отдельном span блоке
+							//а (сезон/серия) в блоке ниже
+							//Если же выводится фильм, то просто отображается его название, без дополнительного блока span
+							"<p class=\"cinema-item__title\">" + ((title.indexOf('(') > 0) ? (title.substring(0, title.indexOf('(')) + "<span class=\"cinema-item__title-season\">" + title.substring(title.indexOf('('))) : (title)) + "</span></p>" +
+							"<p class=\"cinema-item__info\"><span class=\"cinema-item__info_country\">" + year + ", " + countries + "</span>" +
+							"" + genres + "</p>" +
+							"<span class=\"cinema-item__serial-label\">обновляется</span>" +
+							"</a>" +
+							"</div>" +
+							"</div>";
+
+						resultTemplate += template;
+					}
+					document.getElementById('place_for_films').innerHTML = resultTemplate;
+				}
+			}
+
+		} else {
+			let last = JSON.parse(localStorage.getItem('last'));
+			let resultTemplate = '';
+			for (let i = 0; i < Object.keys(last).length; i++) {
+				let film = last[i];
+				let href = 'movie-page.html?id=' + film['movie_id'];//добавление id фильма к ссылке
+				let title = film['title'];
+				let posterImage = 'https://cinema.ntop.tv' + film['poster_image'];
+
+				let popular = (film['popular'] == 1) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_top" data-toggle="tooltip" data-placement="top" title="Хит!"></span>' : '';
+				let hd = (film['hd'] == 1) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_hd" data-toggle="tooltip" data-placement="top" title="HD качество"></span>' : '';
+				let seriesStatus = (film['StatusSeries'] == 1) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_series_add" data-toggle="tooltip" data-placement="top" title="Серии добаляются"></span>' : ((film['StatusSeries'] == 2) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_series_end" data-toggle="tooltip" data-placement="top" title="Сериал завершен"></span>' : '');
+
+
+				let year = film['year'];
+				var countries = '';
+				for (let countryKey in film['countries']) {
+					countries += film['countries'][countryKey] + ' / ';
+				}
+				countries = countries.substring(0, (countries.length - 2));
+				var genres = '';
+				for (let genreKey in film['genres']) {
+					genres += film['genres'][genreKey] + ' / ';
+				}
+				genres = genres.substring(0, (genres.length - 2));
+
+				let template = "<div class=\"col-6 col-sm-4 col-md-3 col-lg-2\">" +
+					"<div class=\"cinema-item\">" +
+					"<a href=\"" + href + "\" class=\"cinema-item__link\">" +
+					"<div class=\"cinema-item__poster-wrap\">" +
+					"<div class=\"cinema-item__poster-icons\">" +
+					popular + hd + seriesStatus +
+					"</div>" +
+					"<img class=\"cinema-item__poster-img\" src=\"" + posterImage + "\" alt=\"\"/>" +
+					"</div>" +
+					//Заголовок сериала имеет вид: "Название_сериала(сезон/серия)"
+					//эта строка смотрит на наличие '(' в названии. Если она присутствует, то название сериала выводится в отдельном span блоке
+					//а (сезон/серия) в блоке ниже
+					//Если же выводится фильм, то просто отображается его название, без дополнительного блока span
+					"<p class=\"cinema-item__title\">" + ((title.indexOf('(') > 0) ? (title.substring(0, title.indexOf('(')) + "<span class=\"cinema-item__title-season\">" + title.substring(title.indexOf('('))) : (title)) + "</span></p>" +
+					"<p class=\"cinema-item__info\"><span class=\"cinema-item__info_country\">" + year + ", " + countries + "</span>" +
+					"" + genres + "</p>" +
+					"<span class=\"cinema-item__serial-label\">обновляется</span>" +
+					"</a>" +
+					"</div>" +
+					"</div>";
+
+				resultTemplate += template;
+			}
+			document.getElementById('place_for_films').innerHTML = resultTemplate;
+		}//if(getCookie('PHPSESSID'))
+
+//----------------------------------------------------------------------------------------------
+		//-----------------------------------------Авторизация------------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		function authorization() {
+			let login = document.getElementById('login-username');
+			let password = document.getElementById('login-pass');
+			let remember = (document.getElementById('login-autologin').checked) ? 1 : 0;
+
+			if (login.value.length <= 0 || password.value.length <= 0) {
+				if (login.value.length <= 0) {
+					document.getElementById('wrong_login_login').style.display = 'inline-block';
+					login.style.borderColor = 'red';
+				}
+				if (password.value.length <= 0) {
+					document.getElementById('wrong_login_pass').style.display = 'inline-block';
+					password.style.borderColor = 'red';
+				}
+
+			} else {
+				document.getElementById('wrong_login_login').style.display = 'none';
+				document.getElementById('wrong_login_pass').style.display = 'none';
+				password.style.borderColor = '#c1c1c1';
+				login.style.borderColor = '#c1c1c1';
+
+				let xhr = new XMLHttpRequest();
+				let request = `https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.login&login[0]=${login.value}&pass[0]=${password.value}&remember[0]=${remember}&JsHttpRequest=16063651671721-xml`;
+
+				xhr.open('POST', request);
+				xhr.responseType = 'json';
+
+				xhr.send();
+
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+						let result = xhr.response;
+						result = result['js'][0];
+						if (result['status'] == 200) {
+							setCookie('PHPSESSID', result['response']['PHPSESSID']);
+
+							document.getElementById('user_authorizated').style.display = 'block';
+							document.getElementById('user_not_authorizated').style.display = 'none';
+							document.getElementById('modal__login').getElementsByTagName('button')[0].click();
+
+							document.getElementsByTagName('header')[0].getElementsByTagName('button')[0].click();
+
+							document.getElementById('favorites').style.display = 'block';
+
+							setCookie('login', login.value);
+							document.getElementById('user_name').innerText = login.value;
+
+
+
+						} else if (result['status'] == 300) {
+
+							let warning = document.createElement('p');
+							warning.classList.add('text-danger');
+							warning.classList.add('text-danger');
+							warning.classList.add('text-center');
+							warning.innerText = result['response'];
+							document.getElementById('form_login').prepend(warning);
+
+							login.style.borderColor = 'red';
+							login.value = '';
+
+							password.style.borderColor = 'red';
+							password.value = '';
+
+						}
+
+					}
+				}
+
+
+			}
+		}
+
+		document.getElementById('login_submit').addEventListener('click', function () {
+			authorization();
+		});
+
+		document.getElementById('modal__login').addEventListener('keypress', function (event) {
+			let enterCode = 13;
+			if(event.keyCode == enterCode){
+				authorization();
+			}
+		});
+
+		//Обработчик на закрытие формы авторизации
+		document.getElementById('modal__login').addEventListener('click', function () {
+			let elem = this;
+			setTimeout(function () {
+				if (elem.classList.length <= 2) {
+					let login = document.getElementById('login-username');
+					login.style.borderColor = '#c1c1c1';
+					login.value = '';
+
+					let password = document.getElementById('login-pass');
+					password.style.borderColor = '#c1c1c1';
+					password.value = '';
+
+					document.getElementById('login-autologin').checked = false;
+
+					document.getElementById('wrong_login_login').style.display = 'none';
+					document.getElementById('wrong_login_pass').style.display = 'none';
+
+					if (document.getElementById('form_login').children[0].tagName == 'P') {
+						document.getElementById('form_login').children[0].remove();
+					}
+				}
+			}, 100);
+		});
+
+
+		//----------------------------------------------------------------------------------------------
+		//-----------------------------------------Регистрация------------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		document.getElementById('register_submit').addEventListener('click', function () {
+			let formRegistration = document.getElementById('modal__registration');
+
+			let login = document.getElementById('reg-username');
+			let password = document.getElementById('reg-pass');
+			let repassword = document.getElementById('reg-repass');
+			let email = document.getElementById('reg-email');
+			let remember = (document.getElementById('reg-autologin').checked) ? 1 : 0;
+
+			if ((login.value.length <= 0) || (password.value.length <= 0) || (repassword.value.length <= 0) || (email.value.length <= 0)) {
+				if (login.value.length <= 0) {
+					document.getElementById('wrong_registration_login').style.display = 'inline-block';
+					login.style.borderColor = 'red';
+				}
+				if (password.value.length <= 0) {
+					document.getElementById('wrong_registration_password').style.display = 'inline-block';
+					password.style.borderColor = 'red';
+				}
+				if (repassword.value.length <= 0) {
+					document.getElementById('wrong_registration_repassword').style.display = 'inline-block';
+					repassword.style.borderColor = 'red';
+				}
+				if (email.value.length <= 0) {
+					document.getElementById('wrong_registration_email').style.display = 'inline-block';
+					email.style.borderColor = 'red';
+				}
+			} else {
+				let xhr = new XMLHttpRequest();
+				let request = `https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.register&login[0]=${login.value}&pass[0]=${password.value}&pass2[0]=${repassword.value}&email[0]=${email.value}&remember[0]=${remember}&JsHttpRequest=16063651671721-xml`;
+				
+				xhr.open('POST', request, true);
+				xhr.responseType = 'json';
+
+				xhr.send();
+
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+						let result = xhr.response;
+						result = result['js'][0];
+
+						if (result['status'] == 300) {
+							login.style.borderColor = '#c1c1c1';
+							password.style.borderColor = '#c1c1c1';
+							repassword.style.borderColor = '#c1c1c1';
+							email.style.borderColor = '#c1c1c1';
+
+							document.getElementById('wrong_registration_login').style.display = 'none';
+							document.getElementById('wrong_registration_login_short').style.display = 'none';
+							document.getElementById('wrong_registration_login_long').style.display = 'none';
+
+							document.getElementById('wrong_registration_password').style.display = 'none';
+							document.getElementById('wrong_registration_password_short').style.display = 'none';
+							document.getElementById('wrong_registration_password_long').style.display = 'none';
+
+							document.getElementById('wrong_registration_repassword').style.display = 'none';
+							document.getElementById('wrong_registration_repassword_wrong').style.display = 'none';
+
+							document.getElementById('wrong_registration_email').style.display = 'none';
+							document.getElementById('wrong_registration_email_false').style.display = 'none';
+
+							if (document.getElementById('form_registration').children[0].tagName == 'P') {
+								document.getElementById('form_registration').children[0].remove();
+							}
+
+							switch (result['response']) {
+								case 'Ошибка. Логин содержит более 16 символов':
+									document.getElementById('wrong_registration_login').style.display = 'none';
+									document.getElementById('wrong_registration_login_short').style.display = 'none';
+									document.getElementById('wrong_registration_login_long').style.display = 'inline-block';
+									login.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Логин содержит менее 3 символов':
+									document.getElementById('wrong_registration_login').style.display = 'none';
+									document.getElementById('wrong_registration_login_short').style.display = 'inline-block';
+									document.getElementById('wrong_registration_login_long').style.display = 'none';
+									login.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Пароль содержит более 16 символов':
+									document.getElementById('wrong_registration_password').style.display = 'none';
+									document.getElementById('wrong_registration_password_short').style.display = 'none';
+									document.getElementById('wrong_registration_password_long').style.display = 'inline-block';
+									password.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Пароль содержит менее 3 символов':
+									document.getElementById('wrong_registration_password').style.display = 'none';
+									document.getElementById('wrong_registration_password_short').style.display = 'inline-block';
+									document.getElementById('wrong_registration_password_long').style.display = 'none';
+									password.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Пароли не совпадают':
+									document.getElementById('wrong_registration_repassword').style.display = 'none';
+									document.getElementById('wrong_registration_repassword_wrong').style.display = 'inline-block';
+									repassword.style.borderColor = 'red';
+									break;
+								case 'Проверьте правильность ввода email':
+									document.getElementById('wrong_registration_email').style.display = 'none';
+									document.getElementById('wrong_registration_email_false').style.display = 'inline-block';
+									email.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Выбранный Вами логин уже занят':
+									let warning = document.createElement('p');
+									warning.classList.add('text-danger');
+									warning.classList.add('text-danger');
+									warning.classList.add('text-center');
+									warning.innerText = result['response'];
+									document.getElementById('form_registration').prepend(warning);
+									break;
+							}
+						} else if (result['status'] == 200) {
+							setCookie('PHPSESSID', result['response']['PHPSESSID']);
+							setCookie('login', login.value);
+							document.getElementById('user_name').innerText = login.value;
+
+
+							document.getElementById('user_authorizated').style.display = 'block';
+							document.getElementById('user_not_authorizated').style.display = 'none';
+							document.getElementById('modal__login').getElementsByTagName('button')[0].click();
+
+							document.getElementsByTagName('header')[0].getElementsByTagName('button')[0].click();
+
+							document.getElementById('favorites').style.display = 'block';
+
+						}
+					}
+				}
+			}
+		});
+
+		//Обработчик на закрытие формы регистрации
+		document.getElementById('modal__registration').addEventListener('click', function () {
+			let elem = this;
+			setTimeout(function () {
+				if (elem.classList.length <= 2) {
+					let login = document.getElementById('reg-username');
+					login.style.borderColor = '#c1c1c1';
+					login.value = '';
+
+					let password = document.getElementById('reg-pass');
+					password.style.borderColor = '#c1c1c1';
+					password.value = '';
+
+					let repassword = document.getElementById('reg-repass');
+					repassword.style.borderColor = '#c1c1c1';
+					repassword.value = '';
+
+					let email = document.getElementById('reg-email');
+					email.style.borderColor = '#c1c1c1';
+					email.value = '';
+
+					document.getElementById('reg-autologin').checked = false;
+
+					document.getElementById('wrong_registration_login').style.display = 'none';
+					document.getElementById('wrong_registration_login_long').style.display = 'none';
+					document.getElementById('wrong_registration_login_short').style.display = 'none';
+
+					document.getElementById('wrong_registration_password').style.display = 'none';
+					document.getElementById('wrong_registration_password_long').style.display = 'none';
+					document.getElementById('wrong_registration_password_short').style.display = 'none';
+
+					document.getElementById('wrong_registration_repassword').style.display = 'none';
+					document.getElementById('wrong_registration_repassword_wrong').style.display = 'none';
+
+					document.getElementById('wrong_registration_email').style.display = 'none';
+					
+
+					if (document.getElementById('form_registration').children[0].tagName == 'P') {
+						document.getElementById('form_registration').children[0].remove();
+					}
+				}
+			}, 100);
+		});
+
+
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------------------Выход--------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		document.getElementById('close_session').addEventListener('click', function () {
+			let xhr = new XMLHttpRequest();
+			let request = `https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.logout&JsHttpRequest=16063651671721-xml`;
+			
+			xhr.open('POST', request);
+			xhr.responseType = 'json';
+
+			xhr.send();
+
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+
+					document.getElementById('user_authorizated').style.display = 'none';
+					document.getElementById('user_not_authorizated').style.display = 'block';
+
+					document.getElementsByTagName('header')[0].getElementsByTagName('button')[0].click();
+
+					document.getElementById('favorites').style.display = 'none';
+
+					deleteCookie('PHPSESSID');
+					deleteCookie('login');
+				}
+			}
+		});
+
+		window.onload = function () {
+			//----------------------------------------------------------------------------------------------
+			//--------------------Отображение авторизованного пользователя----------------------------------
+			//----------------------------------------------------------------------------------------------
+
+			if (getCookie('PHPSESSID')) {
+				document.getElementById('user_authorizated').style.display = 'block';
+				document.getElementById('user_not_authorizated').style.display = 'none';
+				document.getElementById('favorites').style.display = 'block';
+				document.getElementById('user_name').innerText = getCookie('login');
+			}
+
+			//----------------------------------------------------------------------------------------------
+			//------------------------Отображение 'Недавно просмотренные'-----------------------------------
+			//----------------------------------------------------------------------------------------------
+			if (localStorage.getItem('last')) {
+				document.getElementById('watched').style.display = 'block';
+			}
+			//----------------------------------------------------------------------------------------------
+			//---------------------------------------Работа поиска------------------------------------------
+			//----------------------------------------------------------------------------------------------
+
+			let searchForm = document.getElementById('search-form');//элемен поиска
+			let searchFormButton = searchForm.getElementsByTagName('button')[0];//кнопка поиска
+
+			//Начало поиска при клике на 'Enter'
+			searchForm.addEventListener("keypress", function (event) {
+				let keyEnter = 13;//13 - код клавиши 'ENTER'. по нажатию этой клавиши будет выполняться поиск
+				let searchBar = document.getElementById('search-bar');//поле ввода поискового запроса
+				if (event.keyCode == keyEnter) {
+					var query = '';//запрос
+
+					//перевод символов из поискового запроса в 16-ричную систему
+					for (let i = 0; i < searchBar.value.length; i++) {
+						query += '%u' + searchBar.value.charCodeAt(i).toString(16);
+					}
+					sessionStorage.setItem('query', searchBar.value);
+
+					//переход на страницу с результатами поиска. поисковой запрос передается GET-методом с идентификатором 'query'
+					document.location.href = "/search_result.html?query=" + query;
+					//search();
+				}
+				//Запуск мгновенного поиска
+				if (searchBar.value != '') {
+					if (document.getElementById('field-search-result') != undefined) {
+						document.getElementById('field-search-result').remove();
+					}
+					search(searchBar.value, searchForm);
+				}
+
+			});
+
+			//Отправка поискового запроса при повторном фокусе поля поиска
+			document.getElementById('search-bar').addEventListener('focus', function () {
+				let searchBar = document.getElementById('search-bar');//поле ввода поискового запроса
+				var query = '';//запрос
+
+				//перевод символов из поискового запроса в 16-ричную систему
+				for (let i = 0; i < this.value.length; i++) {
+					query += '%u' + this.value.charCodeAt(i).toString(16);
+				}
+				sessionStorage.setItem('query', searchBar.value);
+
+				//Запуск мгновенного поиска
+				if (this.value != '') {
+					if (document.getElementById('field-search-result') != undefined) {
+						document.getElementById('field-search-result').remove();
+					}
+					search(this.value, searchForm);
+				}
+			});
+
+			//Начало поиска при клике на кнопку поиска
+			searchFormButton.addEventListener('click', function () {
+				let searchBar = document.getElementById('search-bar');//поле ввода поискового запроса
+				var query = '';//запрос
+
+				//перевод символов из поискового запроса в 16-ричную систему
+				for (let i = 0; i < searchBar.value.length; i++) {
+					query += '%u' + searchBar.value.charCodeAt(i).toString(16);
+				}
+				sessionStorage.setItem('query', searchBar.value);
+
+				//переход на страницу с результатами поиска. поисковой запрос передается GET-методом с идентификатором 'query'
+				document.location.href = "/search_result.html?query=" + query;
+				//search();
+			});
+
+			//Удаление мгновенного поиска при потере фокуса поля ввода
+			searchForm.addEventListener('focusout', function () {
+				if (document.getElementById('field-search-result') != undefined) {
+					function removeFieldResult() {
+						document.getElementById('field-search-result').remove();
+					}
+					setTimeout(removeFieldResult, 250);
+				}
+			});
+		}//window.onload
+	</script>
+</body>
+
+</html>

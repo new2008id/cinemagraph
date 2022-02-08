@@ -1,0 +1,2156 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="./css/cinema-styles.css" type="text/css">
+	<!-- <link rel="stylesheet" href="./cinema-styles.css"> -->
+
+	<!-- <link rel="stylesheet" href="./icons/style.css" type="text/css"> -->
+	<link rel="stylesheet" href="./css/icons/style.css" type="text/css">
+
+	<link rel="stylesheet" href="./css/load-animation.css">
+
+	<!--Icons-->
+	<link rel="apple-touch-icon" sizes="57x57" href="/androidIcons/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/androidIcons/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/androidIcons/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/androidIcons/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/androidIcons/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/androidIcons/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/androidIcons/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/androidIcons/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="/androidIcons/apple-icon-180x180.png">
+	<link rel="apple-touch-icon" sizes="1024x1024" href="/androidIcons/apple-icon-1024x1024.png">
+	<link rel="apple-touch-icon" sizes="1024x1024" href="/androidIcons/apple-icon-512x512.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="/androidIcons/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/androidIcons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/androidIcons/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/androidIcons/favicon-16x16.png">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+
+	<!--Manifest-->
+	<link rel="manifest" href="/manifest.json">
+
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="application-name" content="PWA">
+	<meta name="apple-mobile-web-app-title" content="PWA">
+	<meta name="msapplication-starturl" content="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+
+	<title>Синематограф</title>
+</head>
+
+<body>
+
+	<!--Service worker-->
+	<script>
+		// Проверка того, что наш браузер поддерживает Service Worker API.
+		if ('serviceWorker' in navigator) {
+			// Весь код регистрации у нас асинхронный.
+			navigator.serviceWorker.register('./sw.js')
+				.then(() => navigator.serviceWorker.ready.then((worker) => {
+					worker.sync.register('syncdata');
+				}))
+				.catch((err) => console.log(err));
+		}
+	</script>
+
+	<!-- header -->
+	<header class="header">
+		<a class="header__logo" href="index.html"><img class="header__logo-img" src="images/logo.png" width="170"
+				height="32" alt="" id="logo" /></a>
+		<button type="button" class="header__menu-button" data-toggle="offcanvas-menu" title="Toggle menu"></button>
+		<div class="header__search">
+			<div id="search-form">
+				<input class="serach-form__input" type="text" placeholder="Поиск" id="search-bar" autocomplete="off">
+				<button class="serach-form__button"></button>
+			</div>
+			<button type="button" class="header__search-btn-toggle" data-toggle="offcanvas-search"
+				title="Toggle Search"></button>
+		</div>
+	</header>
+	<!-- /header -->
+
+	<div class="cnm-main-menu">
+		<div class="main-menu-container">
+
+			<!-- user authorizated -->
+			<div class="main-menu-user" id="user_authorizated" style="display: none;">
+				<div class="main-menu-user__info">
+					<span class="main-menu-user__user-icon"></span>
+					<span class="main-menu-user__user-name" id='user_name'>UserName</span>
+				</div>
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__settings"><span class="cnm cnm-settings"></span>Настройки</button>
+					<button class="main-menu-user__link" id="close_session"><span
+							class="cnm cnm-close"></span>Выход</button>
+				</div>
+			</div>
+
+			<!-- not authorizated -->
+			<div class="main-menu-user main-menu-user_not_login" id="user_not_authorizated">
+				<div class="main-menu-user__links">
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__registration"><span
+							class="cnm cnm-person_add"></span>Зарегистрироваться</button>
+					<button class="main-menu-user__link" type="button" data-toggle="modal"
+						data-target="#modal__login"><span class="cnm cnm-vpn_key"></span>Войти</button>
+				</div>
+			</div>
+			<!-- main menu -->
+			<div class="main-menu">
+				<nav class="main-menu__items">
+					<a class="main-menu__item main-menu__item_catalog" href="iptv.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-ondemand_video"></span>
+						</div>
+						IPTV
+					</a>
+					<a class="main-menu__item main-menu__item_catalog active" href="index.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-view_module"></span>
+						</div>
+						Каталог фильмов
+					</a>
+					<a class="main-menu__item main-menu__item_categories" href="categories.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-view_list"></span>
+						</div>
+						Жанры
+					</a>
+					<a class="main-menu__item main-menu__item_newest" href="newest.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-movie_creation"></span>
+						</div>
+						Новинки
+					</a>
+					<a class="main-menu__item main-menu__item_top" href="top.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-thumb_up"></span>
+						</div>
+						Топ недели
+					</a>
+					<a class="main-menu__item main-menu__item_fav" href="favorites.html" id="favorites"
+						style="display: none;">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-star"></span>
+						</div>
+						Избранное
+					</a>
+					<a class="main-menu__item main-menu__item_watched" href="watched.html" id="watched"
+						style="display: none;">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-watch_later"></span>
+						</div>
+						Недавно просмотренные
+					</a>
+					<a class="main-menu__item main-menu__item_search" href="search.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-search"></span>
+						</div>
+						Расширенный поиск
+					</a>
+					<a class="main-menu__item main-menu__item_small main-menu__item_stats" href="stats.html">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-pie_chart"></span>
+						</div>
+						Статистика cinema.ntop.tv
+					</a>
+					<a class="main-menu__item main-menu__item_small main-menu__item_feedback" data-toggle="modal"
+						href="#modal__feedback">
+						<div class="main-menu__item-icon">
+							<span class="cnm cnm-message"></span>
+						</div>
+						Ваши пожелания
+					</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- CONTENT -->
+	<main class="content">
+		<div class="top-bar">
+			<h1 class="top-bar__title"><span class="cnm cnm-view_module"></span> Каталог</h1>
+			<div class="top-bar__sort-wrapper">
+
+				<div class="top-bar__item top-bar__sort-list-wrapper">
+					<div class="dropdown top-bar__sort-list-dropdown">
+						<button class="top-bar__sort-list-button dropdown-toggle" type="button" id="sort-list"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							по дате добавления
+						</button>
+						<div class="dropdown-menu top-bar__sort-list-menu" aria-labelledby="sort-list"
+							id="hidden-sort-list">
+							<a data="0" class="dropdown-item active" href="#" onclick="sortMovie(this, 0)"><span
+									class="cnm cnm-today"></span> по дате добавления</a>
+							<a data="1" class="dropdown-item" href="#" onclick="sortMovie(this, 1)"><span
+									class="cnm cnm-date_range"></span> по году выпуска</a>
+							<a data="2" class="dropdown-item" href="#" onclick="sortMovie(this, 2)"><span
+									class="cnm cnm-stars"></span> по рейтингу IMDb</a>
+							<a data="9" class="dropdown-item" href="#" onclick="sortMovie(this, 9)"><span
+									class="cnm cnm-stars"></span> по рейтингу KinoPoisk</a>
+							<a data="3" class="dropdown-item" href="#" onclick="sortMovie(this, 3)"><span
+									class="cnm cnm-thumbs_up_down"></span> по локальному рейтингу</a>
+							<a data="4" class="dropdown-item" href="#" onclick="sortMovie(this, 4)"><span
+									class="cnm cnm-thumb_up"></span> по персональному рейтингу</a>
+							<a data="8" class="dropdown-item" href="#" onclick="sortMovie(this, 8)"><span
+									class="cnm  cnm-star_border"></span> по относительной популярности</a>
+							<a data="6" class="dropdown-item" href="#" onclick="sortMovie(this, 6)"><span
+									class="cnm cnm-star"></span> по абсолютной популярности</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="top-bar__item top-bar__serials-switch-wrapper mb-2">
+					<div class="serials-switch top-bar__serials-switch">
+						<input type="checkbox" class="serials-switch__input" id="show-serials">
+						<label class="serials-switch__label" for="show-serials" id="show_serials_label">
+							<span class="serials-switch__label-text">показывать<br>
+								сериалы</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="top-bar__item top-bar__filter-button-wrapper">
+					<button class="top-bar__filter-button" type="button" data-toggle="collapse"
+						data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+						Расширенный фильтр
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid collapse" id="collapseExample">
+			<div class="search-filters-wrapper">
+				<div class="row no-gutters">
+
+					<div class="col-12 col-md-4 search-filters__part">
+						<div class="search-filters__part-bg">
+							<h5 class="search-filters__part-title">Жанр</h5>
+							<div class="form-group">
+								<label class="label-1" for="select-genre"><span class="label-icon">+</span>Выбрать
+									жанр:</label>
+								<select class="form-control cnm-select" id="select-genre">
+									<option>1</option>
+									<option>2</option>
+								</select>
+								<!-- <div> -->
+								<!-- <div class="form-control cnm-select" id="open-genre">Все жанры</div>
+							<div class="form-control pl-1" id="select-genre" style="display: none; position: absolute; overflow-y: scroll; height: 20em; z-index: 10;">
+								
+							</div> -->
+
+								<!-- </div> -->
+
+							</div>
+
+							<div class="form-group">
+								<label class="label-1" for="unselect-genre"><span class="label-icon">-</span>Исключить
+									жанр:</label>
+								<select class="form-control cnm-select" id="unselect-genre">
+
+								</select>
+							</div>
+
+							<div class="search-filter__list-selected-wrapper">
+								<p class="search-filter__list-selected-title">Выбрано:</p>
+								<div class="search-filter__list-selected-items" id="place_for_genre_select">
+
+								</div>
+							</div>
+
+							<div class="search-filter__list-selected-wrapper">
+								<p class="search-filter__list-selected-title">Исключено:</p>
+								<div class="search-filter__list-selected-items" id="place_for_genre_unselect">
+
+								</div>
+							</div>
+
+							<div class="search-filter__list-selected-wrapper">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="only_selected_genres_check">
+									<label class="custom-control-label" for="only_selected_genres_check"> - только
+										выбранные жанры</label>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-12 col-md-4 search-filters__part">
+						<div class="search-filters__part-bg">
+							<h5 class="search-filters__part-title">Страна</h5>
+
+							<div class="form-group">
+								<label class="label-1" for="select-country"><span class="label-icon">+</span>Выбрать
+									страну:</label>
+								<select class="form-control cnm-select" id="select-country">
+
+								</select>
+							</div>
+
+							<div class="form-group">
+								<label class="label-1" for="unselect-country"><span class="label-icon">-</span>Исключить
+									страну:</label>
+								<select class="form-control cnm-select" id="unselect-country">
+
+								</select>
+							</div>
+							<div class="search-filter__list-selected-wrapper">
+								<p class="search-filter__list-selected-title">Выбрано:</p>
+								<div class="search-filter__list-selected-items" id="place_for_country_select">
+
+								</div>
+							</div>
+
+							<div class="search-filter__list-selected-wrapper">
+								<p class="search-filter__list-selected-title">Исключено:</p>
+								<div class="search-filter__list-selected-items" id="place_for_country_unselect">
+
+								</div>
+							</div>
+							<div class="search-filter__list-selected-wrapper">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input"
+										id="only_selected_countries_check">
+									<label class="custom-control-label" for="only_selected_countries_check"> - только
+										выбранные страны</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="col-12 col-md-4 search-filters__part">
+						<div class="search-filters__part-bg">
+							<h5 class="search-filters__part-title">Год выпуска</h5>
+							<div class="form-group">
+								<label class="label-1" for="select-country">Выбрать год:</label>
+								<select class="form-control cnm-select" id="select-year">
+
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="label-1" for="unselect-country">или десятилетие:</label>
+								<select class="form-control cnm-select" id="select-decade">
+									<option>Все десятиления</option>
+									<option>2020-e</option>
+									<option>2010-e</option>
+									<option>2000-e</option>
+									<option>1990-e</option>
+									<option>1980-e</option>
+									<option>1970-e</option>
+									<option>1960-e</option>
+									<option>1950-e</option>
+									<option>1940-e</option>
+									<option>1930-e</option>
+									<option>1920-e</option>
+									<option>1910-e</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="label-1" for="unselect-country">или промежуток:</label>
+								<select class="form-control form-control-inline cnm-select" id="select-start-interval"
+									style="width: 85px;">
+
+								</select>
+								<select class="form-control form-control-inline cnm-select" id="select-end-interval"
+									style="width: 85px;">
+
+								</select>
+							</div>
+							<div class="search-filter__list-selected-wrapper">
+								<p class="search-filter__list-selected-title">Выбрано:</p>
+								<div class="search-filter__list-selected-items" id="place_for_year_select">
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="filters-buttons-wrapper">
+					<button class="filter-button filter-button__reset" id="reset">Сбросить</button>
+					<button class="filter-button filter-button__apply" id="apply">Применить</button>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="container-fluid cinema-content-wrapper cinema-items_var1">
+			<!-- Анимация загрузки -->
+			<div id="fountainG">
+				<div id="fountainG_1" class="fountainG"></div>
+				<div id="fountainG_2" class="fountainG"></div>
+				<div id="fountainG_3" class="fountainG"></div>
+				<div id="fountainG_4" class="fountainG"></div>
+				<div id="fountainG_5" class="fountainG"></div>
+				<div id="fountainG_6" class="fountainG"></div>
+				<div id="fountainG_7" class="fountainG"></div>
+				<div id="fountainG_8" class="fountainG"></div>
+			</div>
+
+			<div class="row no-gutters" id="place_for_films" style="display: none;">
+
+			</div>
+		</div>
+
+	</main>
+	<!-- /CONTENT -->
+
+
+	<!-- BOTTOM-BAR -->
+	<div class="bottom-bar">
+		<span class="bottom-bar__items-coount"><span id="film_count"></span> из <span id="total_count">'место для
+				количества всех фильмов'</span></span>
+		<button class="bottom-bar__nav-button bottom-bar__nav-button_prev" id="button_prev"></button>
+		<button class="bottom-bar__nav-button bottom-bar__nav-button_next" id="button_next"></button>
+	</div>
+	<!-- /BOTTOM-BAR -->
+
+	<!-- MODALS -->
+
+	<!-- Modal - FEEDBACK -->
+	<div class="modal fade" id="modal__feedback" tabindex="-1" role="dialog" aria-labelledby="modal__feedback"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Ваши пожелания</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="feedback-message">Ваше сообщение</label>
+							<textarea id="feedback-message" placeholder="Введите сообщение"
+								class="form-control cnm-input"></textarea>
+						</div>
+						<div class="text-center py-2">
+							<button type="submit" class="cnm-modal-btn">Отправить</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - SETTINGS -->
+	<div class="modal fade" id="modal__settings" tabindex="-1" role="dialog" aria-labelledby="modal__settings"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Настройки</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - LOGIN -->
+	<div class="modal fade" id="modal__login" tabindex="-1" role="dialog" aria-labelledby="modal__login"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="Login">Вход</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="form_login">
+						<div class="form-group">
+							<label for="login-username">Имя пользователя: <span class="text-danger"
+									id="wrong_login_login" style="display: none;">Вы не ввели логин</span></label>
+							<input type="text" class="form-control cnm-input" id="login-username"
+								placeholder="Введите имя пользователя">
+						</div>
+
+						<div class="form-group">
+							<label for="login-pass">Пароль: <span class="text-danger" id="wrong_login_pass"
+									style="display: none;">Вы не ввели пароль</span></label>
+							<input type="password" class="form-control cnm-input" id="login-pass" placeholder="Пароль">
+						</div>
+
+						<div class="form-group form-check text-center">
+							<input type="checkbox" class="form-check-input" id="login-autologin">
+							<label class="form-check-label" for="login-autologin">Автоматически входить</label>
+						</div>
+
+
+						<div class="text-center py-2">
+							<button id="login_submit" class="cnm-modal-btn">Войти</button>
+						</div>
+					</div>
+
+					<div class="p-4">
+						<a href="#modal__registration" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-person_add"></span> Зарегистрироваться</a>
+						<a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span
+								class="cnm cnm-help_outline"></span> Забыл пароль</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal - REGISTRATION -->
+	<div class="modal fade" id="modal__registration" tabindex="-1" role="dialog" aria-labelledby="modal__registration"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Регистрация</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="form_registration">
+						<div class="form-group">
+							<label for="reg-username">Имя пользователя:
+								<span class="text-danger" id="wrong_registration_login" style="display: none;">
+									Вы не ввели имя пользователя
+								</span>
+								<span class="text-danger" id="wrong_registration_login_long" style="display: none;">
+									Логин содержит более 16 символов.
+								</span>
+								<span class="text-danger" id="wrong_registration_login_short" style="display: none;">
+									Логин содержит менее 3 символов.
+								</span>
+							</label>
+							<input type="text" class="form-control cnm-input" id="reg-username"
+								placeholder="Введите имя пользователя">
+						</div>
+						<div class="form-group">
+							<label for="reg-pass">Пароль:
+								<span class="text-danger" id="wrong_registration_password" style="display: none;">
+									Вы не ввели пароль
+								</span>
+								<span class="text-danger" id="wrong_registration_password_long" style="display: none;">
+									Пароль содержит более 16 символов.
+								</span>
+								<span class="text-danger" id="wrong_registration_password_short" style="display: none;">
+									Пароль содержит менее 3 символов.
+								</span>
+							</label>
+							<input type="password" class="form-control cnm-input" id="reg-pass" placeholder="Пароль">
+						</div>
+						<div class="form-group">
+							<label for="reg-repass">Повторите папроль:
+								<span class="text-danger" id="wrong_registration_repassword" style="display: none;">
+									Вы не повторили пароль
+								</span>
+								<span class="text-danger" id="wrong_registration_repassword_wrong"
+									style="display: none;">
+									Пароли не совпадают
+								</span>
+							</label>
+							<input type="password" class="form-control cnm-input" id="reg-repass"
+								placeholder="Повторите пароль">
+						</div>
+						<div class="form-group">
+							<label for="reg-email">E-mail:
+								<span class="text-danger" id="wrong_registration_email" style="display: none;">
+									Вы не указали e-mail
+								</span>
+								<span class="text-danger" id="wrong_registration_email_false" style="display: none;">
+									Проверьте правильность ввода e-mail
+								</span>
+							</label>
+							<input type="text" class="form-control cnm-input" id="reg-email"
+								placeholder="Введите e-mail">
+						</div>
+						<div class="form-group form-check text-center">
+							<input type="checkbox" class="form-check-input" id="reg-autologin">
+							<label class="form-check-label" for="reg-autologin">Автоматически входить</label>
+						</div>
+
+						<div class="text-center py-2">
+							<button type="submit" id="register_submit" class="cnm-modal-btn">Зарегистрироваться</button>
+						</div>
+					</div>
+
+					<div class="p-4">
+						<a href="#modal__login" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-vpn_key"></span> Вход</a>
+						<a href="#modal__forgotpass" data-toggle="modal" class="float-right"><span
+								class="cnm cnm-help_outline"></span> Забыл пароль</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Modal - FORGOT PASSWORD -->
+	<div class="modal fade" id="modal__forgotpass" tabindex="-1" role="dialog" aria-labelledby="modal__forgotpass"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle">Восстановление пароля</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="forgot-pass-email">E-mail:</label>
+							<input type="text" class="form-control cnm-input" id="forgot-pass-email"
+								placeholder="Введите e-mail">
+						</div>
+						<div class="text-center py-2">
+							<button type="submit" class="cnm-modal-btn">Восстановить</button>
+						</div>
+					</form>
+
+					<div class="p-4">
+						<a href="#modal__login" data-toggle="modal" class="float-left"><span
+								class="cnm cnm-vpn_key"></span> Вход</a>
+						<span class="clearfix"></span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+		integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+		crossorigin="anonymous"></script>
+
+	<script src="./js/functions.js"></script>
+
+
+	<script>
+		$(document).ready(function () {
+
+			$('[data-toggle=offcanvas-menu]').click(function () {
+				$('.cnm-main-menu').toggleClass('active');
+				$('.header__menu-button').toggleClass('active');
+			});
+
+			$('[data-toggle=offcanvas-search]').click(function () {
+				$('.header__search').toggleClass('active');
+				$('.header__search-btn-toggle').toggleClass('active');
+			});
+
+		});
+	</script>
+
+	<script>
+		const SHOW_SERIALS = true; // отображать сериалы
+		const DONT_SHOW_SERIALS = false; // не отображать сериалы
+		const NUMBER_OF_FILMS_PER_PAGE = 12;// количество фильмов на странице
+		const REQUEST_URL_END = '&JsHttpRequest=16007667792177-xml';//окончание для REQUEST_URL
+		// типы сортировки
+		const DATE_ADDED = '&order[0]=0';
+		const YEAR_RELEASE = '&order[0]=1';
+		const RAITING_IMDB = '&order[0]=2';
+		const RAITING_KINOPOISK = '&order[0]=9';
+		const LOCAL_RAITING = '&order[0]=3';
+		const PERSONAL_RAITING = '&order[0]=4';
+		const RELATIVE_POPULARITY = '&order[0]=8';
+		const ABSOLUTE_POPULARITY = '&order[0]=6';
+		// справочники
+		var GENRES = new Object();
+		var COUNTRIES = new Object();
+		var YEARS = new Object();
+
+		var currentMovieNumber = 0; //номер текущего фильма с которго начинаетяс отображение
+		var SHOW_OPTION = SHOW_SERIALS; // параметр отображения - присваивается SHOW_SERIALS или DONT_SHOW_SERIALS
+		var showSerialsFilterGenreUnselectSpan = document.createElement("span"); // span элемент для отображения 'показывать сериалы' в фильтре
+		showSerialsFilterGenreUnselectSpan.id = 'unselect_serials';
+		showSerialsFilterGenreUnselectSpan.innerText = 'Сериал';
+		var SORTING_TYPE = undefined; //тип сортировки - присваивается из const
+		var TOTAL_FILM_COUNT = 0;//текущее количество всех фильмов
+		var FILTER;//расширенный фильтр
+		var EXTENDED_MENU_OPEN = false;
+
+		// Получение данных из localStorage
+		if (localStorage.length > 0) {
+			// Проверка "показывать сериалы"
+			if (localStorage.getItem('showOption') == 'true') {
+				SHOW_OPTION = SHOW_SERIALS;
+			} else if ((localStorage.getItem('showOption')) == 'false') {
+				SHOW_OPTION = DONT_SHOW_SERIALS;
+			}
+
+			// Получение текущего номера фильма	
+			if (Number(localStorage.getItem('currentMovieNumber') > 0)) {
+				currentMovieNumber = Number(localStorage.getItem('currentMovieNumber'));
+			}
+
+			// Получение типа сортировки
+			SORTING_TYPE = localStorage.getItem('sortingType');
+
+			// Получение фильтра
+			FILTER = localStorage.getItem('filter');
+		}
+
+		//Обработка prev и next buttons
+		let buttonNext = document.getElementById('button_next');
+		let buttonPrev = document.getElementById('button_prev');
+
+		buttonNext.onclick = function () {
+			//загрузка следующих фильмов при клике на кнопку перехода вправо
+			currentMovieNumber += NUMBER_OF_FILMS_PER_PAGE;
+
+			document.getElementById('place_for_films').style.display = 'none';
+
+			let animation = document.createElement('div');
+			animation.id = 'fountainG';
+			animation.innerHTML = `<div id="fountainG_1" class="fountainG"></div>
+											<div id="fountainG_2" class="fountainG"></div>
+								<div id="fountainG_3" class="fountainG"></div>
+								<div id="fountainG_4" class="fountainG"></div>
+								<div id="fountainG_5" class="fountainG"></div>
+								<div id="fountainG_6" class="fountainG"></div>
+								<div id="fountainG_7" class="fountainG"></div>
+								<div id="fountainG_8" class="fountainG"></div>`;
+			document.getElementsByClassName('cinema-content-wrapper')[0].prepend(animation);
+
+			movieLoader(SORTING_TYPE, FILTER, false);
+			window.scrollTo(0, 0);
+		}
+
+		buttonPrev.onclick = function () {
+			//загрузка предыдущих фильмов при клике на кнопку перехода влево
+			if (currentMovieNumber > 0) {
+				currentMovieNumber -= NUMBER_OF_FILMS_PER_PAGE;
+				document.getElementById('place_for_films').style.display = 'none';
+
+				let animation = document.createElement('div');
+				animation.id = 'fountainG';
+				animation.innerHTML = `<div id="fountainG_1" class="fountainG"></div>
+											<div id="fountainG_2" class="fountainG"></div>
+								<div id="fountainG_3" class="fountainG"></div>
+								<div id="fountainG_4" class="fountainG"></div>
+								<div id="fountainG_5" class="fountainG"></div>
+								<div id="fountainG_6" class="fountainG"></div>
+								<div id="fountainG_7" class="fountainG"></div>
+								<div id="fountainG_8" class="fountainG"></div>`;
+
+				movieLoader(SORTING_TYPE, FILTER, false);
+
+				document.getElementsByClassName('cinema-content-wrapper')[0].prepend(animation);
+			} else {
+				console.log("Ты на первой странице");
+			}
+			window.scrollTo(0, 0);
+		}
+
+
+		//----------------------------------------------------------------------------------------------
+		//----------------------------------Обработка "Показывать сериалы"------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		document.getElementById('show_serials_label').addEventListener('click', function (event) {
+			if (document.getElementById('show-serials').checked == true) {
+				SHOW_OPTION = DONT_SHOW_SERIALS;
+				document.getElementById('place_for_genre_unselect').append(showSerialsFilterGenreUnselectSpan);
+				document.getElementById('apply').click();
+			} else {
+				SHOW_OPTION = SHOW_SERIALS;
+				try {
+					document.getElementById('place_for_genre_unselect').removeChild(showSerialsFilterGenreUnselectSpan);
+				} catch (error) {
+					// document.getElementById('place_for_genre_unselect').innerHTML = '';
+					for (let key in document.getElementById('place_for_genre_unselect').childNodes) {
+						if (document.getElementById('place_for_genre_unselect').childNodes[key].innerText == 'Сериал') {
+							document.getElementById('place_for_genre_unselect').childNodes[key].remove();
+						}
+					}
+					console.error(error);
+				}
+				document.getElementById('apply').click();
+			}
+		});
+
+		//Функция для подгрузки фильмов
+		//sortingType - тип сортировки (Используется глобальная переменная SORTING_TYPE)
+		//primaryDownload - параметр, отображающий первичную загрузку. При передачи в качестве параметра true дополнительно будут загружаться списки стран, жанров и годов
+		function movieLoader(sortingType, filterRequest, primaryDownload) {
+			let REQUEST_URL = 'https://cinema.ntop.tv/api.php?format=ajax';
+			if (getCookie('PHPSESSID')) {
+				REQUEST_URL += `&PHPSESSID=${getCookie('PHPSESSID')}&action[4]=Video.getBookmarks`;
+			}
+			if (primaryDownload) {
+				REQUEST_URL += '&action[0]=Video.getCatalog&offset[0]=' + currentMovieNumber + '&size[0]=' + NUMBER_OF_FILMS_PER_PAGE +
+					'&action[1]=Video.getCountrie' +
+					's&action[2]=Video.getGenres' +
+					'&action[3]=Video.getYears';
+			} else {
+				REQUEST_URL += '&action[0]=Video.getCatalog&offset[0]=' + currentMovieNumber + '&size[0]=' + NUMBER_OF_FILMS_PER_PAGE;
+			}
+
+
+			if (Boolean(filterRequest) ?? (filterRequest != undefined)) {
+				REQUEST_URL += filterRequest;
+			}
+
+			console.log('sortingType=' + sortingType);
+			if (sortingType != undefined && sortingType.length > 10) {
+				//if(!primaryDownload){
+				REQUEST_URL += sortingType;
+				//}
+			}
+
+
+			REQUEST_URL += REQUEST_URL_END;
+			// console.log(REQUEST_URL);
+
+			xhr = new XMLHttpRequest();
+			xhr.open('POST', REQUEST_URL, true);
+			xhr.responseType = 'json';
+			xhr.send();
+			var result = '';
+			xhr.onreadystatechange = function () {
+
+				//Провекрка на статус выполненяи запроса. Если запрос выполнен(xhr.readyState == XMLHttpRequest.DONE) и был возвращен ответ(xhr.status == 200)
+				//идет дальнейшая обработка. В случае сбоя идет обработка ошибки
+				if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+					let films = xhr.response;
+
+					if (primaryDownload) {
+						createFilters(films, primaryDownload);
+					}
+
+					//получение favorites_id (массива id фильмов), которые пользователь добавил в избранные
+					let favorites_id = new Array();
+					try {
+						let favorites = films['js'][4]['response']['movies'];
+
+						for (let key in favorites) {
+							favorites_id.push(favorites[key]['movie_id']);
+						}
+					} catch {
+						console.warn('Пользователь не авторизован!!!');
+					}
+
+
+
+					if (films['js']['0']['response']['total'] == 0) {
+						document.getElementById('place_for_films').innerHTML = '<h2 class="mt-3 ml-3 text-muted">Результатов нет</h2>';
+						return;
+					}
+
+					let movies = films['js']['0']['response']['movies'];
+					for (let key in movies) {
+						let href = 'movie-page.html?id=' + movies[key]['movie_id'];//добавление id фильма к ссылке
+						let title = movies[key]['name'];
+						let posterImage = 'https://cinema.ntop.tv' + movies[key]['cover_original'];
+
+						let popular = (movies[key]['popular'] == 1) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_top" data-toggle="tooltip" data-placement="top" title="Хит!"></span>' : '';
+						let hd = (movies[key]['hd'] == 1) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_hd" data-toggle="tooltip" data-placement="top" title="HD качество"></span>' : '';
+						let seriesStatus = (movies[key]['StatusSeries'] == 1) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_series_add" data-toggle="tooltip" data-placement="top" title="Серии добаляются"></span>' : ((movies[key]['StatusSeries'] == 2) ? '<span class="cinema-item__poster-icon cinema-item__poster-icon_series_end" data-toggle="tooltip" data-placement="top" title="Сериал завершен"></span>' : '');
+
+						let favorite = '';
+
+
+						if (getCookie('PHPSESSID')) {
+							for (let i = 0; i < favorites_id.length; i++) {
+								if (favorites_id[i] == movies[key]['movie_id']) {
+									favorite = '<span class="cinema-item__poster-icon cinema-item__poster-icon_series_favorite" data-toggle="tooltip" data-placement="top" title="В избранном"></span>';
+									break;
+								}
+							}
+						}
+
+						let year = movies[key]['year'];
+						var countries = '';
+						for (let countryKey in movies[key]['countries']) {
+							countries += movies[key]['countries'][countryKey] + ' / ';
+						}
+						countries = countries.substring(0, (countries.length - 2));
+						var genres = '';
+						for (let genreKey in movies[key]['genres']) {
+							genres += movies[key]['genres'][genreKey] + ' / ';
+						}
+						genres = genres.substring(0, (genres.length - 2));
+
+						let template = "<div class=\"col-6 col-sm-4 col-md-3 col-lg-2\">" +
+							"<div class=\"cinema-item\">" +
+							"<a href=\"" + href + "\" class=\"cinema-item__link\">" +
+							"<div class=\"cinema-item__poster-wrap\">" +
+							"<div class=\"cinema-item__poster-icons\">" +
+							popular + hd + seriesStatus + favorite +
+							"</div>" +
+							"<img class=\"cinema-item__poster-img\" src=\"" + posterImage + "\" alt=\"\"/>" +
+							"</div>" +
+							//Заголовок сериала имеет вид: "Название_сериала(сезон/серия)"
+							//эта строка смотрит на наличие '(' в названии. Если она присутствует, то название сериала выводится в отдельном span блоке
+							//а (сезон/серия) в блоке ниже
+							//Если же выводится фильм, то просто отображается его название, без дополнительного блока span
+							"<p class=\"cinema-item__title\">" + ((title.indexOf('(') > 0) ? (title.substring(0, title.indexOf('(')) + "<span class=\"cinema-item__title-season\">" + title.substring(title.indexOf('('))) : (title)) + "</span></p>" +
+							"<p class=\"cinema-item__info\"><span class=\"cinema-item__info_country\">" + year + ", " + countries + "</span>" +
+							"" + genres + "</p>" +
+							"<span class=\"cinema-item__serial-label\">обновляется</span>" +
+							"</a>" +
+							"</div>" +
+							"</div>";
+						result += template;
+					}
+					document.getElementById('place_for_films').innerHTML = result;
+
+					let TOTAL_FILM_COUNT = films['js']['0']['response']['total'];
+
+					if (NUMBER_OF_FILMS_PER_PAGE > TOTAL_FILM_COUNT) {
+						document.getElementById('film_count').innerText = (currentMovieNumber + 1) + ' - ' + (TOTAL_FILM_COUNT);
+					} else {
+						document.getElementById('film_count').innerText = (currentMovieNumber + 1) + ' - ' + (currentMovieNumber + NUMBER_OF_FILMS_PER_PAGE);
+					}
+
+					document.getElementById('total_count').innerText = TOTAL_FILM_COUNT;
+
+					setTimeout(function () {
+						//------------------------------------------------------------------------------
+						//------------------Включение отображения содержимого---------------------------
+						//------------------------------------------------------------------------------
+						document.getElementById('fountainG').remove();//удаление анимации загрузки
+						document.getElementById('place_for_films').style.display = 'flex';//отображение содержимого страницы
+					}, 1500);
+				}
+			}
+		}
+
+
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------------Создание фильтров--------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		//вызывается внутри movieLoader() при первой загрузке страницы
+		// в качестве параметра принимает xhr.response
+		function createFilters(films, primaryDownload) {
+			//переменные используются для парсинга строки для запроса на отбор по фильтрам
+			//в глобальную переменную FILTER будет передаваться результат соединения всех запросов:
+			//FILTER_GENRE - отбор по жанрам
+			//FILTER_COUNTRY - отбор по странам
+			//FILTER_YEAR - отбор по годам
+			let FILTER_GENRE = '&genre[0]=';//общий запрос на отбор по жанрам. будет состоять из FILTER_SELECT_GENRE и FILTER_UNSELECT_GENRE
+			let FILTER_SELECT_GENRE = '';//запрос на выбранные жанры
+			let FILTER_UNSELECT_GENRE = '';//запрос на исключенные жанры
+
+			let FILTER_COUNTRY = '&country[0]=';//общий запрос на отбор по странам. будет состоять из FILTER_SELECT_COUNTRY и FILTER_UNSELECT_COUNTRY
+			let FILTER_SELECT_COUNTRY = '';//запрос на выбранные страны
+			let FILTER_UNSELECT_COUNTRY = '';//запрос на исключенные страны
+
+			let FILTER_YEAR = '';//общий запрос на отбор по годам
+
+
+			//---------------------------------Загрузка информации-------------------------------------------
+
+			//Для хранения информаии, используемой в фильтрах, взяты глобальные объекты GENRES, COUNTRIES, YEARS
+
+			//загрузка жанров
+			let counter = 0;
+			let genres = films['js']['2']['response']['genres'];
+			for (let key in genres) {
+				//Отбираются только рускоязычные и корректные (id != 79) имена жанров. 1039 - код символа 'А', 1072 - код символа 'Я' в стандарте Unicode
+				if (
+					Number(genres[key]['id']) != 79 &&
+					((Number(genres[key]['name'].charCodeAt(0)) > 1039) &&
+						(Number(genres[key]['name'].charCodeAt(0)) < 1072))
+				) {
+					GENRES[counter] = {
+						name: genres[key]['name'],
+						id: genres[key]['id']
+					};
+					//console.log("counter=" + counter + "; жанр=" + GENRES[counter]['name'] + ", id=" + GENRES[counter]['id']);
+					counter++;
+				}
+			}
+
+			//загрузка стран
+			counter = 0;
+			let countries = films['js']['1']['response']['countries'];
+			for (let key in countries) {
+				//Отбираются только рускоязычные названия стран. 1039 - код символа 'А', 1072 - код символа 'Я' в стандарте Unicode
+				if (
+					((Number(countries[key]['name'].charCodeAt(0)) > 1039) &&
+						(Number(countries[key]['name'].charCodeAt(0)) < 1072))
+				) {
+					COUNTRIES[counter] = {
+						name: countries[key]['name'],
+						id: countries[key]['id']
+					};
+					//console.log("counter=" + counter + "; страна=" +COUNTRIES[counter]['name'] + ", id=" +COUNTRIES[counter]['id']);
+					counter++;
+				}
+			}
+
+			//загрузка года
+			counter = 0;
+			let years = films['js']['3']['response'];
+			for (let key in years['years']) {
+				YEARS[counter] = {
+					name: years['years'][key]['name'],
+				};
+				//console.log("counter=" + counter + "; год=" +COUNTRIES[counter]['name']);
+				counter++;
+			}
+
+
+			//-----------------------------------Добавление методов------------------------------------------
+
+			//методы используются для возвращения свойств. возвращают свойство 'name' по id и свойство 'id' по name
+			GENRES.getName = function (id) {
+				for (let key in this) {
+					if (this[key]['id'] == id) {
+						return this[key]['name'];
+					}
+				}
+			}
+			GENRES.getId = function (name) {
+				for (let key in this) {
+					if (this[key]['name'] == name) {
+						return this[key]['id'];
+					}
+				}
+			}
+			COUNTRIES.getName = function (id) {
+				for (let key in this) {
+					if (this[key]['id'] == id) {
+						return this[key]['name'];
+					}
+				}
+			}
+			COUNTRIES.getId = function (name) {
+				for (let key in this) {
+					if (this[key]['name'] == name) {
+						return this[key]['id'];
+					}
+				}
+			}
+
+
+			selectGenre = document.getElementById('select-genre');//элемент select 'Выбрать жанр'
+			selectGenre.options[0] = new Option('Все жанры', '', true, true);//добавление значения select по умолчанию
+			unselectGenre = document.getElementById('unselect-genre');//элемент select 'Исключить жанр'
+			unselectGenre.options[0] = new Option('Исключить жанр', '', true, true);//добавление значения select по умолчанию
+
+			//Добавление данных для select с выбором жанров из массива GENRES
+			//Object.keys - возвращает количество ключей обхъекта (в данном случае используется для получения длинны массива)
+			//(lenght-2) - вычитает два метода (GENRES.getName() и GENRES.getId()) из общего количества ключей
+			for (let i = 0; i < (Object.keys(GENRES).length - 2); i++) {
+				selectGenre.options[i + 1] = new Option(GENRES[i]['name'], GENRES[i]['id']);
+				unselectGenre.options[i + 1] = new Option(GENRES[i]['name'], GENRES[i]['id']);
+			}
+
+			//Страна
+			selectCountry = document.getElementById('select-country');//элемент select 'Выбрать страну'
+			selectCountry.options[0] = new Option('Все страны', '', true, true);//добавление значения select по умолчанию
+			unselectCountry = document.getElementById('unselect-country');//элемент select 'Исключить страну'
+			unselectCountry.options[0] = new Option('Исключить страну', '', true, true);//добавление значения select по умолчанию
+
+			//Добавление данных для select с выбором стран из массива COUTNRIES
+			//Object.keys - возвращает количество ключей обхъекта (в данном случае используется для получения длинны массива)
+			//(lenght-2) - вычитает два метода (COUTNRIES.getName() и COUTNRIES.getId()) из общего количества ключей
+			for (let i = 0; i < (Object.keys(COUNTRIES).length - 2); i++) {
+				selectCountry.options[i + 1] = new Option(COUNTRIES[i]['name'], COUNTRIES[i]['id']);
+				unselectCountry.options[i + 1] = new Option(COUNTRIES[i]['name'], COUNTRIES[i]['id']);
+			}
+
+			//Год
+			selectYear = document.getElementById('select-year');//элемент select 'Выбрать год'
+			selectYear.options[0] = new Option('Все года', '', true, true);//добавление значения select по умолчанию
+
+			selectDecade = document.getElementById('select-decade');//элемент select 'Выбрать десятилетие'
+
+			selectStartInterval = document.getElementById('select-start-interval');//элемент select 'Выбрать промежуток начальный'
+			selectStartInterval.options[0] = new Option('Начало', '', true, true);//добавление значения select по умолчанию
+			selectEndInterval = document.getElementById('select-end-interval');//элемент select 'Выбрать промежуток конечный'
+			selectEndInterval.options[0] = new Option('Конец', '', true, true);//добавление значения select по умолчанию
+
+			//Добавление данных для select с выбором стран из массива COUTNRIES
+			//Object.keys - возвращает количество ключей обхъекта (в данном случае используется для получения длинны массива)
+			for (let i = 0; i < Object.keys(YEARS).length; i++) {
+				selectYear.options[i + 1] = new Option(YEARS[i]['name']);
+				//selectDecade.options[i+1] = new Option(YEARS[i]['name']);
+				selectStartInterval.options[i + 1] = new Option(YEARS[i]['name']);
+				selectEndInterval.options[i + 1] = new Option(YEARS[i]['name']);
+			}
+
+
+			//---------------------------------Обработчики событий select -----------------------------------
+
+			// обработка onchange для выбранных жанров
+			selectGenre.onchange = function () {
+				if (GENRES.getName(this.value) != undefined) {
+					//Добавление span с названием жанра
+					if (document.getElementById('place_for_genre_select').innerText.indexOf(GENRES.getName(this.value)) < 0) {
+						let newElem = document.createElement("span");
+						newElem.innerText = GENRES.getName(this.value);
+						document.getElementById('place_for_genre_select').append(newElem);
+					}
+				}
+			}
+
+			//обработка удаления выбранных жанров
+			document.getElementById('place_for_genre_select').onclick = function () {
+				this.removeChild(event.target);
+			}
+
+			// обработка onchange для исключенных жанров
+			unselectGenre.onchange = function () {
+				if (GENRES.getName(this.value) != undefined) {
+					//Добавление span с названием жанра
+					if (document.getElementById('place_for_genre_unselect').innerText.indexOf(GENRES.getName(this.value)) < 0) {
+						let newElem = document.createElement("span");
+						newElem.innerText = GENRES.getName(this.value);
+						document.getElementById('place_for_genre_unselect').append(newElem);
+					}
+				}
+			}
+
+			//обработка удаления исключенных жанров
+			document.getElementById('place_for_genre_unselect').onclick = function () {
+				if (event.target.innerText == showSerialsFilterGenreUnselectSpan.innerText) {
+					if (FILTER.length > 0) {
+						document.getElementById('show-serials').checked = true;
+						//document.getElementById('apply').click();
+					} else {
+						document.getElementById('show-serials').checked = true;
+					}
+
+				}
+				this.removeChild(event.target);
+			}
+
+
+			// обработка onchange для выбранных стран
+			selectCountry.onchange = function () {
+				if (COUNTRIES.getName(this.value) != undefined) {
+					//Добавление span с названием страны
+					if (document.getElementById('place_for_country_select').innerText.indexOf(COUNTRIES.getName(this.value)) < 0) {
+						let newElem = document.createElement("span");
+						newElem.innerText = COUNTRIES.getName(this.value);
+						document.getElementById('place_for_country_select').append(newElem);
+					}
+
+					console.log('FILTER_SELECT_COUNTRY=' + FILTER_SELECT_COUNTRY);
+				}
+			}
+
+			//обработка удаления выбранных стран
+			document.getElementById('place_for_country_select').onclick = function () {
+				this.removeChild(event.target);
+			}
+
+			//обработка onchange для исключенных стран
+			unselectCountry.onchange = function () {
+				if (COUNTRIES.getName(this.value) != undefined) {
+					//Добавление span с названием страны
+					if (document.getElementById('place_for_country_unselect').innerText.indexOf(COUNTRIES.getName(this.value)) < 0) {
+						let newElem = document.createElement("span");
+						newElem.innerText = COUNTRIES.getName(this.value);
+						document.getElementById('place_for_country_unselect').append(newElem);
+					}
+				}
+			}
+
+			//обработка удаления исключенных стран
+			document.getElementById('place_for_country_unselect').onclick = function () {
+				this.removeChild(event.target);
+			}
+
+			//обработка onchange для выбранного года
+			selectYear.onchange = function () {
+				//добавление span с годом
+				let newElem = document.createElement("span");
+				newElem.innerText = this.value;
+				document.getElementById('place_for_year_select').innerHTML = '';
+				document.getElementById('place_for_year_select').append(newElem);
+
+				//установка остальных select в начальное состояние
+				selectDecade[0].selected = true;
+				selectStartInterval[0].selected = true;
+				selectEndInterval[0].selected = true;
+			}
+
+			//обработка onchange для выбранного десятилетия
+			selectDecade.onchange = function () {
+				//добавление span с годом
+				let newElem = document.createElement("span");
+				newElem.innerText = this.value;
+				document.getElementById('place_for_year_select').innerHTML = '';
+				document.getElementById('place_for_year_select').append(newElem);
+
+				//установка остальных select в начальное состояние
+				selectYear[0].selected = true;
+				selectStartInterval[0].selected = true;
+				selectEndInterval[0].selected = true;
+			}
+
+			//обработка onchange для начала выбранного промежутка
+			selectStartInterval.onchange = function () {
+				//добавление span с годом
+				let newElem = document.createElement("span");
+
+				//проверка - была ли указана конечная дата выбранного промежутка
+				if (selectEndInterval[0].selected) {
+					newElem.innerText = this.value + ' - ';
+				} else {
+					newElem.innerText = selectStartInterval.value + ' - ' + selectEndInterval.value;
+				}
+
+				document.getElementById('place_for_year_select').innerHTML = '';
+				document.getElementById('place_for_year_select').append(newElem);
+
+				//установка остальных select в начальное состояние
+				selectYear[0].selected = true;
+				selectDecade[0].selected = true;
+			}
+
+			//обработка onchange для конца выбранного промежутка
+			selectEndInterval.onchange = function () {
+				//добавление span с годом
+				let newElem = document.createElement("span");
+
+				//проверка - была ли указана начальная дата выбранного промежутка
+				if (selectStartInterval[0].selected) {
+					newElem.innerText = ' - ' + this.value;
+				} else {
+					newElem.innerText = selectStartInterval.value + ' - ' + this.value;
+				}
+
+				document.getElementById('place_for_year_select').innerHTML = '';
+				document.getElementById('place_for_year_select').append(newElem);
+
+				//установка остальных select в начальное состояние
+				selectYear[0].selected = true;
+				selectDecade[0].selected = true;
+
+			}
+
+			//обработка удаления года
+			document.getElementById('place_for_year_select').addEventListener('click', function () {
+				this.removeChild(event.target);
+			});
+
+			//--------------------------------Обработчики клика кнопок---------------------------------------
+
+			//Обработчик для кнопки "Применить"
+			document.getElementById('apply').addEventListener('click', function () {
+				//парсинг отбора для выбранных жанров
+				FILTER_SELECT_GENRE = '';
+				if (document.getElementById('place_for_genre_select').childNodes.length > 0) {
+					let selectGenres = document.getElementById('place_for_genre_select').childNodes;//получение NodeList элемента, в котором отображаются выбранные жанры
+
+					//парсинг строки
+					for (let i = 0; i < selectGenres.length; i++) {
+						if (GENRES.getId(selectGenres[i].innerText) != undefined) {
+							FILTER_SELECT_GENRE += GENRES.getId(selectGenres[i].innerText) + '%2C';
+						}
+
+					}
+					FILTER_SELECT_GENRE = FILTER_SELECT_GENRE.substring(0, (FILTER_SELECT_GENRE.length - 1) - 2);//откидывает '%2C', которые добавились в конце
+				}
+
+				//парсинг отбора для исключенных жанров
+				FILTER_UNSELECT_GENRE = '';
+				if (document.getElementById('place_for_genre_unselect').childNodes.length > 0) {
+					let unselectGenres = document.getElementById('place_for_genre_unselect').childNodes;//получение NodeList элемента, в котором отображаются исключенные жанры
+
+					//парсинг строки
+					for (let i = 0; i < unselectGenres.length; i++) {
+						if (GENRES.getId(unselectGenres[i].innerText) != undefined) {
+							FILTER_UNSELECT_GENRE += '%21' + GENRES.getId(unselectGenres[i].innerText) + '%2C';
+						}
+					}
+					FILTER_UNSELECT_GENRE = FILTER_UNSELECT_GENRE.substring(0, (FILTER_UNSELECT_GENRE.length - 1) - 2);//откидывает '%2C', которые добавились в конце
+				}
+
+				//соединение FILTER_SELECT_GENRE и FILTER_UNSELECT_GENRE
+				FILTER_GENRE = '&genre[0]=';
+				if (FILTER_SELECT_GENRE.length > 0) {
+					FILTER_GENRE += FILTER_SELECT_GENRE;
+				}
+				if (FILTER_UNSELECT_GENRE.length > 0) {
+					if (FILTER_SELECT_GENRE.length > 0) {
+						FILTER_GENRE += '%2C' + FILTER_UNSELECT_GENRE;
+					} else {
+						FILTER_GENRE += FILTER_UNSELECT_GENRE;
+					}
+				}
+
+				//проверка на 'только выбранные жанры'
+				if (document.getElementById('only_selected_genres_check').checked) {
+					FILTER_GENRE += '%7C1';//указание обязательного поиска;
+				}
+
+				//парсинг отбора для выбранных стран
+				FILTER_SELECT_COUNTRY = '';
+				if (document.getElementById('place_for_country_select').childNodes.length > 0) {
+					let selectCountry = document.getElementById('place_for_country_select').childNodes;//получение NodeList элемента, в котором отображаются выбранные страны
+
+					//console.log(selectCountry);
+
+					//парсинг строки
+					for (let i = 0; i < selectCountry.length; i++) {
+						if (COUNTRIES.getId(selectCountry[i].innerText) != undefined) {
+							FILTER_SELECT_COUNTRY += COUNTRIES.getId(selectCountry[i].innerText) + '%2C';
+						}
+
+					}
+					FILTER_SELECT_COUNTRY = FILTER_SELECT_COUNTRY.substring(0, (FILTER_SELECT_COUNTRY.length - 1) - 2);//откидывает '%2C', которые добавились в конце
+				}
+
+				//парсинг отбора для исключенных стран
+				FILTER_UNSELECT_COUNTRY = '';
+				if (document.getElementById('place_for_country_unselect').childNodes.length > 0) {
+					let unselectCountry = document.getElementById('place_for_country_unselect').childNodes;//получение NodeList элемента, в котором отображаются исключенные страны
+
+					//парсинг строки
+					for (let i = 0; i < unselectCountry.length; i++) {
+						if (COUNTRIES.getId(unselectCountry[i].innerText) != undefined) {
+							FILTER_UNSELECT_COUNTRY += '%21' + COUNTRIES.getId(unselectCountry[i].innerText) + '%2C';
+						}
+					}
+					FILTER_UNSELECT_COUNTRY = FILTER_UNSELECT_COUNTRY.substring(0, (FILTER_UNSELECT_COUNTRY.length - 1) - 2);//откидывает '%2C', которые добавились в конце
+				}
+
+				//соединение FILTER_SELECT_COUNTRY и FILTER_UNSELECT_COUNTRY
+				FILTER_COUNTRY = '&country[0]=';
+				if (FILTER_SELECT_COUNTRY.length > 0) {
+					FILTER_COUNTRY += FILTER_SELECT_COUNTRY;
+				}
+				if (FILTER_UNSELECT_COUNTRY.length > 0) {
+					if (FILTER_SELECT_COUNTRY.length > 0) {
+						FILTER_COUNTRY += '%2C' + FILTER_UNSELECT_COUNTRY;
+					} else {
+						FILTER_COUNTRY += FILTER_UNSELECT_COUNTRY;
+					}
+				}
+
+				//проверка на 'только выбранные страны'
+				if (document.getElementById('only_selected_countries_check').checked) {
+					FILTER_COUNTRY += '%7C1';//указание обязательного поиска;
+				}
+
+				//парсинг отбора для года
+				FILTER_YEAR = '&year[0]=';
+				if (document.getElementById('place_for_year_select').childNodes.length > 0) {
+					let selectYear = document.getElementById('place_for_year_select').childNodes;//получение NodeList элемента, в котором отображаются года
+
+					//парсинг строки
+					try {
+						FILTER_YEAR += selectYear[0].innerText.replaceAll(' ', '');
+					} catch {
+						console.log('Ну бывает');
+					}
+				}
+
+				//соединение FILTER_GENRE, FILTER_COUNTRY и FILTER_YEAR в запрос на отбор
+				FILTER = '';
+				if (FILTER_GENRE != '&genre[0]=') {
+					FILTER += FILTER_GENRE;
+				}
+				if (FILTER_COUNTRY != '&country[0]=') {
+					FILTER += FILTER_COUNTRY;
+				}
+				if (FILTER_YEAR != '&year[0]=') {
+					FILTER += FILTER_YEAR;
+				}
+
+				//закрытие расширенного фильтра
+				document.getElementsByClassName('top-bar__filter-button')[0].setAttribute('aria-expanded', false);
+
+				//загрузка фильмов
+				movieLoader(SORTING_TYPE, FILTER, false);
+			});
+
+			//Обработчик для кнопки "Сбросить"
+			document.getElementById('reset').addEventListener('click', function () {
+				//сбрасывание всех переменные в первоначальный вид
+				FILTER_GENRE = '&genre[0]=';
+				FILTER_SELECT_GENRE = '';
+				FILTER_UNSELECT_GENRE = '';
+				FILTER_COUNTRY = '&country[0]=';
+				FILTER_SELECT_COUNTRY = '';
+				FILTER_UNSELECT_COUNTRY = '';
+				FILTER_YEAR = '';
+				FILTER = '';
+
+				//сбрасывание всех элементов разметки в первоначальный вид
+				selectGenre[0].selected = true;
+				document.getElementById('place_for_genre_select').innerHTML = '';
+				unselectGenre[0].selected = true;
+				document.getElementById('place_for_genre_unselect').innerHTML = '';
+				document.getElementById('only_selected_genres_check').checked = false;
+
+				selectCountry[0].selected = true;
+				document.getElementById('place_for_country_select').innerHTML = '';
+				unselectCountry[0].selected = true;
+				document.getElementById('place_for_country_unselect').innerHTML = '';
+				document.getElementById('only_selected_countries_check').checked = false;
+
+				selectYear[0].selected = true;
+				selectDecade[0].selected = true;
+				selectStartInterval[0].selected = true;
+				selectEndInterval[0].selected = true;
+				document.getElementById('place_for_year_select').innerHTML = '';
+
+				document.getElementById('show-serials').checked = true;
+				SHOW_OPTION = SHOW_SERIALS;
+
+				//закрытие расширенного фильтра
+				document.getElementsByClassName('top-bar__filter-button')[0].click();
+
+				//загрузка фильмов
+				movieLoader(SORTING_TYPE, false, false);
+			});
+
+
+			//------------------------------Первичная загрузка фильтров--------------------------------------
+
+			if (primaryDownload && FILTER != '') {
+				//console.log('FILTER = ' + FILTER);
+
+				//обработка отображения фильтров по жанрам
+				try {
+					if (FILTER.startsWith('&genre[0]=')) {
+						//вычленение FILTER_GENRE из FILTER
+						FILTER_GENRE = FILTER.substring((FILTER.indexOf('=') + 1));
+						if (FILTER_GENRE.indexOf('=') > 0) {
+							FILTER_GENRE = FILTER_GENRE.substring(0, FILTER_GENRE.indexOf('&'));
+						}
+
+						//console.log('FILTER_GENRE = ' + FILTER_GENRE);
+						let filterGenre = FILTER_GENRE.split('%2C');//массив id жанров из строки FILTER_GENRE
+						//console.log(filterGenre);
+
+						//добавление span с выбранными жанрами
+						for (let i = 0; i < filterGenre.length; i++) {
+							let newElem = document.createElement("span");
+
+							//если елемент в массиве начинается с %21, значит это исключенный жанр. он отображается в элементе с id = "place_for_genre_unselect"
+							if (filterGenre[i].startsWith('%21')) {
+								text = document.createTextNode(GENRES.getName(filterGenre[i].substring(filterGenre[i].indexOf('1') + 1)));
+								newElem.append(text);
+								//if(newElem.innerText != "Сериал"){
+								document.getElementById('place_for_genre_unselect').append(newElem);
+								//}
+
+							}
+							//если елементв массиве не начинается с %21, значит это выбранный жанр. он отображается в элементе с id = "place_for_genre_select"
+							else {
+								text = document.createTextNode(GENRES.getName(filterGenre[i]));
+								//if(text != undefined){
+								newElem.append(text);
+								document.getElementById('place_for_genre_select').append(newElem);
+								//}
+							}
+						}
+					}
+
+
+					//обработка отображения фильтров по жанрам
+					if (FILTER.indexOf('country[0]=') > 0 && !primaryDownload) {
+						//вычленение FILTER_COUNTRY из FILTER
+						FILTER_COUNTRY = FILTER.substring((FILTER.indexOf('=') + 1));
+						FILTER_COUNTRY = FILTER_COUNTRY.substring((FILTER_COUNTRY.indexOf('=') + 1));
+						if (FILTER_COUNTRY.indexOf('=') > 0) {
+							FILTER_COUNTRY = FILTER_COUNTRY.substring(0, FILTER_COUNTRY.indexOf('&'));
+
+						}
+
+						//console.log('FILTER_COUNTRY = ' + FILTER_COUNTRY);
+						let filterCountry = FILTER_COUNTRY.split('%2C');//массив id стран из строки FILTER_COUNTRY
+						//console.log(filterCountry);
+
+						//добавление span с выбранными жанрамиww
+						for (let i = 0; i < filterCountry.length; i++) {
+							newElem = document.createElement("span");
+
+							//если елементв массиве начинается с %21, значит это исключенная страна. она отображается в элементе с id = "place_for_country_unselect"
+							if (filterCountry[i].startsWith('%21')) {
+								text = document.createTextNode(COUNTRIES.getName(filterCountry[i].substring(filterCountry[i].indexOf('1') + 1)));
+								newElem.append(text);
+								document.getElementById('place_for_country_unselect').append(newElem);
+							}
+							//если елементв массиве не начинается с %21, значит это выбранная страна. она отображается в элементе с id = "place_for_country_select"
+							else {
+								text = document.createTextNode(COUNTRIES.getName(filterCountry[i]));
+								newElem.append(text);
+								document.getElementById('place_for_country_select').append(newElem);
+							}
+						}
+					}
+
+
+					//обработка отображения фильтров по годам
+					if (FILTER.indexOf('year[0]=') > 0 && !primaryDownload) {
+						//вычленение FILTER_YEAR из FILTER
+						FILTER_YEAR = FILTER.substring((FILTER.indexOf('=') + 1));
+						FILTER_YEAR = FILTER_YEAR.substring((FILTER_YEAR.indexOf('=') + 1));
+						FILTER_YEAR = FILTER_YEAR.substring((FILTER_YEAR.indexOf('=') + 1));
+						if (FILTER_YEAR.indexOf('=') > 0) {
+							FILTER_YEAR = FILTER_YEAR.substring(0, FILTER_YEAR.indexOf('&'));
+
+						}
+
+						//console.log('FILTER_YEAR = ' + FILTER_YEAR);
+						let filterYear = FILTER_YEAR;//строка с годом из строки FILTER_YEAR
+						//console.log(filterYear);
+
+						//добавление span с выбранным годом
+						newElem = document.createElement("span");
+						text = document.createTextNode(filterYear);
+						newElem.append(text);
+						document.getElementById('place_for_year_select').append(newElem);
+					}
+					console.log('FILTER_GENRE = ' + FILTER_GENRE);
+					console.log('FILTER_COUNTRY = ' + FILTER_COUNTRY);
+					console.log('FILTER_YEAR = ' + FILTER_YEAR);
+				} catch (error) {
+					console.error('обработка отображения фильтров по жанрам');
+				}
+			}
+
+		}
+
+
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------------Сортировка фильмов--------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		function sortMovie(sortElem, id) {
+			let dropdownButton = document.getElementById('sort-list');//кнопка, вызывающая выпадающий список с типами сортировки
+			let sortElemCurrent = document.getElementsByClassName('dropdown-item');//массив дочерних элементов dropdownButton
+
+			//Убирает class="active" со всех дочерних элементов
+			for (let i = 0; i < sortElemCurrent.length; i++) {
+				sortElemCurrent[i].classList.remove('active');
+			}
+
+			sortElem.classList.add('active');//добавляет class="active" выбранному типу сортировки
+			dropdownButton.innerText = sortElem.innerText;//устанавливается название типа сортировки в dropdownButton
+
+			//установление значения типа сортировки (путем сравнивания с const типов сортировки) глобальной переменной SORTING_TYPE
+			switch (id.toString()) {
+				case DATE_ADDED[DATE_ADDED.length - 1]:
+					SORTING_TYPE = DATE_ADDED;
+					break;
+				case YEAR_RELEASE[YEAR_RELEASE.length - 1]:
+					SORTING_TYPE = YEAR_RELEASE;
+					break;
+				case RAITING_IMDB[RAITING_IMDB.length - 1]:
+					SORTING_TYPE = RAITING_IMDB;
+					break;
+				case RAITING_KINOPOISK[RAITING_KINOPOISK.length - 1]:
+					SORTING_TYPE = RAITING_KINOPOISK
+					break;
+				case LOCAL_RAITING[LOCAL_RAITING.length - 1]:
+					SORTING_TYPE = LOCAL_RAITING;
+					break;
+				case PERSONAL_RAITING[PERSONAL_RAITING.length - 1]:
+					SORTING_TYPE = PERSONAL_RAITING;
+					break;
+				case RELATIVE_POPULARITY[RELATIVE_POPULARITY.length - 1]:
+					SORTING_TYPE = RELATIVE_POPULARITY;
+					break;
+				case ABSOLUTE_POPULARITY[ABSOLUTE_POPULARITY.length - 1]:
+					SORTING_TYPE = ABSOLUTE_POPULARITY;
+					break;
+				default:
+					console.log("Ошибка в сортировке");
+			}
+
+			//запуск movieLoader с выбранной сортировкой
+			movieLoader(SORTING_TYPE, FILTER, false);
+		}
+
+
+		//----------------------------------------------------------------------------------------------
+		//-----------------------------------------Авторизация------------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		function authorization() {
+			let login = document.getElementById('login-username');
+			let password = document.getElementById('login-pass');
+			let remember = (document.getElementById('login-autologin').checked) ? 1 : 0;
+
+			if (login.value.length <= 0 || password.value.length <= 0) {
+				if (login.value.length <= 0) {
+					document.getElementById('wrong_login_login').style.display = 'inline-block';
+					login.style.borderColor = 'red';
+				}
+				if (password.value.length <= 0) {
+					document.getElementById('wrong_login_pass').style.display = 'inline-block';
+					password.style.borderColor = 'red';
+				}
+
+			} else {
+				document.getElementById('wrong_login_login').style.display = 'none';
+				document.getElementById('wrong_login_pass').style.display = 'none';
+				password.style.borderColor = '#c1c1c1';
+				login.style.borderColor = '#c1c1c1';
+
+				let xhr = new XMLHttpRequest();
+				let request = `https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.login&login[0]=${login.value}&pass[0]=${password.value}&remember[0]=${remember}&JsHttpRequest=16063651671721-xml`;
+
+				xhr.open('POST', request);
+				xhr.responseType = 'json';
+
+				xhr.send();
+
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+						let result = xhr.response;
+						result = result['js'][0];
+						if (result['status'] == 200) {
+							setCookie('PHPSESSID', result['response']['PHPSESSID']);
+
+							document.getElementById('user_authorizated').style.display = 'block';
+							document.getElementById('user_not_authorizated').style.display = 'none';
+							document.getElementById('modal__login').getElementsByTagName('button')[0].click();
+
+							document.getElementById('place_for_films').style.display = 'none';
+
+							let animation = document.createElement('div');
+							animation.id = 'fountainG';
+							animation.innerHTML = `<div id="fountainG_1" class="fountainG"></div>
+											<div id="fountainG_2" class="fountainG"></div>
+								<div id="fountainG_3" class="fountainG"></div>
+								<div id="fountainG_4" class="fountainG"></div>
+								<div id="fountainG_5" class="fountainG"></div>
+								<div id="fountainG_6" class="fountainG"></div>
+								<div id="fountainG_7" class="fountainG"></div>
+								<div id="fountainG_8" class="fountainG"></div>`;
+
+							movieLoader(SORTING_TYPE, FILTER, false);
+
+							document.getElementsByClassName('cinema-content-wrapper')[0].prepend(animation);
+
+							document.getElementsByTagName('header')[0].getElementsByTagName('button')[0].click();
+
+							document.getElementById('favorites').style.display = 'block';
+
+							setCookie('login', login.value);
+							document.getElementById('user_name').innerText = login.value;
+
+
+
+						} else if (result['status'] == 300) {
+
+							let warning = document.createElement('p');
+							warning.classList.add('text-danger');
+							warning.classList.add('text-danger');
+							warning.classList.add('text-center');
+							warning.innerText = result['response'];
+							document.getElementById('form_login').prepend(warning);
+
+							login.style.borderColor = 'red';
+							login.value = '';
+
+							password.style.borderColor = 'red';
+							password.value = '';
+
+						}
+
+					}
+				}
+
+
+			}
+		}
+
+		document.getElementById('login_submit').addEventListener('click', function () {
+			authorization();
+		});
+
+		document.getElementById('modal__login').addEventListener('keypress', function (event) {
+			let enterCode = 13;
+			if (event.keyCode == enterCode) {
+				authorization();
+			}
+		});
+
+
+		//Обработчик на закрытие формы авторизации
+		document.getElementById('modal__login').addEventListener('click', function () {
+			let elem = this;
+			setTimeout(function () {
+				if (elem.classList.length <= 2) {
+					let login = document.getElementById('login-username');
+					login.style.borderColor = '#c1c1c1';
+					login.value = '';
+
+					let password = document.getElementById('login-pass');
+					password.style.borderColor = '#c1c1c1';
+					password.value = '';
+
+					document.getElementById('login-autologin').checked = false;
+
+					document.getElementById('wrong_login_login').style.display = 'none';
+					document.getElementById('wrong_login_pass').style.display = 'none';
+
+					if (document.getElementById('form_login').children[0].tagName == 'P') {
+						document.getElementById('form_login').children[0].remove();
+					}
+				}
+			}, 100);
+		});
+
+
+		//----------------------------------------------------------------------------------------------
+		//-----------------------------------------Регистрация------------------------------------------
+		//----------------------------------------------------------------------------------------------
+
+		document.getElementById('register_submit').addEventListener('click', function () {
+			let formRegistration = document.getElementById('modal__registration');
+
+			let login = document.getElementById('reg-username');
+			let password = document.getElementById('reg-pass');
+			let repassword = document.getElementById('reg-repass');
+			let email = document.getElementById('reg-email');
+			let remember = (document.getElementById('reg-autologin').checked) ? 1 : 0;
+
+			if ((login.value.length <= 0) || (password.value.length <= 0) || (repassword.value.length <= 0) || (email.value.length <= 0)) {
+				if (login.value.length <= 0) {
+					document.getElementById('wrong_registration_login').style.display = 'inline-block';
+					login.style.borderColor = 'red';
+				}
+				if (password.value.length <= 0) {
+					document.getElementById('wrong_registration_password').style.display = 'inline-block';
+					password.style.borderColor = 'red';
+				}
+				if (repassword.value.length <= 0) {
+					document.getElementById('wrong_registration_repassword').style.display = 'inline-block';
+					repassword.style.borderColor = 'red';
+				}
+				if (email.value.length <= 0) {
+					document.getElementById('wrong_registration_email').style.display = 'inline-block';
+					email.style.borderColor = 'red';
+				}
+			} else {
+				let xhr = new XMLHttpRequest();
+				let request = `https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.register&login[0]=${login.value}&pass[0]=${password.value}&pass2[0]=${repassword.value}&email[0]=${email.value}&remember[0]=${remember}&JsHttpRequest=16063651671721-xml`;
+
+				xhr.open('POST', request, true);
+				xhr.responseType = 'json';
+
+				xhr.send();
+
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+						let result = xhr.response;
+						result = result['js'][0];
+
+						if (result['status'] == 300) {
+							login.style.borderColor = '#c1c1c1';
+							password.style.borderColor = '#c1c1c1';
+							repassword.style.borderColor = '#c1c1c1';
+							email.style.borderColor = '#c1c1c1';
+
+							document.getElementById('wrong_registration_login').style.display = 'none';
+							document.getElementById('wrong_registration_login_short').style.display = 'none';
+							document.getElementById('wrong_registration_login_long').style.display = 'none';
+
+							document.getElementById('wrong_registration_password').style.display = 'none';
+							document.getElementById('wrong_registration_password_short').style.display = 'none';
+							document.getElementById('wrong_registration_password_long').style.display = 'none';
+
+							document.getElementById('wrong_registration_repassword').style.display = 'none';
+							document.getElementById('wrong_registration_repassword_wrong').style.display = 'none';
+
+							document.getElementById('wrong_registration_email').style.display = 'none';
+							document.getElementById('wrong_registration_email_false').style.display = 'none';
+
+							if (document.getElementById('form_registration').children[0].tagName == 'P') {
+								document.getElementById('form_registration').children[0].remove();
+							}
+
+							switch (result['response']) {
+								case 'Ошибка. Логин содержит более 16 символов':
+									document.getElementById('wrong_registration_login').style.display = 'none';
+									document.getElementById('wrong_registration_login_short').style.display = 'none';
+									document.getElementById('wrong_registration_login_long').style.display = 'inline-block';
+									login.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Логин содержит менее 3 символов':
+									document.getElementById('wrong_registration_login').style.display = 'none';
+									document.getElementById('wrong_registration_login_short').style.display = 'inline-block';
+									document.getElementById('wrong_registration_login_long').style.display = 'none';
+									login.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Пароль содержит более 16 символов':
+									document.getElementById('wrong_registration_password').style.display = 'none';
+									document.getElementById('wrong_registration_password_short').style.display = 'none';
+									document.getElementById('wrong_registration_password_long').style.display = 'inline-block';
+									password.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Пароль содержит менее 3 символов':
+									document.getElementById('wrong_registration_password').style.display = 'none';
+									document.getElementById('wrong_registration_password_short').style.display = 'inline-block';
+									document.getElementById('wrong_registration_password_long').style.display = 'none';
+									password.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Пароли не совпадают':
+									document.getElementById('wrong_registration_repassword').style.display = 'none';
+									document.getElementById('wrong_registration_repassword_wrong').style.display = 'inline-block';
+									repassword.style.borderColor = 'red';
+									break;
+								case 'Проверьте правильность ввода email':
+									document.getElementById('wrong_registration_email').style.display = 'none';
+									document.getElementById('wrong_registration_email_false').style.display = 'inline-block';
+									email.style.borderColor = 'red';
+									break;
+								case 'Ошибка. Выбранный Вами логин уже занят':
+									let warning = document.createElement('p');
+									warning.classList.add('text-danger');
+									warning.classList.add('text-danger');
+									warning.classList.add('text-center');
+									warning.innerText = result['response'];
+									document.getElementById('form_registration').prepend(warning);
+									break;
+							}
+						} else if (result['status'] == 200) {
+							setCookie('PHPSESSID', result['response']['PHPSESSID']);
+							setCookie('login', login.value);
+							document.getElementById('user_name').innerText = login.value;
+
+
+							document.getElementById('user_authorizated').style.display = 'block';
+							document.getElementById('user_not_authorizated').style.display = 'none';
+							document.getElementById('modal__login').getElementsByTagName('button')[0].click();
+
+							document.getElementById('place_for_films').style.display = 'none';
+
+							let animation = document.createElement('div');
+							animation.id = 'fountainG';
+							animation.innerHTML = `<div id="fountainG_1" class="fountainG"></div>
+											<div id="fountainG_2" class="fountainG"></div>
+								<div id="fountainG_3" class="fountainG"></div>
+								<div id="fountainG_4" class="fountainG"></div>
+								<div id="fountainG_5" class="fountainG"></div>
+								<div id="fountainG_6" class="fountainG"></div>
+								<div id="fountainG_7" class="fountainG"></div>
+								<div id="fountainG_8" class="fountainG"></div>`;
+
+							movieLoader(SORTING_TYPE, FILTER, false);
+
+							document.getElementsByClassName('cinema-content-wrapper')[0].prepend(animation);
+
+							document.getElementsByTagName('header')[0].getElementsByTagName('button')[0].click();
+
+							document.getElementById('favorites').style.display = 'block';
+
+						}
+					}
+				}
+			}
+		});
+
+		//Обработчик на закрытие формы регистрации
+		document.getElementById('modal__registration').addEventListener('click', function () {
+			let elem = this;
+			setTimeout(function () {
+				if (elem.classList.length <= 2) {
+					let login = document.getElementById('reg-username');
+					login.style.borderColor = '#c1c1c1';
+					login.value = '';
+
+					let password = document.getElementById('reg-pass');
+					password.style.borderColor = '#c1c1c1';
+					password.value = '';
+
+					let repassword = document.getElementById('reg-repass');
+					repassword.style.borderColor = '#c1c1c1';
+					repassword.value = '';
+
+					let email = document.getElementById('reg-email');
+					email.style.borderColor = '#c1c1c1';
+					email.value = '';
+
+					document.getElementById('reg-autologin').checked = false;
+
+					document.getElementById('wrong_registration_login').style.display = 'none';
+					document.getElementById('wrong_registration_login_long').style.display = 'none';
+					document.getElementById('wrong_registration_login_short').style.display = 'none';
+
+					document.getElementById('wrong_registration_password').style.display = 'none';
+					document.getElementById('wrong_registration_password_long').style.display = 'none';
+					document.getElementById('wrong_registration_password_short').style.display = 'none';
+
+					document.getElementById('wrong_registration_repassword').style.display = 'none';
+					document.getElementById('wrong_registration_repassword_wrong').style.display = 'none';
+
+					document.getElementById('wrong_registration_email').style.display = 'none';
+					// 
+
+					if (document.getElementById('form_registration').children[0].tagName == 'P') {
+						document.getElementById('form_registration').children[0].remove();
+					}
+				}
+			}, 100);
+		});
+
+
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------------------Выход--------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		document.getElementById('close_session').addEventListener('click', function () {
+			let xhr = new XMLHttpRequest();
+			let request = `https://cinema.ntop.tv/api.php?format=ajax&action[0]=Video.logout&JsHttpRequest=16063651671721-xml`;
+			xhr.open('POST', request);
+			xhr.responseType = 'json';
+
+			xhr.send();
+
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+					document.getElementById('place_for_films').style.display = 'none';
+
+					let animation = document.createElement('div');
+					animation.id = 'fountainG';
+					animation.innerHTML = `<div id="fountainG_1" class="fountainG"></div>
+											<div id="fountainG_2" class="fountainG"></div>
+								<div id="fountainG_3" class="fountainG"></div>
+								<div id="fountainG_4" class="fountainG"></div>
+								<div id="fountainG_5" class="fountainG"></div>
+								<div id="fountainG_6" class="fountainG"></div>
+								<div id="fountainG_7" class="fountainG"></div>
+								<div id="fountainG_8" class="fountainG"></div>`;
+					movieLoader(SORTING_TYPE, FILTER, false);
+
+					document.getElementsByClassName('cinema-content-wrapper')[0].prepend(animation);
+
+					document.getElementById('user_authorizated').style.display = 'none';
+					document.getElementById('user_not_authorizated').style.display = 'block';
+
+					document.getElementsByTagName('header')[0].getElementsByTagName('button')[0].click();
+
+					document.getElementById('favorites').style.display = 'none';
+
+					deleteCookie('PHPSESSID');
+					deleteCookie('login');
+				}
+			}
+		});
+
+
+
+		window.onload = function () {
+			//----------------------------------------------------------------------------------------------
+			//--------------------Отображение авторизованного пользователя----------------------------------
+			//----------------------------------------------------------------------------------------------
+
+			if (getCookie('PHPSESSID')) {
+				document.getElementById('user_authorizated').style.display = 'block';
+				document.getElementById('user_not_authorizated').style.display = 'none';
+				document.getElementById('favorites').style.display = 'block';
+				document.getElementById('user_name').innerText = getCookie('login');
+			}
+
+			//----------------------------------------------------------------------------------------------
+			//------------------------Отображение 'Недавно просмотренные'-----------------------------------
+			//----------------------------------------------------------------------------------------------
+			if (localStorage.getItem('last')) {
+				document.getElementById('watched').style.display = 'block';
+			}
+
+			pageOpen();
+
+
+			//----------------------------------------------------------------------------------------------
+			//---------------------------------Первичная загрузка фильмов-----------------------------------
+			//----------------------------------------------------------------------------------------------
+
+			//запуск загрузчика видео с переданным параметром primaryDownload=true
+			movieLoader(SORTING_TYPE, FILTER, true);
+			console.log(FILTER);
+
+			//если выбрано отображение сериалов, то делается активным переключатель 'Показывать сериалы'
+			if (SHOW_OPTION == SHOW_SERIALS) {
+				document.getElementById('show-serials').checked = true;
+			} else {
+				//если сериалы не отображаются, то переключатель 'Показывать сериалы' делается неактивным
+				document.getElementById('show-serials').checked = false;
+			}
+
+			//если был указан тип сортировки
+			if (SORTING_TYPE != undefined) {
+				try {
+					//поиск и удаление class="active" из первого пункта выпадающего списка меню сортировки
+					let sortElemCurrent = document.getElementsByClassName('dropdown-item')[0];
+					sortElemCurrent.classList.remove('active');
+
+					//добавление class="active" для используемого типа сортировки
+					let sortElem = document.querySelector('a[data="' + SORTING_TYPE[SORTING_TYPE.length - 1] + '"]');
+					sortElem.classList.add('active');
+
+					//установка названия типа сортировки
+					document.getElementById('sort-list').innerText = sortElem.innerText;
+					sortElemCurrent = sortElemCurrent[0];
+				} catch (e) {
+					console.error();
+				}
+
+			}
+
+
+			//----------------------------------------------------------------------------------------------
+			//---------------------------------------Работа поиска------------------------------------------
+			//----------------------------------------------------------------------------------------------
+
+			let searchForm = document.getElementById('search-form');//элемен поиска
+			let searchFormButton = searchForm.getElementsByTagName('button')[0];//кнопка поиска
+			console.log(searchForm.offsetWidth);
+
+			//Начало поиска при клике на 'Enter'
+			searchForm.addEventListener("keypress", function (event) {
+				let keyEnter = 13;//13 - код клавиши 'ENTER'. по нажатию этой клавиши будет выполняться поиск
+				let searchBar = document.getElementById('search-bar');//поле ввода поискового запроса
+				if (event.keyCode == keyEnter) {
+					var query = '';//запрос
+
+					//перевод символов из поискового запроса в 16-ричную систему
+					for (let i = 0; i < searchBar.value.length; i++) {
+						query += '%u' + searchBar.value.charCodeAt(i).toString(16);
+					}
+					sessionStorage.setItem('query', searchBar.value);
+
+					//переход на страницу с результатами поиска. поисковой запрос передается GET-методом с идентификатором 'query'
+					document.location.href = "/search_result.html?query=" + query;
+					//search();
+				}
+				//Запуск мгновенного поиска
+				if (searchBar.value != '') {
+					if (document.getElementById('field-search-result') != undefined) {
+						document.getElementById('field-search-result').remove();
+					}
+					search(searchBar.value, searchForm);
+				}
+			});
+
+			//Отправка поискового запроса при повторном фокусе поля поиска
+			document.getElementById('search-bar').addEventListener('focus', function () {
+				let searchBar = document.getElementById('search-bar');//поле ввода поискового запроса
+				var query = '';//запрос
+
+				//перевод символов из поискового запроса в 16-ричную систему
+				for (let i = 0; i < this.value.length; i++) {
+					query += '%u' + this.value.charCodeAt(i).toString(16);
+				}
+				sessionStorage.setItem('query', searchBar.value);
+
+				//Запуск мгновенного поиска
+				if (this.value != '') {
+					if (document.getElementById('field-search-result') != undefined) {
+						document.getElementById('field-search-result').remove();
+					}
+					search(this.value, searchForm);
+				}
+			});
+
+			//Начало поиска при клике на кнопку поиска
+			searchFormButton.addEventListener('click', function () {
+				let searchBar = document.getElementById('search-bar');//поле ввода поискового запроса
+				var query = '';//запрос
+
+				//перевод символов из поискового запроса в 16-ричную систему
+				for (let i = 0; i < searchBar.value.length; i++) {
+					query += '%u' + searchBar.value.charCodeAt(i).toString(16);
+				}
+				sessionStorage.setItem('query', searchBar.value);
+
+				//переход на страницу с результатами поиска. поисковой запрос передается GET-методом с идентификатором 'query'
+				document.location.href = "/search_result.html?query=" + query;
+				//search();
+			});
+
+			//Удаление мгновенного поиска при потере фокуса поля ввода
+			searchForm.addEventListener('focusout', function () {
+				if (document.getElementById('field-search-result') != undefined) {
+					function removeFieldResult() {
+						document.getElementById('field-search-result').remove();
+					}
+					setTimeout(removeFieldResult, 250);
+				}
+			});
+		}//window.onload
+
+
+		window.onunload = function () {
+			showSerialsFilterGenreUnselectSpan.remove();
+
+
+			//установка cookie
+			localStorage.setItem('showOption', SHOW_OPTION);
+			localStorage.setItem('currentMovieNumber', currentMovieNumber);
+			localStorage.setItem('sortingType', SORTING_TYPE);
+			localStorage.setItem('filter', FILTER);
+			pageClose();
+		}//window.onunload
+
+		window.beforeunload = function () {
+
+			alert('Пока');
+		}
+
+		// window.beforeunload = function () {
+		// 	pageClose();
+		// }
+
+
+		//----------------------------------------------------------------------------------------------
+		//-------------------Сброс cookie при клике на logo на первой странице--------------------------
+		//----------------------------------------------------------------------------------------------
+
+		document.getElementById('logo').onclick = function () {
+			//всем cookie присваиваются первоначальные значения
+			SHOW_OPTION = SHOW_SERIALS;
+			currentMovieNumber = 0;
+			SORTING_TYPE = undefined;
+			FILTER = '';
+		}
+	</script>
+
+
+</body>
+
+</html>

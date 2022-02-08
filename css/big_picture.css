@@ -1,0 +1,63 @@
+/* ÐºÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ° Ð½Ð° ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ðµ */
+.minimized {
+	width: 300px;
+	cursor: pointer;
+	border: 1px solid #FFF;
+}
+.minimized:hover {
+	border: 1px solid yellow;
+}
+
+
+/* ÑƒÐ²ÐµÐ»Ð¸Ñ‡ÐµÐ½Ð½Ð°Ñ ÐºÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ° */
+#magnify {
+	/* display: none; */
+	/* position: absolute; upd: 24.10.2016 */
+	position: fixed;
+	max-width: 600px;
+	height: auto;
+	/*top: 10%;
+	left: 30%;*/
+	z-index: 9999;
+}
+#magnify img {
+	width: 100%;
+}
+
+/* Ð·Ð°Ñ‚ÐµÐ¼Ð½ÑÑŽÑ‰Ð¸Ð¹ Ñ„Ð¾Ð½ */
+#overlay {
+	/* display: none; */
+	background: #000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	opacity: 0.5;
+	z-index: 9990;
+}
+
+/* ÐºÐ½Ð¾Ð¿ÐºÐ° Ð·Ð°ÐºÑ€Ñ‹Ñ‚Ð¸Ñ */
+#close-popup {
+	display: block;
+	position: absolute;
+	top: -10px;
+	right: -12px;
+	width: 25px;
+	height: 25px;
+	background: url('/images/close.png') no-repeat;
+	-moz-background-size: 100%; /* Firefox 3.6+ */
+    -webkit-background-size: 100%; /* Safari 3.1+ Ð¸ Chrome 4.0+ */
+    -o-background-size: 100%; /* Opera 9.6+ */
+	background-size: 100%;
+	cursor: pointer;
+	z-index: 1103;
+	/* display:none;  */
+}
+
+#close-popup:hover{
+	width: 32px;
+	height: 32px;
+	right: -15px;
+}
+
